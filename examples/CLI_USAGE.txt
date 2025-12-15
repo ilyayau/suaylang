@@ -1,0 +1,26 @@
+Example usage
+
+1) Check syntax
+$ ./suay check examples/hello.suay
+OK
+
+2) Print AST (first few lines)
+$ ./suay ast examples/hello.suay
+└─ Program
+   ├─ items [4]
+   │  ├─ Binding
+   │  │  ├─ name = 'square'
+   │  │  └─ ...
+
+3) Run
+$ ./suay run examples/hello.suay
+total=30
+
+4) Error output (example)
+$ ./suay run examples/bad.suay
+examples/bad.suay:1:14: Undefined name 'z'
+...source line...
+             ^
+stack:
+- examples/bad.suay:4:1: call f
+- examples/bad.suay:2:10: call g

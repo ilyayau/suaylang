@@ -1,0 +1,21 @@
+⍝ Minimal stdlib demo
+
+xs ← [1 2 3 4 5]
+
+say · ("count(xs)=" ⊞ (text · (count · xs)))
+
+say · ("at(xs,2)=" ⊞ (text · (at · xs · 2)))
+
+say · ("take(xs,3)=" ⊞ (text · (take · xs · 3)))
+
+say · ("drop(xs,3)=" ⊞ (text · (drop · xs · 3)))
+
+m ← ⟦"a" ↦ 1, "b" ↦ 2⟧
+
+say · ("keys(m)=" ⊞ (text · (keys · m)))
+
+say · ("has(m,'a')=" ⊞ (text · (has · m · "a")))
+
+m2 ← put · m · "c" · (abs · -7)
+
+say · ("m2=" ⊞ (text · m2))

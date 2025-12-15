@@ -1,0 +1,9 @@
+⍝ Circular example: a loads b, b loads a.
+
+b ← link · "./b"
+
+_force ← b · "value"  ⍝ force module load at top-level
+
+value ← 1
+
+say · ("a.value=" ⊞ (text · value))

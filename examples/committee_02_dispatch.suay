@@ -1,0 +1,10 @@
+⍝ Committee example 02: dispatch (pattern matching)
+classify ← ⌁(v)
+  v ▷ ⟪
+  ▷ Ok•x  ⇒ "ok:" ⊞ (text · x)
+  ▷ Err•m ⇒ "err:" ⊞ m
+  ▷ _     ⇒ "unknown"
+  ⟫
+
+say · (classify · (Ok•41))
+say · (classify · (Err•"bad"))

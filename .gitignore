@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node / VS Code extension
+node_modules/
+
+# VS Code
+.vscode/
+
+# OS/editor
+.DS_Store
+*.swp

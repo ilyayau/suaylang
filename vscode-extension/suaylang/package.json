@@ -1,0 +1,52 @@
+{
+  "name": "suaylang",
+  "displayName": "SuayLang",
+  "description": "SuayLang syntax highlighting and minimal LSP (diagnostics/hover/definition/symbols).",
+  "version": "0.0.1",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onLanguage:suay"
+  ],
+  "categories": [
+    "Programming Languages"
+  ],
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "suay",
+        "aliases": [
+          "SuayLang",
+          "suay"
+        ],
+        "extensions": [
+          ".suay"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "suay",
+        "scopeName": "source.suay",
+        "path": "./syntaxes/suay.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "SuayLang",
+      "properties": {
+        "suay.server.pythonPath": {
+          "type": "string",
+          "default": "python3",
+          "description": "Python executable used to launch the SuayLang LSP server (run as: -m suaylang.lsp_server)."
+        }
+      }
+    }
+  }
+}

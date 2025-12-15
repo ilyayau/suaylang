@@ -1,0 +1,3 @@
+⍝ Committee example 04: intentional runtime error (undefined name)
+⍝ Expected: a user-facing runtime error with span and no Python traceback.
+say · (text · not_defined)

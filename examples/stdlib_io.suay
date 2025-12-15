@@ -1,0 +1,4 @@
+⍝ Interactive IO demo (interpreter + VM both support hear)
+name ← hear · "name? "
+
+say · ("hello, " ⊞ name)

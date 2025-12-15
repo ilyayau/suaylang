@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import os
+import sys
+
+# Allow running from a source checkout without installation.
+ROOT = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, ROOT)
+
+from suaylang.cli import main
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

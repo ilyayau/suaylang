@@ -1,0 +1,7 @@
+⍝ Committee example 05: modules via `link`
+⍝ Uses the existing examples/modules directory shipped with this repo.
+⍝ Note: `link` resolves paths relative to the current file.
+math ← link · "./modules/math"
+add ← math · "add"
+
+say · ("add(2,3)=" ⊞ (text · (add · 2 · 3)))

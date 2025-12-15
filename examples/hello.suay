@@ -1,0 +1,6 @@
+square ← ⌁(x) x × x
+
+nums ← [1 2 3 4]
+total ← fold · (⌁(a b) a + b) · 0 · (map · square · nums)
+
+say · ("total=" ⊞ (text · total))

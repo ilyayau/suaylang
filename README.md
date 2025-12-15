@@ -1,1 +1,257 @@
-# suaylang
+# SuayLang (v0.1)
+
+SuayLang is a small, expression-oriented programming language designed around **explicit control flow**.
+It is implemented in pure Python and includes two execution paths:
+
+- an interpreter (reference behavior)
+- a minimal stack-based bytecode compiler + VM (alternate execution)
+
+This repository is intended for public review: language design, semantics, error model, and tooling are documented and tested.
+
+For a stability definition of “v0.1”, see [docs/LANGUAGE_CONTRACT_v0.1.md](docs/LANGUAGE_CONTRACT_v0.1.md).
+
+## Why this language exists
+
+SuayLang is a constraint-driven experiment:
+
+- Control flow should be **composable** (branching and looping are expressions).
+- State changes should be **visible** (binding and mutation are distinct).
+- Programs should map cleanly to **bytecode/state-machine** reasoning.
+
+It is not trying to compete with mainstream languages or their ecosystems.
+
+## Language overview
+
+SuayLang is expression-first. Its signature constructs are:
+
+- Binding: `name ← expr`
+- Mutation: `name ⇐ expr` (updates an existing binding)
+- Blocks: `⟪ ... ⟫` (newlines separate forms)
+- Lambda: `⌁(pattern ...) expr` (closures, lexical scoping)
+- Application: `f · x · y` (curried)
+- Pattern match: `value ▷ ⟪ ▷ pat ⇒ expr ... ⟫` ("dispatch")
+- Pattern-driven loop: `⟲ seed ▷ ⟪ ▷ pat ⇒ ↩ expr | ▷ pat ⇒ ↯ expr ... ⟫` ("cycle")
+- Variants: `Tag•payload`
+- Maps: `⟦ key ↦ value , ... ⟧`
+
+Newlines are significant; top-level and block forms are separated by newline(s).
+
+## Examples (representative, small)
+
+### 1) Higher-order style (map + fold)
+
+```suay
+square ← ⌁(x) x × x
+nums ← [1 2 3 4]
+
+total ← fold · (⌁(a b) a + b) · 0 · (map · square · nums)
+say · ("total=" ⊞ (text · total))
+```
+
+### 2) Dispatch: branch on data shape
+
+```suay
+classify ← ⌁(v)
+    v ▷ ⟪
+    ▷ Ok•x  ⇒ "ok:" ⊞ (text · x)
+    ▷ Err•m ⇒ "err:" ⊞ m
+    ▷ _     ⇒ "unknown"
+    ⟫
+
+say · (classify · (Ok•41))
+```
+
+### 3) Cycle: explicit state machine
+
+```suay
+sum_to ← ⌁(n)
+    ⟲ (Step•(1 0)) ▷ ⟪
+    ▷ Done•acc     ⇒ ↯ acc
+    ▷ Step•(i acc) ⇒ ↩ (
+            (i > n) ▷ ⟪
+            ▷ ⊤ ⇒ Done•acc
+            ▷ ⊥ ⇒ Step•(i + 1  acc + i)
+            ⟫
+        )
+    ⟫
+
+say · (text · (sum_to · 5))
+```
+
+### 4) Modules (MVP): explicit loading via `link`
+
+```suay
+m ← link · "./examples/modules/math"  
+add ← m · "add"
+say · (text · (add · 2 · 3))
+```
+
+## Execution model (what runs)
+
+### Interpreter (reference)
+
+- Deterministic evaluation order.
+- Lexical scoping + closures.
+- `dispatch` chooses the first matching arm; arm bindings exist only inside that arm.
+- `cycle` repeats by matching the current state; each arm explicitly chooses `↩` (continue) or `↯` (finish).
+
+### Bytecode VM (MVP)
+
+The VM is a stack machine with an explicit environment chain. It is designed to mirror the interpreter’s semantics for the supported subset.
+
+See [docs/BYTECODE.md](docs/BYTECODE.md) for the instruction model and mapping.
+
+## Tooling and error model
+
+The CLI reports user-facing errors with file/line/column spans and caret context. The project’s tests enforce that CLI failures do not emit Python tracebacks.
+
+Example shape:
+
+```text
+examples/bad.suay:1:14: runtime error: Undefined name 'z'
+...source line...
+                         ^
+stack:
+- examples/bad.suay:4:1: call f
+- examples/bad.suay:2:10: call g
+```
+
+## Run / reproduce
+
+### Requirements
+
+- Python 3.10+
+
+### One-command installation
+
+From a clean environment:
+
+```sh
+python -m pip install -e .
+```
+
+Verify the install:
+
+```sh
+suay doctor
+```
+
+Expected output includes a line `doctor:ok` followed by `OK`.
+
+### CLI
+
+From a source checkout:
+
+```sh
+./suay --help
+./suay check examples/hello.suay
+./suay run examples/hello.suay
+```
+
+After installation, you can also run:
+
+```sh
+suay --help
+suay run examples/hello.suay
+```
+
+Expected output:
+
+```text
+total=30
+```
+
+The CLI is also available as:
+
+```sh
+python -m suaylang --help
+```
+
+### Bytecode demo
+
+```sh
+python examples/bytecode_demo.py
+```
+
+## Documentation index
+
+- Grammar (formal EBNF aligned to implementation): [docs/GRAMMAR.md](docs/GRAMMAR.md)
+- Minimal standard library (builtins): [docs/STDLIB.md](docs/STDLIB.md)
+- Bytecode + VM (MVP): [docs/BYTECODE.md](docs/BYTECODE.md)
+- Semantics walkthrough (step-by-step evaluation): [docs/SEMANTIC_WALKTHROUGH.md](docs/SEMANTIC_WALKTHROUGH.md)
+- Design rationale (opinionated, non-marketing): [docs/WHY_SUAYLANG.md](docs/WHY_SUAYLANG.md)
+- v0.1 stability contract: [docs/LANGUAGE_CONTRACT_v0.1.md](docs/LANGUAGE_CONTRACT_v0.1.md)
+- Accessibility redesign proposal (syntax-only, no new features): [docs/ACCESSIBILITY_REDESIGN.md](docs/ACCESSIBILITY_REDESIGN.md)
+- Committee-mode checklist (15-minute evaluation script): [docs/COMMITTEE_MODE_CHECKLIST.md](docs/COMMITTEE_MODE_CHECKLIST.md)
+
+## Canonical examples (committee pack)
+
+These are short, self-contained examples intended for live evaluation:
+
+- `examples/committee_01_basic.suay`
+- `examples/committee_02_dispatch.suay`
+- `examples/committee_03_cycle.suay`
+- `examples/committee_04_error.suay`
+- `examples/committee_05_modules.suay`
+
+## 5-minute first program (from an empty directory)
+
+```sh
+mkdir my-suay && cd my-suay
+python -m venv .venv
+source .venv/bin/activate
+
+# install SuayLang (from a checkout of this repository)
+python -m pip install -e /path/to/suayLang
+suay doctor
+
+# write a first program
+cat > hello.suay <<'SUAY'
+square ← ⌁(x) x × x
+say · ("square(7)=" ⊞ (text · (square · 7)))
+SUAY
+
+suay run hello.suay
+```
+
+Expected output:
+
+```text
+square(7)=49
+```
+
+## VS Code extension (local)
+
+The local extension in [vscode-extension/suaylang](vscode-extension/suaylang) provides syntax highlighting and a minimal LSP experience.
+
+## Tests
+
+```sh
+python -m unittest discover -s tests -v
+```
+
+## Development
+
+Create a virtual environment and install in editable mode:
+
+```sh
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+python -m pip install -e .
+suay doctor
+```
+
+Contribution guidelines and security policy:
+
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [SECURITY.md](SECURITY.md)
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+
+## Repository layout
+
+- `suaylang/` — lexer/parser/interpreter/compiler/vm + runtime/errors
+- `examples/` — example programs and Python demos
+- `tests/` — unit and stress tests (`unittest`)
+- `docs/` — grammar, semantics, bytecode, contracts
+- `vscode-extension/` — editor support

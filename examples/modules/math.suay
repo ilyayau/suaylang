@@ -1,0 +1,9 @@
+⍝ A tiny module: everything bound at top-level is exportable via link.
+
+pi ← 3.14159
+
+add ← ⌁(a) ⌁(b) a + b
+
+square ← ⌁(x) x × x
+
+_secret ← 999  ⍝ underscore names are private (link will reject)
