@@ -5,6 +5,11 @@ __pycache__/
 .coverage
 htmlcov/
 
+# Packaging/build artifacts
+build/
+dist/
+*.egg-info/
+
 # Node / VS Code extension
 node_modules/
 
