@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use SuayLang in academic work, please cite it using this metadata."
+title: "SuayLang"
+type: software
+version: 0.1.0
+license: MIT
+repository-code: "https://github.com/ilyayau/suaylang"
+authors:
+  - name: "Sultanbarys"
