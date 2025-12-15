@@ -1,5 +1,9 @@
 # SuayLang (v0.1)
 
+[![CI](https://github.com/ilyayau/suaylang/actions/workflows/ci.yml/badge.svg)](https://github.com/ilyayau/suaylang/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+
 SuayLang is a small, expression-oriented programming language designed around **explicit control flow**.
 It is implemented in pure Python and includes two execution paths:
 
@@ -78,6 +82,18 @@ sum_to ← ⌁(n)
 say · (text · (sum_to · 5))
 ```
 
+## Demo (3 commands)
+
+```sh
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -e ".[dev]"
+
+suay run examples/hello.suay
+pytest -q
+python scripts/smoke.py
+```
+
 ### 4) Modules (MVP): explicit loading via `link`
 
 ```suay
@@ -121,6 +137,18 @@ stack:
 ### Requirements
 
 - Python 3.10+
+
+### Reproducible build in ~60 seconds
+
+```sh
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+python -m pip install -e ".[dev]"
+make check
+```
+
+See [docs/QUICKSTART.md](docs/QUICKSTART.md) for a 15-minute reviewer path.
 
 ### One-command installation
 
