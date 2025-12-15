@@ -6,9 +6,8 @@ import sys
 from dataclasses import is_dataclass
 
 from .errors import SuayError
-from .lexer import LexError, Lexer
-from .parser import ParseError, Parser
-from .runtime import SuayRuntimeError
+from .lexer import Lexer
+from .parser import Parser
 from .interpreter import Interpreter
 
 
@@ -31,7 +30,7 @@ def cmd_doctor() -> int:
     print(f"suaylang: {__version__}")
 
     # End-to-end: lex -> parse -> interpret a tiny program.
-    src = "say · (\"doctor:ok\")\n"
+    src = 'say · ("doctor:ok")\n'
     try:
         tokens = Lexer(src, filename="<doctor>").tokenize()
         program = Parser(tokens, src, filename="<doctor>").parse_program()
@@ -92,19 +91,39 @@ def _format_ast(node: object, *, indent: str = "", is_last: bool = True) -> str:
             continue
 
         if isinstance(val, list):
-            parts.append(f"{next_indent}{'└─ ' if last_field else '├─ '}{name} [{len(val)}]")
+            parts.append(
+                f"{next_indent}{'└─ ' if last_field else '├─ '}{name} [{len(val)}]"
+            )
             for j, child in enumerate(val):
-                parts.append(_format_ast(child, indent=next_indent + ("   " if last_field else "│  "), is_last=(j == len(val) - 1)))
+                parts.append(
+                    _format_ast(
+                        child,
+                        indent=next_indent + ("   " if last_field else "│  "),
+                        is_last=(j == len(val) - 1),
+                    )
+                )
             continue
 
         if isinstance(val, tuple) and len(val) == 2:
             parts.append(f"{next_indent}{'└─ ' if last_field else '├─ '}{name}")
-            parts.append(_format_ast(val, indent=next_indent + ("   " if last_field else "│  "), is_last=True))
+            parts.append(
+                _format_ast(
+                    val,
+                    indent=next_indent + ("   " if last_field else "│  "),
+                    is_last=True,
+                )
+            )
             continue
 
         if is_dataclass(val):
             parts.append(f"{next_indent}{'└─ ' if last_field else '├─ '}{name}")
-            parts.append(_format_ast(val, indent=next_indent + ("   " if last_field else "│  "), is_last=True))
+            parts.append(
+                _format_ast(
+                    val,
+                    indent=next_indent + ("   " if last_field else "│  "),
+                    is_last=True,
+                )
+            )
             continue
 
         parts.append(f"{next_indent}{'└─ ' if last_field else '├─ '}{name} = {val!r}")
@@ -142,7 +161,9 @@ def main(argv: list[str] | None = None) -> int:
 
     p_run = sub.add_parser("run", help="Execute a .suay file")
     p_run.add_argument("file", help="Path to .suay file")
-    p_run.add_argument("--trace", action="store_true", help="Print step-by-step evaluation trace")
+    p_run.add_argument(
+        "--trace", action="store_true", help="Print step-by-step evaluation trace"
+    )
 
     p_check = sub.add_parser("check", help="Lex+parse only; no execution")
     p_check.add_argument("file", help="Path to .suay file")
@@ -166,7 +187,13 @@ def main(argv: list[str] | None = None) -> int:
         _print_err("Unknown command")
         return 2
 
-    except (FileNotFoundError, PermissionError, IsADirectoryError, UnicodeDecodeError, OSError) as e:
+    except (
+        FileNotFoundError,
+        PermissionError,
+        IsADirectoryError,
+        UnicodeDecodeError,
+        OSError,
+    ) as e:
         _print_err(f"{getattr(args, 'file', '<input>')}: {e}")
         return 1
     except SuayError as e:

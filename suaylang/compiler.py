@@ -37,7 +37,9 @@ class _Builder:
             if p.label not in self.labels:
                 raise ValueError(f"Unknown label: {p.label}")
             target = self.labels[p.label]
-            self.instrs[p.pc] = Instr(op=self.instrs[p.pc].op, arg=target, span=self.instrs[p.pc].span)
+            self.instrs[p.pc] = Instr(
+                op=self.instrs[p.pc].op, arg=target, span=self.instrs[p.pc].span
+            )
         return Code(name=self.name, instrs=self.instrs)
 
 

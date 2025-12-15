@@ -19,7 +19,7 @@ class LexerTests(unittest.TestCase):
     def test_lexer_string_escapes_are_decoded(self) -> None:
         tokens = Lexer('"a\\n\\t\\"\\\\"').tokenize()
         self.assertEqual(tokens[0].type, TokenType.STRING)
-        self.assertEqual(tokens[0].value, "a\n\t\"\\")
+        self.assertEqual(tokens[0].value, 'a\n\t"\\')
 
     def test_lexer_unit_literal_is_not_identifier(self) -> None:
         tokens = Lexer("ø").tokenize()

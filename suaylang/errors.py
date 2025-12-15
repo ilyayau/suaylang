@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+
+
 class SuayError(Exception):
     """Base class for user-facing SuayLang errors."""
-
 
 
 def _line_text(source: str, line: int) -> str | None:

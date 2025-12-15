@@ -16,55 +16,42 @@ _SYMBOLS: dict[str, TokenType] = {
     "[": TokenType.LBRACK,
     "]": TokenType.RBRACK,
     ",": TokenType.COMMA,
-
     "⟦": TokenType.LDBRACK,
     "⟧": TokenType.RDBRACK,
     "⟪": TokenType.LDBLOCK,
     "⟫": TokenType.RDBLOCK,
-
     "←": TokenType.ARROW_BIND,
     "⇐": TokenType.ARROW_SET,
     "↦": TokenType.ARROW_MAP,
     "⇒": TokenType.FAT_ARROW,
-
     "▷": TokenType.DISPATCH,
     "⟲": TokenType.CYCLE,
-
     "↩": TokenType.CONTINUE,
     "↯": TokenType.FINISH,
-
     "•": TokenType.BULLET,
     "⋯": TokenType.ELLIPSIS,
-
     "⌁": TokenType.LAMBDA,
-
     "ø": TokenType.UNIT,
     "⊤": TokenType.TRUE,
     "⊥": TokenType.FALSE,
-
     "¬": TokenType.NOT,
-
     "×": TokenType.MUL,
     "÷": TokenType.DIV,
     "*": TokenType.MUL,
     "/": TokenType.DIV,
     "%": TokenType.MOD,
-
     "+": TokenType.PLUS,
     "−": TokenType.MINUS,
     "-": TokenType.MINUS,
     "⊞": TokenType.CONCAT,
-
     "=": TokenType.EQ,
     "≠": TokenType.NEQ,
     "<": TokenType.LT,
     "≤": TokenType.LTE,
     ">": TokenType.GT,
     "≥": TokenType.GTE,
-
     "∧": TokenType.AND,
     "∨": TokenType.OR,
-
     "·": TokenType.CALL,
 }
 

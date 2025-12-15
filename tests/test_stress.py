@@ -8,8 +8,12 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SUAY = os.path.join(REPO_ROOT, "suay")
 
 
-def _run_cli(cmd: str, src: str, *, timeout_s: float = 10.0) -> subprocess.CompletedProcess[str]:
-    with tempfile.NamedTemporaryFile("w", suffix=".suay", delete=False, encoding="utf-8") as f:
+def _run_cli(
+    cmd: str, src: str, *, timeout_s: float = 10.0
+) -> subprocess.CompletedProcess[str]:
+    with tempfile.NamedTemporaryFile(
+        "w", suffix=".suay", delete=False, encoding="utf-8"
+    ) as f:
         f.write(src)
         path = f.name
     try:
@@ -35,7 +39,7 @@ class StressTests(unittest.TestCase):
     # --- Malformed programs ---
 
     def test_malformed_unexpected_character_is_clean_error(self) -> None:
-        p = _run_cli("check", 'say · @\n')
+        p = _run_cli("check", "say · @\n")
         self.assertNotEqual(p.returncode, 0)
         self.assertNoTraceback(p)
         self.assertIn("lexical error", p.stderr)

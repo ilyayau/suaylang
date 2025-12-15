@@ -7,7 +7,16 @@ from . import ast
 from .errors import SuayError
 from .lexer import Lexer
 from .parser import Parser
-from .runtime import Builtin, Closure, Env, StackFrame, SuayRuntimeError, UNIT, Unit, Variant
+from .runtime import (
+    Builtin,
+    Closure,
+    Env,
+    StackFrame,
+    SuayRuntimeError,
+    UNIT,
+    Unit,
+    Variant,
+)
 
 
 def _is_truthy(v: object) -> bool:
@@ -43,7 +52,9 @@ def _to_text(v: object) -> str:
     return str(v)
 
 
-def _merge_maps(a: dict[object, object], b: dict[object, object]) -> dict[object, object]:
+def _merge_maps(
+    a: dict[object, object], b: dict[object, object]
+) -> dict[object, object]:
     out = dict(a)
     out.update(b)
     return out
@@ -87,7 +98,11 @@ class Interpreter:
         p = raw
         if not os.path.splitext(p)[1]:
             p = p + ".suay"
-        base = os.path.dirname(os.path.abspath(self.filename)) if self.filename else os.getcwd()
+        base = (
+            os.path.dirname(os.path.abspath(self.filename))
+            if self.filename
+            else os.getcwd()
+        )
         return os.path.abspath(os.path.join(base, p))
 
     def _load_module_env(self, abs_path: str, *, call_span) -> Env:
@@ -119,8 +134,15 @@ class Interpreter:
 
             # Each module gets its own scope (child of builtins only).
             mod_tokens = Lexer(mod_source, filename=abs_path).tokenize()
-            mod_program = Parser(mod_tokens, mod_source, filename=abs_path).parse_program()
-            mod_interp = Interpreter(source=mod_source, filename=abs_path, trace=self.trace, modules=self.modules)
+            mod_program = Parser(
+                mod_tokens, mod_source, filename=abs_path
+            ).parse_program()
+            mod_interp = Interpreter(
+                source=mod_source,
+                filename=abs_path,
+                trace=self.trace,
+                modules=self.modules,
+            )
             mod_env = Env(parent=mod_interp._builtins_env)
             for item in mod_program.items:
                 mod_interp.eval_expr(item, mod_env)
@@ -130,7 +152,9 @@ class Interpreter:
         except SuayRuntimeError as e:
             # Add an import stack frame at the call site (if we have one).
             if call_span is not None:
-                raise e.with_frame(StackFrame(label=f"load module {abs_path}", span=call_span))
+                raise e.with_frame(
+                    StackFrame(label=f"load module {abs_path}", span=call_span)
+                )
             raise
         except SuayError:
             # Lex/syntax errors are already user-facing; let them bubble.
@@ -148,7 +172,9 @@ class Interpreter:
             return v
         except SuayRuntimeError as e:
             if e.span is None or e.source is None or e.filename is None:
-                raise e.with_location(span=expr.span, source=self.source, filename=self.filename)
+                raise e.with_location(
+                    span=expr.span, source=self.source, filename=self.filename
+                )
             raise
         except RecursionError:
             raise SuayRuntimeError(
@@ -191,7 +217,9 @@ class Interpreter:
             case ast.Binding(name=name, value=value_expr):
                 value = self.eval_expr(value_expr, env)
                 if isinstance(value, Closure) and value.name is None:
-                    value = Closure(params=value.params, body=value.body, env=value.env, name=name)
+                    value = Closure(
+                        params=value.params, body=value.body, env=value.env, name=name
+                    )
                 try:
                     env.define(name, value)
                 except KeyError:
@@ -486,7 +514,12 @@ class Interpreter:
                 if fn_val.name == "link":
                     new_bound = (*fn_val.bound, arg_val)
                     if len(new_bound) < fn_val.arity:
-                        return Builtin(name=fn_val.name, arity=fn_val.arity, impl=fn_val.impl, bound=new_bound)
+                        return Builtin(
+                            name=fn_val.name,
+                            arity=fn_val.arity,
+                            impl=fn_val.impl,
+                            bound=new_bound,
+                        )
                     if len(new_bound) > fn_val.arity:
                         raise SuayRuntimeError(
                             "Builtin over-applied",
@@ -527,7 +560,9 @@ class Interpreter:
                     return fn_val.apply(arg_val)
                 except SuayRuntimeError as e:
                     # Ensure builtins always surface with a call-site location.
-                    raise e.with_location(span=call_span, source=self.source, filename=self.filename)
+                    raise e.with_location(
+                        span=call_span, source=self.source, filename=self.filename
+                    )
 
             if isinstance(fn_val, Closure):
                 if not fn_val.params:
@@ -551,7 +586,9 @@ class Interpreter:
                     call_env.define(k, v)
 
                 if rest:
-                    return Closure(params=rest, body=fn_val.body, env=call_env, name=fn_val.name)
+                    return Closure(
+                        params=rest, body=fn_val.body, env=call_env, name=fn_val.name
+                    )
 
                 # all params satisfied
                 try:
@@ -559,7 +596,9 @@ class Interpreter:
                 except SuayRuntimeError as e:
                     label = fn_val.name or "<lambda>"
                     if call_span is not None:
-                        raise e.with_frame(StackFrame(label=f"call {label}", span=call_span))
+                        raise e.with_frame(
+                            StackFrame(label=f"call {label}", span=call_span)
+                        )
                     raise e
 
             raise SuayRuntimeError(
@@ -572,7 +611,9 @@ class Interpreter:
         except SuayRuntimeError:
             raise
 
-    def _match_pattern(self, pat: ast.Pattern, value: object) -> dict[str, object] | None:
+    def _match_pattern(
+        self, pat: ast.Pattern, value: object
+    ) -> dict[str, object] | None:
         def merge_into(dst: dict[str, object], src: dict[str, object]) -> bool:
             # Return False on conflict (duplicate binder).
             for k, v in src.items():
@@ -845,9 +886,10 @@ class Interpreter:
                 )
             acc = init
             for x in xs:
-                acc = self._apply(self._apply(fn, acc, call_span=None), x, call_span=None)
+                acc = self._apply(
+                    self._apply(fn, acc, call_span=None), x, call_span=None
+                )
             return acc
-
 
         # Note: Builtins are curried by arity.
         env.define("say", Builtin(name="say", arity=1, impl=say))
@@ -863,7 +905,9 @@ class Interpreter:
         env.define("put", Builtin(name="put", arity=3, impl=put3))
         env.define("map", Builtin(name="map", arity=2, impl=map1))
         env.define("fold", Builtin(name="fold", arity=3, impl=fold1))
-        env.define("link", Builtin(name="link", arity=2, impl=lambda _path, _name: UNIT))
+        env.define(
+            "link", Builtin(name="link", arity=2, impl=lambda _path, _name: UNIT)
+        )
 
     def _trace_enter(self, expr: ast.Expr) -> None:
         self._depth += 1
@@ -876,8 +920,12 @@ class Interpreter:
         self._depth -= 1
 
 
-def run_source(source: str, *, filename: str | None = None, trace: bool = False) -> object:
+def run_source(
+    source: str, *, filename: str | None = None, trace: bool = False
+) -> object:
     """Convenience: lex + parse + interpret a SuayLang source string."""
     tokens = Lexer(source, filename=filename).tokenize()
     program = Parser(tokens, source, filename=filename).parse_program()
-    return Interpreter(source=source, filename=filename, trace=trace).eval_program(program)
+    return Interpreter(source=source, filename=filename, trace=trace).eval_program(
+        program
+    )

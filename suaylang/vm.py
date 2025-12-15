@@ -1,11 +1,19 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
 
 from . import ast
 from .bytecode import Code, Instr
-from .runtime import Builtin, Closure, Env, StackFrame, SuayRuntimeError, UNIT, Unit, Variant
+from .runtime import (
+    Builtin,
+    Closure,
+    Env,
+    StackFrame,
+    SuayRuntimeError,
+    UNIT,
+    Unit,
+    Variant,
+)
 
 
 def _is_truthy(v: object) -> bool:
@@ -56,7 +64,9 @@ class ClosureBC:
 
 
 class VM:
-    def __init__(self, *, source: str, filename: str | None = None, trace: bool = False) -> None:
+    def __init__(
+        self, *, source: str, filename: str | None = None, trace: bool = False
+    ) -> None:
         self.source = source
         self.filename = filename
         self.trace = trace
@@ -165,7 +175,11 @@ class VM:
                     stack.append(Variant(tag=str(ins.arg), payload=payload))
                 elif op == "MAKE_CLOSURE":
                     code_obj, params = ins.arg
-                    stack.append(ClosureBC(params=list(params), code=code_obj, env=env, name=None))
+                    stack.append(
+                        ClosureBC(
+                            params=list(params), code=code_obj, env=env, name=None
+                        )
+                    )
                 elif op == "CALL":
                     arg = stack.pop()
                     fn = stack.pop()
@@ -439,7 +453,9 @@ class VM:
                 )
             acc = init
             for x in xs:
-                acc = self._apply(self._apply(fn, acc, call_span=None), x, call_span=None)
+                acc = self._apply(
+                    self._apply(fn, acc, call_span=None), x, call_span=None
+                )
             return acc
 
         env.define("hear", Builtin(name="hear", arity=1, impl=hear))
@@ -463,7 +479,9 @@ class VM:
             try:
                 return fn_val.apply(arg_val)
             except SuayRuntimeError as e:
-                raise e.with_location(span=call_span, source=self.source, filename=self.filename)
+                raise e.with_location(
+                    span=call_span, source=self.source, filename=self.filename
+                )
 
         if isinstance(fn_val, ClosureBC):
             if not fn_val.params:
@@ -487,14 +505,18 @@ class VM:
                 call_env.define(k, v)
 
             if rest:
-                return ClosureBC(params=rest, code=fn_val.code, env=call_env, name=fn_val.name)
+                return ClosureBC(
+                    params=rest, code=fn_val.code, env=call_env, name=fn_val.name
+                )
 
             try:
                 return self.run_in_env(fn_val.code, call_env)
             except SuayRuntimeError as e:
                 label = fn_val.name or "<lambda>"
                 if call_span is not None:
-                    raise e.with_frame(StackFrame(label=f"call {label}", span=call_span))
+                    raise e.with_frame(
+                        StackFrame(label=f"call {label}", span=call_span)
+                    )
                 raise
 
         # allow calling existing interpreter Closure objects too
@@ -651,7 +673,9 @@ class VM:
 
     # -------- Patterns --------
 
-    def _match_pattern(self, pat: ast.Pattern, value: object, *, span) -> dict[str, object] | None:
+    def _match_pattern(
+        self, pat: ast.Pattern, value: object, *, span
+    ) -> dict[str, object] | None:
         def merge_into(dst: dict[str, object], src: dict[str, object]) -> bool:
             for k, v in src.items():
                 if k in dst:
@@ -746,4 +770,6 @@ class VM:
     def _trace_step(self, code: Code, pc: int, ins: Instr, stack: list[object]) -> None:
         pad = "  " * self._depth
         top = "" if not stack else _to_text(stack[-1])
-        print(f"{pad}{code.name}:{pc:04d} {ins.op} {'' if ins.arg is None else ins.arg} | top={top}")
+        print(
+            f"{pad}{code.name}:{pc:04d} {ins.op} {'' if ins.arg is None else ins.arg} | top={top}"
+        )

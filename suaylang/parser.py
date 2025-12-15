@@ -82,19 +82,31 @@ class Parser:
         expr = self._parse_or()
         while self._match(TokenType.DISPATCH):
             # value ▷ ⟪ ... ⟫
-            self._consume(TokenType.LDBLOCK, "Expected ⟪ after ▷ to start dispatch arms")
+            self._consume(
+                TokenType.LDBLOCK, "Expected ⟪ after ▷ to start dispatch arms"
+            )
             arms: list[ast.DispatchArm] = []
             self._skip_newlines()
             while not self._check(TokenType.RDBLOCK):
                 self._consume(TokenType.DISPATCH, "Expected ▷ to start a dispatch arm")
                 pat = self._parse_pattern()
-                self._consume(TokenType.FAT_ARROW, "Expected ⇒ after dispatch arm pattern")
+                self._consume(
+                    TokenType.FAT_ARROW, "Expected ⇒ after dispatch arm pattern"
+                )
                 self._skip_newlines()
                 arm_expr = self._parse_expr()
-                arms.append(ast.DispatchArm(pattern=pat, expr=arm_expr, span=Span(pat.span.start, arm_expr.span.end)))
+                arms.append(
+                    ast.DispatchArm(
+                        pattern=pat,
+                        expr=arm_expr,
+                        span=Span(pat.span.start, arm_expr.span.end),
+                    )
+                )
                 self._skip_newlines()
             end_tok = self._consume(TokenType.RDBLOCK, "Expected ⟫ to close dispatch")
-            expr = ast.Dispatch(value=expr, arms=arms, span=Span(expr.span.start, end_tok.span.end))
+            expr = ast.Dispatch(
+                value=expr, arms=arms, span=Span(expr.span.start, end_tok.span.end)
+            )
         return expr
 
     def _parse_or(self) -> ast.Expr:
@@ -102,7 +114,12 @@ class Parser:
         while self._match(TokenType.OR):
             op = self._previous().lexeme
             right = self._parse_and()
-            expr = ast.Binary(op=op, left=expr, right=right, span=Span(expr.span.start, right.span.end))
+            expr = ast.Binary(
+                op=op,
+                left=expr,
+                right=right,
+                span=Span(expr.span.start, right.span.end),
+            )
         return expr
 
     def _parse_and(self) -> ast.Expr:
@@ -110,15 +127,32 @@ class Parser:
         while self._match(TokenType.AND):
             op = self._previous().lexeme
             right = self._parse_compare()
-            expr = ast.Binary(op=op, left=expr, right=right, span=Span(expr.span.start, right.span.end))
+            expr = ast.Binary(
+                op=op,
+                left=expr,
+                right=right,
+                span=Span(expr.span.start, right.span.end),
+            )
         return expr
 
     def _parse_compare(self) -> ast.Expr:
         expr = self._parse_add()
-        while self._match(TokenType.EQ, TokenType.NEQ, TokenType.LT, TokenType.LTE, TokenType.GT, TokenType.GTE):
+        while self._match(
+            TokenType.EQ,
+            TokenType.NEQ,
+            TokenType.LT,
+            TokenType.LTE,
+            TokenType.GT,
+            TokenType.GTE,
+        ):
             op = self._previous().lexeme
             right = self._parse_add()
-            expr = ast.Binary(op=op, left=expr, right=right, span=Span(expr.span.start, right.span.end))
+            expr = ast.Binary(
+                op=op,
+                left=expr,
+                right=right,
+                span=Span(expr.span.start, right.span.end),
+            )
         return expr
 
     def _parse_add(self) -> ast.Expr:
@@ -126,7 +160,12 @@ class Parser:
         while self._match(TokenType.PLUS, TokenType.MINUS, TokenType.CONCAT):
             op = self._previous().lexeme
             right = self._parse_mul()
-            expr = ast.Binary(op=op, left=expr, right=right, span=Span(expr.span.start, right.span.end))
+            expr = ast.Binary(
+                op=op,
+                left=expr,
+                right=right,
+                span=Span(expr.span.start, right.span.end),
+            )
         return expr
 
     def _parse_mul(self) -> ast.Expr:
@@ -134,21 +173,30 @@ class Parser:
         while self._match(TokenType.MUL, TokenType.DIV, TokenType.MOD):
             op = self._previous().lexeme
             right = self._parse_prefix()
-            expr = ast.Binary(op=op, left=expr, right=right, span=Span(expr.span.start, right.span.end))
+            expr = ast.Binary(
+                op=op,
+                left=expr,
+                right=right,
+                span=Span(expr.span.start, right.span.end),
+            )
         return expr
 
     def _parse_prefix(self) -> ast.Expr:
         if self._match(TokenType.NOT, TokenType.MINUS):
             op_tok = self._previous()
             rhs = self._parse_call()  # call binds tighter than prefix in SuayLang spec
-            return ast.Unary(op=op_tok.lexeme, expr=rhs, span=Span(op_tok.span.start, rhs.span.end))
+            return ast.Unary(
+                op=op_tok.lexeme, expr=rhs, span=Span(op_tok.span.start, rhs.span.end)
+            )
         return self._parse_call()
 
     def _parse_call(self) -> ast.Expr:
         expr = self._parse_variant()
         while self._match(TokenType.CALL):
             rhs = self._parse_call_arg()
-            expr = ast.Call(func=expr, arg=rhs, span=Span(expr.span.start, rhs.span.end))
+            expr = ast.Call(
+                func=expr, arg=rhs, span=Span(expr.span.start, rhs.span.end)
+            )
         return expr
 
     def _parse_call_arg(self) -> ast.Expr:
@@ -157,7 +205,9 @@ class Parser:
         if self._match(TokenType.NOT, TokenType.MINUS):
             op_tok = self._previous()
             rhs = self._parse_variant()
-            return ast.Unary(op=op_tok.lexeme, expr=rhs, span=Span(op_tok.span.start, rhs.span.end))
+            return ast.Unary(
+                op=op_tok.lexeme, expr=rhs, span=Span(op_tok.span.start, rhs.span.end)
+            )
         return self._parse_variant()
 
     def _parse_variant(self) -> ast.Expr:
@@ -166,7 +216,11 @@ class Parser:
             tag_tok = self._advance()
             self._advance()  # •
             payload = self._parse_primary()
-            return ast.VariantExpr(tag=tag_tok.value if isinstance(tag_tok.value, str) else tag_tok.lexeme, payload=payload, span=Span(tag_tok.span.start, payload.span.end))
+            return ast.VariantExpr(
+                tag=tag_tok.value if isinstance(tag_tok.value, str) else tag_tok.lexeme,
+                payload=payload,
+                span=Span(tag_tok.span.start, payload.span.end),
+            )
         return self._parse_primary()
 
     def _parse_primary(self) -> ast.Expr:
@@ -212,10 +266,19 @@ class Parser:
                     self._error_here("Expected ↩ or ↯ after ⇒ in cycle arm")
                 self._skip_newlines()
                 arm_expr = self._parse_expr()
-                arms.append(ast.CycleArm(pattern=pat, mode=mode, expr=arm_expr, span=Span(pat.span.start, arm_expr.span.end)))
+                arms.append(
+                    ast.CycleArm(
+                        pattern=pat,
+                        mode=mode,
+                        expr=arm_expr,
+                        span=Span(pat.span.start, arm_expr.span.end),
+                    )
+                )
                 self._skip_newlines()
             end_tok = self._consume(TokenType.RDBLOCK, "Expected ⟫ to close cycle")
-            return ast.Cycle(seed=seed, arms=arms, span=Span(start_tok.span.start, end_tok.span.end))
+            return ast.Cycle(
+                seed=seed, arms=arms, span=Span(start_tok.span.start, end_tok.span.end)
+            )
 
         # Lambda: ⌁(p1 p2 ...) body
         if self._match(TokenType.LAMBDA):
@@ -231,7 +294,9 @@ class Parser:
             self._consume(TokenType.RPAREN, "Expected ) to close parameter list")
             self._skip_newlines()
             body = self._parse_expr()
-            return ast.Lambda(params=params, body=body, span=Span(start_tok.span.start, body.span.end))
+            return ast.Lambda(
+                params=params, body=body, span=Span(start_tok.span.start, body.span.end)
+            )
 
         # Block: ⟪ ... ⟫
         if self._match(TokenType.LDBLOCK):
@@ -241,13 +306,20 @@ class Parser:
             while not self._check(TokenType.RDBLOCK):
                 items.append(self._parse_expr())
                 # Inside blocks, require line breaks between forms.
-                if not (self._check(TokenType.NEWLINE) or self._check(TokenType.RDBLOCK)):
+                if not (
+                    self._check(TokenType.NEWLINE) or self._check(TokenType.RDBLOCK)
+                ):
                     self._error_here("Expected end of line after block expression")
                 self._skip_newlines()
             end_tok = self._consume(TokenType.RDBLOCK, "Expected ⟫ to close block")
             if not items:
-                self._raise_at_span(Span(start_tok.span.start, end_tok.span.end), "Empty block ⟪ ⟫ is not allowed")
-            return ast.Block(items=items, span=Span(start_tok.span.start, end_tok.span.end))
+                self._raise_at_span(
+                    Span(start_tok.span.start, end_tok.span.end),
+                    "Empty block ⟪ ⟫ is not allowed",
+                )
+            return ast.Block(
+                items=items, span=Span(start_tok.span.start, end_tok.span.end)
+            )
 
         # Tuple: (e1 e2 ...)
         if self._match(TokenType.LPAREN):
@@ -272,7 +344,9 @@ class Parser:
             # Grouping: (expr) is just expr. A 1-tuple must be written as (expr,).
             if len(items) == 1 and not saw_comma:
                 return items[0]
-            return ast.TupleExpr(items=items, span=Span(start_tok.span.start, end_tok.span.end))
+            return ast.TupleExpr(
+                items=items, span=Span(start_tok.span.start, end_tok.span.end)
+            )
 
         # List: [e1 e2 ...]
         if self._match(TokenType.LBRACK):
@@ -281,13 +355,17 @@ class Parser:
             self._skip_newlines()
             while not self._check(TokenType.RBRACK):
                 if self._check(TokenType.ELLIPSIS):
-                    self._error_here("⋯ (ellipsis) is only allowed in list patterns, not list expressions")
+                    self._error_here(
+                        "⋯ (ellipsis) is only allowed in list patterns, not list expressions"
+                    )
                 items.append(self._parse_expr())
                 self._skip_separators_in_listlike()
                 if self._check(TokenType.RBRACK):
                     break
             end_tok = self._consume(TokenType.RBRACK, "Expected ] to close list")
-            return ast.ListExpr(items=items, span=Span(start_tok.span.start, end_tok.span.end))
+            return ast.ListExpr(
+                items=items, span=Span(start_tok.span.start, end_tok.span.end)
+            )
 
         # Map: ⟦ k ↦ v , ... ⟧
         if self._match(TokenType.LDBRACK):
@@ -303,7 +381,9 @@ class Parser:
                 if self._check(TokenType.RDBRACK):
                     break
             end_tok = self._consume(TokenType.RDBRACK, "Expected ⟧ to close map")
-            return ast.MapExpr(entries=entries, span=Span(start_tok.span.start, end_tok.span.end))
+            return ast.MapExpr(
+                entries=entries, span=Span(start_tok.span.start, end_tok.span.end)
+            )
 
         # Binding: name ← expr
         if self._check(TokenType.IDENT) and self._check_next(TokenType.ARROW_BIND):
@@ -311,7 +391,11 @@ class Parser:
             self._advance()  # ←
             self._skip_newlines()
             val = self._parse_expr()
-            return ast.Binding(name=str(name_tok.value), value=val, span=Span(name_tok.span.start, val.span.end))
+            return ast.Binding(
+                name=str(name_tok.value),
+                value=val,
+                span=Span(name_tok.span.start, val.span.end),
+            )
 
         # Mutation: name ⇐ expr
         if self._check(TokenType.IDENT) and self._check_next(TokenType.ARROW_SET):
@@ -319,7 +403,11 @@ class Parser:
             self._advance()  # ⇐
             self._skip_newlines()
             val = self._parse_expr()
-            return ast.Mutation(name=str(name_tok.value), value=val, span=Span(name_tok.span.start, val.span.end))
+            return ast.Mutation(
+                name=str(name_tok.value),
+                value=val,
+                span=Span(name_tok.span.start, val.span.end),
+            )
 
         if self._match(TokenType.IDENT):
             t = self._previous()
@@ -338,7 +426,11 @@ class Parser:
             tag_tok = self._advance()
             self._advance()  # •
             payload = self._parse_pattern_atom()
-            return ast.PVariant(tag=str(tag_tok.value), payload=payload, span=Span(tag_tok.span.start, payload.span.end))
+            return ast.PVariant(
+                tag=str(tag_tok.value),
+                payload=payload,
+                span=Span(tag_tok.span.start, payload.span.end),
+            )
         return self._parse_pattern_atom()
 
     def _parse_pattern_atom(self) -> ast.Pattern:
@@ -396,7 +488,9 @@ class Parser:
                 if self._match(TokenType.ELLIPSIS):
                     tail = self._parse_pattern_atom()
                     if not isinstance(tail, (ast.PName, ast.PWildcard)):
-                        self._raise_at_span(tail.span, "List tail after ⋯ must be a name or _")
+                        self._raise_at_span(
+                            tail.span, "List tail after ⋯ must be a name or _"
+                        )
                     self._skip_newlines()
                     break
                 items.append(self._parse_pattern())
@@ -404,7 +498,9 @@ class Parser:
                 if self._check(TokenType.RBRACK):
                     break
             end = self._consume(TokenType.RBRACK, "Expected ] to close list pattern")
-            return ast.PList(items=items, tail=tail, span=Span(start.span.start, end.span.end))
+            return ast.PList(
+                items=items, tail=tail, span=Span(start.span.start, end.span.end)
+            )
 
         if self._match(TokenType.IDENT):
             t = self._previous()

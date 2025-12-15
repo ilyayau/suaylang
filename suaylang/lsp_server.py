@@ -62,7 +62,9 @@ def _respond(req_id: Any, result: Any) -> None:
     _send({"jsonrpc": "2.0", "id": req_id, "result": result})
 
 
-def _respond_error(req_id: Any, code: int, message: str, data: Any | None = None) -> None:
+def _respond_error(
+    req_id: Any, code: int, message: str, data: Any | None = None
+) -> None:
     err: dict[str, Any] = {"code": code, "message": message}
     if data is not None:
         err["data"] = data
@@ -141,7 +143,9 @@ class DocState:
     defs: dict[str, list[DefInfo]] | None = None
 
 
-def _index_document(uri: str, text: str) -> tuple[list[dict[str, Any]], list[Token] | None, dict[str, list[DefInfo]] | None]:
+def _index_document(
+    uri: str, text: str
+) -> tuple[list[dict[str, Any]], list[Token] | None, dict[str, list[DefInfo]] | None]:
     # Returns (diagnostics, tokens, defs). On lex/parse error, tokens/defs may be partial.
     diagnostics: list[dict[str, Any]] = []
 
@@ -208,7 +212,15 @@ def _extract_defs(text: str, tokens: list[Token]) -> dict[str, list[DefInfo]]:
                 params_text = _extract_lambda_params(text, tokens, j)
 
             full_span = tokens[j].span if j < len(tokens) else t0.span
-            add(DefInfo(name=name, kind=kind, name_span=t0.span, full_span=full_span, params_text=params_text))
+            add(
+                DefInfo(
+                    name=name,
+                    kind=kind,
+                    name_span=t0.span,
+                    full_span=full_span,
+                    params_text=params_text,
+                )
+            )
         i += 1
 
     # Sort by occurrence.
@@ -217,7 +229,9 @@ def _extract_defs(text: str, tokens: list[Token]) -> dict[str, list[DefInfo]]:
     return defs
 
 
-def _extract_lambda_params(text: str, tokens: list[Token], lambda_index: int) -> str | None:
+def _extract_lambda_params(
+    text: str, tokens: list[Token], lambda_index: int
+) -> str | None:
     # lambda token is at lambda_index. Find next LPAREN .. matching RPAREN.
     i = lambda_index + 1
     while i < len(tokens) and tokens[i].type == TokenType.NEWLINE:
@@ -248,7 +262,9 @@ def _find_ident_at(tokens: list[Token], line0: int, ch0: int) -> Token | None:
     return None
 
 
-def _pick_def(defs: dict[str, list[DefInfo]], name: str, before_offset: int) -> DefInfo | None:
+def _pick_def(
+    defs: dict[str, list[DefInfo]], name: str, before_offset: int
+) -> DefInfo | None:
     lst = defs.get(name)
     if not lst:
         return None
@@ -334,7 +350,9 @@ class SuayLspServer:
             if uri:
                 with self._lock:
                     self._docs.pop(uri, None)
-                _notify("textDocument/publishDiagnostics", {"uri": uri, "diagnostics": []})
+                _notify(
+                    "textDocument/publishDiagnostics", {"uri": uri, "diagnostics": []}
+                )
             return
 
         if method == "textDocument/definition":
@@ -365,8 +383,12 @@ class SuayLspServer:
     def _update_doc(self, uri: str, text: str, version: int | None) -> None:
         diagnostics, tokens, defs = _index_document(uri, text)
         with self._lock:
-            self._docs[uri] = DocState(uri=uri, text=text, version=version, tokens=tokens, defs=defs)
-        _notify("textDocument/publishDiagnostics", {"uri": uri, "diagnostics": diagnostics})
+            self._docs[uri] = DocState(
+                uri=uri, text=text, version=version, tokens=tokens, defs=defs
+            )
+        _notify(
+            "textDocument/publishDiagnostics", {"uri": uri, "diagnostics": diagnostics}
+        )
 
     def _get_doc(self, uri: str) -> DocState | None:
         with self._lock:
@@ -388,7 +410,9 @@ class SuayLspServer:
             return None
 
         name = str(tok.value)
-        before = _lsp_pos_to_offset(doc.text, pos.get("line", 0), pos.get("character", 0))
+        before = _lsp_pos_to_offset(
+            doc.text, pos.get("line", 0), pos.get("character", 0)
+        )
         di = _pick_def(doc.defs, name, before)
         if di is None:
             return None
@@ -441,16 +465,16 @@ class SuayLspServer:
 
         builtins = {
             "say": "builtin: say · x → ø (prints)",
-                "hear": "builtin: hear · prompt → Text (read a line from stdin)",
-                "text": "builtin: text · x → Text (stringify)",
-                "abs": "builtin: abs · n → Num",
-                "count": "builtin: count · x → Int (length of Text/List/Tuple/Map)",
-                "at": "builtin: at · xs · i → value (index Text/List/Tuple)",
-                "take": "builtin: take · xs · n → xs (prefix of Text/List)",
-                "drop": "builtin: drop · xs · n → xs (suffix of Text/List)",
-                "keys": "builtin: keys · map → List (map keys)",
-                "has": "builtin: has · map · key → Bool (map contains key)",
-                "put": "builtin: put · map · key · val → Map (returns new map)",
+            "hear": "builtin: hear · prompt → Text (read a line from stdin)",
+            "text": "builtin: text · x → Text (stringify)",
+            "abs": "builtin: abs · n → Num",
+            "count": "builtin: count · x → Int (length of Text/List/Tuple/Map)",
+            "at": "builtin: at · xs · i → value (index Text/List/Tuple)",
+            "take": "builtin: take · xs · n → xs (prefix of Text/List)",
+            "drop": "builtin: drop · xs · n → xs (suffix of Text/List)",
+            "keys": "builtin: keys · map → List (map keys)",
+            "has": "builtin: has · map · key → Bool (map contains key)",
+            "put": "builtin: put · map · key · val → Map (returns new map)",
             "map": "builtin: map · f · [a] → [b]",
             "fold": "builtin: fold · f · init · [a] → b",
             "link": "builtin: link · path · name → value (load module by file path)",

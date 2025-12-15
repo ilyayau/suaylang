@@ -41,7 +41,9 @@ class Builtin:
     def apply(self, arg: object) -> "Builtin | object":
         new_bound = (*self.bound, arg)
         if len(new_bound) < self.arity:
-            return Builtin(name=self.name, arity=self.arity, impl=self.impl, bound=new_bound)
+            return Builtin(
+                name=self.name, arity=self.arity, impl=self.impl, bound=new_bound
+            )
         if len(new_bound) > self.arity:
             raise ValueError("Builtin over-applied")
         return self.impl(*new_bound)
@@ -126,7 +128,13 @@ class SuayRuntimeError(SuayError):
             filename=self.filename,
         )
 
-    def with_location(self, *, span: Span | None = None, source: str | None = None, filename: str | None = None) -> "SuayRuntimeError":
+    def with_location(
+        self,
+        *,
+        span: Span | None = None,
+        source: str | None = None,
+        filename: str | None = None,
+    ) -> "SuayRuntimeError":
         """Fill in missing location information, without overwriting existing details."""
         return SuayRuntimeError(
             self.message,

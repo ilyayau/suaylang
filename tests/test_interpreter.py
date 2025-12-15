@@ -77,5 +77,3 @@ class InterpreterTests(unittest.TestCase):
         src = "say · (⟲ 3 ▷ ⟪\n ▷ 0 ⇒ ↯ 0\n ▷ n ⇒ ↩ (n - 1)\n⟫)\n"
         _, out = run_capture(src)
         self.assertEqual(out.strip(), "0")
-
-
