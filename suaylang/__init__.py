@@ -1,9 +1,11 @@
-"""SuayLang front-end (lexer, parser, AST).
+"""SuayLang front-end (lexer, parser, AST)."""
 
-MVP implementation based on the SuayLang language spec in this workspace's chat history.
-"""
+from importlib import metadata
 
-__version__ = "0.1.0"
+try:
+    __version__ = metadata.version("suaylang")
+except metadata.PackageNotFoundError:  # pragma: no cover
+    __version__ = "0.0.0"
 
 from .tokens import Token, TokenType, Position, Span
 from .errors import SuayError, Diagnostic
