@@ -19,3 +19,12 @@ say · ("has(m,'a')=" ⊞ (text · (has · m · "a")))
 m2 ← put · m · "c" · (abs · -7)
 
 say · ("m2=" ⊞ (text · m2))
+
+⍝ Expected stdout:
+⍝ count(xs)=5
+⍝ at(xs,2)=3
+⍝ take(xs,3)=[1 2 3]
+⍝ drop(xs,3)=[4 5]
+⍝ keys(m)=[a b]
+⍝ has(m,'a')=⊤
+⍝ m2=⟦a ↦ 1, b ↦ 2, c ↦ 7⟧

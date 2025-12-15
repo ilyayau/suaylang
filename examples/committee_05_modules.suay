@@ -5,3 +5,6 @@ math ← link · "./modules/math"
 add ← math · "add"
 
 say · ("add(2,3)=" ⊞ (text · (add · 2 · 3)))
+
+⍝ Expected stdout:
+⍝ add(2,3)=5

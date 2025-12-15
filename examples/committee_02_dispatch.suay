@@ -8,3 +8,7 @@ classify ← ⌁(v)
 
 say · (classify · (Ok•41))
 say · (classify · (Err•"bad"))
+
+⍝ Expected stdout:
+⍝ ok:41
+⍝ err:bad

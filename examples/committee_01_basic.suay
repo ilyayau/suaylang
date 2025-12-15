@@ -1,3 +1,6 @@
 ⍝ Committee example 01: basic computation + functions
 square ← ⌁(x) x × x
 say · ("square(7)=" ⊞ (text · (square · 7)))
+
+⍝ Expected stdout:
+⍝ square(7)=49

@@ -11,3 +11,6 @@ sum_to ← ⌁(n)
   ⟫
 
 say · ("sum_to(5)=" ⊞ (text · (sum_to · 5)))
+
+⍝ Expected stdout:
+⍝ sum_to(5)=15

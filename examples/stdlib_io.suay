@@ -2,3 +2,7 @@
 name ← hear · "name? "
 
 say · ("hello, " ⊞ name)
+
+⍝ Expected interaction:
+⍝ - prompts: name?
+⍝ - if input is "Aya", prints: hello, Aya
