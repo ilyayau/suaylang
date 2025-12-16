@@ -23,4 +23,10 @@ For programs in the supported subset, compare:
 
 ## Status
 
-This is scaffolding only. Implementation will live in run.py.
+Implemented runner:
+
+```sh
+python tools/conformance/run.py
+```
+
+By default it runs all `.suay` files under `tests/corpus/conformance/`.

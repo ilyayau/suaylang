@@ -1,0 +1,6 @@
+x ← 10
+
+# Arithmetic + higher-order builtins (no I/O except final print)
+
+total ← fold · (⌁(a b) a + b) · 0 · [x 20]
+say · ("total=" ⊞ (text · total))

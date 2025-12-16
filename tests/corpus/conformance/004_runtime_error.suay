@@ -1,0 +1,2 @@
+# Undefined name should raise runtime error with location
+say · (text · z)

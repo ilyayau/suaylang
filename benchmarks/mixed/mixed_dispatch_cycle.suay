@@ -1,0 +1,20 @@
+⍝ mixed: dispatch inside cycle with tuples
+
+⟲ (Step•(0 0)) ▷ ⟪
+▷ Done•acc     ⇒ ↯ acc
+▷ Step•(i acc) ⇒ ↩ (
+    (i ≥ 3000) ▷ ⟪
+    ▷ ⊤ ⇒ Done•acc
+    ▷ ⊥ ⇒ Step•(
+          i + 1
+          acc + (
+            (i % 3) ▷ ⟪
+            ▷ 0 ⇒ i
+            ▷ 1 ⇒ 2 × i
+            ▷ _ ⇒ 3 × i
+            ⟫
+          )
+        )
+    ⟫
+  )
+⟫

@@ -1,0 +1,19 @@
+⍝ call-heavy: curried calls + higher-order builtins
+
+add ← ⌁(a b) a + b
+inc ← add · 1
+
+nums ← ⟪
+  ⍝ build a list [0..999]
+  ⟲ (Step•(0 [])) ▷ ⟪
+  ▷ Done•xs     ⇒ ↯ xs
+  ▷ Step•(i xs) ⇒ ↩ (
+        (i ≥ 1000) ▷ ⟪
+        ▷ ⊤ ⇒ Done•xs
+        ▷ ⊥ ⇒ Step•(i + 1  xs ⊞ [i])
+        ⟫
+      )
+  ⟫
+⟫
+
+fold · (⌁(a b) a + (inc · b)) · 0 · nums
