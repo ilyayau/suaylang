@@ -49,14 +49,14 @@
     },
     "constants": {
       "patterns": [
-        { "name": "constant.language.suay", "match": "[ø⊤⊥]" }
+        { "name": "constant.language.suay", "match": "(ø|⊤|⊥|#u|#t|#f)" }
       ]
     },
     "operators": {
       "patterns": [
         {
           "name": "keyword.operator.suay",
-          "match": "(←|⇐|↦|⇒|▷|⟲|↩|↯|•|⋯|⌁|·|¬|⊞|×|÷|%|\\+|−|-|\\*|/|=|≠|≤|≥|<|>|∧|∨)"
+          "match": "(←|⇐|↦|⇒|▷|⟲|↩|↯|•|⋯|⌁|·|¬|⊞|×|÷|%|\\+|−|-|\\*|/|=|≠|≤|≥|<|>|∧|∨|<-|<~|->|=>|\\|>|~~|>>|<<|::|\\.\\.\\.|<=|>=|!=|==|&&|\\|\\||\\+\\+|#u|#t|#f|\\.|!|\\\\)"
         }
       ]
     },
@@ -64,7 +64,7 @@
       "patterns": [
         { "name": "punctuation.section.parens.suay", "match": "[()]" },
         { "name": "punctuation.section.brackets.suay", "match": "[\\[\\]]" },
-        { "name": "punctuation.section.block.suay", "match": "(⟪|⟫|⟦|⟧)" },
+        { "name": "punctuation.section.block.suay", "match": "(⟪|⟫|⟦|⟧|\\{|\\}|\\[\\[|\\]\\])" },
         { "name": "punctuation.separator.comma.suay", "match": "," }
       ]
     },

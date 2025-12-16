@@ -1,0 +1,31 @@
+name: Bug report
+description: Report a crash, wrong result, or bad diagnostic
+labels: [bug]
+body:
+  - type: textarea
+    id: code
+    attributes:
+      label: Suay program
+      description: Paste a minimal reproducer program (prefer a single file)
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: SuayLang version
+      description: Output of `suay doctor` (or package version)
+    validations:
+      required: false

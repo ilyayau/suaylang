@@ -14,6 +14,10 @@ This repository is intended for public review: language design, semantics, error
 
 For a stability definition of “v0.1”, see [docs/LANGUAGE_CONTRACT_v0.1.md](docs/LANGUAGE_CONTRACT_v0.1.md).
 
+## Research Orientation
+
+This project prioritizes reproducible experiments, explicit semantics, and evidence (tests + benchmarks) intended for international academic review.
+
 ## Quickstart (2 minutes)
 
 ### Linux/macOS
@@ -48,6 +52,12 @@ suay run src/main.suay
 
 Reference sheet:
 - [docs/REFERENCE_SHEET.md](docs/REFERENCE_SHEET.md)
+- ASCII aliases (first-class): [docs/syntax_mapping.md](docs/syntax_mapping.md)
+
+Demo + tutorial:
+- [demos/README.md](demos/README.md)
+- [docs/TUTORIAL.md](docs/TUTORIAL.md)
+- [docs/USE_CASES.md](docs/USE_CASES.md)
 
 ## Start in 60 seconds
 
@@ -200,6 +210,7 @@ make check
 ```
 
 See [docs/QUICKSTART.md](docs/QUICKSTART.md) for a 15-minute reviewer path.
+See [docs/testing.md](docs/testing.md) for the testing pyramid.
 
 ### One-command installation
 

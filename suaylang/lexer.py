@@ -15,6 +15,8 @@ _SYMBOLS: dict[str, TokenType] = {
     ")": TokenType.RPAREN,
     "[": TokenType.LBRACK,
     "]": TokenType.RBRACK,
+    "{": TokenType.LDBLOCK,
+    "}": TokenType.RDBLOCK,
     ",": TokenType.COMMA,
     "⟦": TokenType.LDBRACK,
     "⟧": TokenType.RDBRACK,
@@ -53,6 +55,69 @@ _SYMBOLS: dict[str, TokenType] = {
     "∧": TokenType.AND,
     "∨": TokenType.OR,
     "·": TokenType.CALL,
+    ".": TokenType.CALL,
+    "!": TokenType.NOT,
+    "\\": TokenType.LAMBDA,
+}
+
+
+# Multi-character ASCII aliases (checked before single-character symbols).
+_MULTI_SYMBOLS: dict[str, TokenType] = {
+    "[[": TokenType.LDBRACK,
+    "]]": TokenType.RDBRACK,
+    "<-": TokenType.ARROW_BIND,
+    "<~": TokenType.ARROW_SET,
+    "->": TokenType.ARROW_MAP,
+    "=>": TokenType.FAT_ARROW,
+    "|>": TokenType.DISPATCH,
+    "~~": TokenType.CYCLE,
+    ">>": TokenType.CONTINUE,
+    "<<": TokenType.FINISH,
+    "::": TokenType.BULLET,
+    "...": TokenType.ELLIPSIS,
+    "<=": TokenType.LTE,
+    ">=": TokenType.GTE,
+    "!=": TokenType.NEQ,
+    "==": TokenType.EQ,
+    "&&": TokenType.AND,
+    "||": TokenType.OR,
+    "++": TokenType.CONCAT,
+    "#t": TokenType.TRUE,
+    "#f": TokenType.FALSE,
+    "#u": TokenType.UNIT,
+}
+
+
+_CANONICAL_LEXEME: dict[TokenType, str] = {
+    TokenType.LDBRACK: "⟦",
+    TokenType.RDBRACK: "⟧",
+    TokenType.LDBLOCK: "⟪",
+    TokenType.RDBLOCK: "⟫",
+    TokenType.ARROW_BIND: "←",
+    TokenType.ARROW_SET: "⇐",
+    TokenType.ARROW_MAP: "↦",
+    TokenType.FAT_ARROW: "⇒",
+    TokenType.DISPATCH: "▷",
+    TokenType.CYCLE: "⟲",
+    TokenType.CONTINUE: "↩",
+    TokenType.FINISH: "↯",
+    TokenType.BULLET: "•",
+    TokenType.ELLIPSIS: "⋯",
+    TokenType.LAMBDA: "⌁",
+    TokenType.UNIT: "ø",
+    TokenType.TRUE: "⊤",
+    TokenType.FALSE: "⊥",
+    TokenType.NOT: "¬",
+    TokenType.MUL: "×",
+    TokenType.DIV: "÷",
+    TokenType.MINUS: "−",
+    TokenType.CONCAT: "⊞",
+    TokenType.NEQ: "≠",
+    TokenType.LTE: "≤",
+    TokenType.GTE: "≥",
+    TokenType.AND: "∧",
+    TokenType.OR: "∨",
+    TokenType.CALL: "·",
 }
 
 
@@ -104,6 +169,13 @@ class Lexer:
                     tokens.append(self._lex_number())
                     continue
 
+                # Multi-character ASCII aliases must be recognized before single-character
+                # symbol lexing and identifier lexing.
+                multi = self._try_lex_multi_symbol()
+                if multi is not None:
+                    tokens.append(multi)
+                    continue
+
                 # Symbols (including alphabetic-looking glyphs like ø/⊤/⊥) must be recognized
                 # before identifier lexing.
                 if ch in _SYMBOLS:
@@ -141,7 +213,30 @@ class Lexer:
         start = self._pos()
         ch = self._advance()
         end = self._pos()
-        return Token(_SYMBOLS[ch], ch, Span(start, end))
+        typ = _SYMBOLS[ch]
+        lexeme = _CANONICAL_LEXEME.get(typ, ch)
+        return Token(typ, lexeme, Span(start, end))
+
+    def _try_lex_multi_symbol(self) -> Token | None:
+        if self._at_end():
+            return None
+
+        # Max-munch for known multi-character tokens.
+        for n in (3, 2):
+            j = self._i + n
+            if j <= len(self.source):
+                s = self.source[self._i : j]
+                typ = _MULTI_SYMBOLS.get(s)
+                if typ is None:
+                    continue
+                start = self._pos()
+                for _ in range(n):
+                    self._advance()
+                end = self._pos()
+                lexeme = _CANONICAL_LEXEME.get(typ, s)
+                return Token(typ, lexeme, Span(start, end))
+
+        return None
 
     def _lex_ident_or_underscore(self) -> Token:
         start = self._pos()

@@ -14,6 +14,7 @@ This directory contains a small, intentionally conservative micro-benchmark suit
 Reproduce (from repo root):
 
 - `python scripts/bench_micro.py --iters 50 benchmarks/fib benchmarks/map_fold benchmarks/dispatch benchmarks/cycle`
+- `python scripts/bench_micro.py --iters 50 benchmarks/state_machine/workflow.suay`
 
 ## Results (example run)
 
@@ -25,6 +26,7 @@ These measurements are machine-dependent; treat **Relative** as the primary sign
 | map_fold | 42.121 | 35.505 | 1.19 | 81 | builtin `map`+`fold` + list building |
 | dispatch_chain | 80.950 | 67.770 | 1.19 | 89 | dispatch-heavy branching |
 | cycle_sum | 127.287 | 113.551 | 1.12 | 58 | explicit state-machine summation |
+| state_machine/workflow | 0.340 | 0.369 | 0.92 | 162 | cycle-heavy workflow transitions |
 
 Environment notes:
 

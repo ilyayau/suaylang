@@ -1,0 +1,47 @@
+⍝ Demo: explicit workflow state machine.
+⍝ Goal: show why `cycle` + `dispatch` is clearer than ad-hoc if/while.
+
+⍝ State encoding as variants:
+⍝ - Start•n
+⍝ - Review•(n tries)
+⍝ - Approved•n
+⍝ - Rejected•n
+⍝ - Done•Text
+
+step ← ⌁(st)
+  st ▷ ⟪
+  ▷ Start•n ⇒
+      say · ("start n=" ⊞ (text · n))
+      Review•(n 0)
+
+  ▷ Review•(n tries) ⇒
+      say · ("review tries=" ⊞ (text · tries))
+      (tries ≥ 3) ▷ ⟪
+      ▷ ⊤ ⇒ Rejected•n
+      ▷ ⊥ ⇒ (
+            (n % 2 = 0) ▷ ⟪
+            ▷ ⊤ ⇒ Approved•n
+            ▷ ⊥ ⇒ Review•(n tries + 1)
+            ⟫
+          )
+      ⟫
+
+  ▷ Approved•n ⇒
+      say · ("approved")
+      Done•("ok:" ⊞ (text · n))
+
+  ▷ Rejected•n ⇒
+      say · ("rejected")
+      Done•("no:" ⊞ (text · n))
+
+  ▷ Done•msg ⇒ Done•msg
+  ▷ _        ⇒ Done•"internal"
+  ⟫
+
+run ← ⌁(seed)
+  ⟲ (Start•seed) ▷ ⟪
+  ▷ Done•msg ⇒ ↯ msg
+  ▷ st       ⇒ ↩ (step · st)
+  ⟫
+
+say · ("result=" ⊞ (run · 7))

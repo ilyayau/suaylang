@@ -3,10 +3,10 @@
 This file is an accessibility aid.
 
 - Unicode remains the primary, research-oriented surface syntax.
-- The ASCII forms below are an **optional presentation layer** for documentation and teaching.
-- Semantics are identical: each ASCII form is intended to be mechanically translatable to the Unicode form.
+- The ASCII forms below are a **first-class alias layer**.
+- Semantics are identical: ASCII and Unicode parse to the same AST (modulo spans).
 
-This document does not claim that an ASCII parser is implemented in v0.1.
+See docs/syntax_mapping.md for the full mapping table.
 
 ## Core mapping table (Unicode → ASCII)
 
@@ -14,18 +14,22 @@ This document does not claim that an ASCII parser is implemented in v0.1.
 |---|---|---|
 | `←` | `<-` | binding |
 | `⇐` | `<~` | mutation |
-| `▷` | `match` | dispatch head |
-| `⇒` | `=>` | dispatch arm arrow |
-| `⟲` | `cycle` | cycle head |
-| `↩` | `continue` | cycle arm mode: continue |
-| `↯` | `finish` | cycle arm mode: finish |
+| `▷` | `|>` | dispatch |
+| `⇒` | `=>` | arm arrow |
+| `⟲` | `~~` | cycle head |
+| `↩` | `>>` | cycle arm mode: continue |
+| `↯` | `<<` | cycle arm mode: finish |
+| `⌁` | `\` | lambda |
+| `•` | `::` | variant separator |
+| `⟦⟧` | `[[ ]]` | map delimiters |
+| `↦` | `->` | map entry arrow |
 | `⟪` | `{` | block open |
 | `⟫` | `}` | block close |
 
 Notes:
 
-- Mutation uses `<~` (not `<=`) to avoid clashing with comparison operators in ASCII-heavy settings.
-- This table focuses only on the constructs required for the optional ASCII layer.
+- Call uses `.` as an ASCII alias for `·`.
+- Booleans/Unit: `#t`/`#f`/`#u` are ASCII aliases for `⊤`/`⊥`/`ø`.
 
 ## Equivalent examples
 
@@ -69,11 +73,11 @@ classify ← ⌁(v)
 ASCII (presentation):
 
 ```text
-classify <- fn(v)
-	match v {
-	match Ok•x  => x + 1
-	match Err•x => x + 2
-	match _     => 0
+classify <- \(v)
+	v |> {
+	|> Ok::x  => x + 1
+	|> Err::x => x + 2
+	|> _      => 0
 	}
 ```
 
@@ -93,9 +97,9 @@ Unicode:
 ASCII (presentation):
 
 ```text
-cycle (Step•(1 0)) match {
-match Done•acc     => finish acc
-match Step•(i acc) => continue Step•(i + 1  acc + i)
+~~ (Step::(1 0)) |> {
+|> Done::acc     => << acc
+|> Step::(i acc) => >> Step::(i + 1  acc + i)
 }
 ```
 

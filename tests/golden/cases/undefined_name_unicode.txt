@@ -1,0 +1,3 @@
+tests/golden/cases/undefined_name_unicode.suay:1:7: runtime error: Undefined name 'z'
+say · z
+      ^

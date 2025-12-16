@@ -1,9 +1,66 @@
-# Conformance (interpreter ↔ VM)
+# Conformance: interpreter ↔ VM equivalence (v0.1)
 
-This document is the canonical conformance definition for research evaluation.
+## What is being checked
 
-For the full definition, scope statement, and how-to-run instructions, see:
-- docs/research/CONFORMANCE.md
+SuayLang has two execution paths:
 
-Rationale for duplication:
-- Some reviewer paths and external links are case-sensitive and expect a lowercase filename.
+- **Interpreter** (reference semantics)
+- **Bytecode VM** (alternate execution)
+
+To reduce semantic drift risk, this repo provides:
+
+1) A **conformance corpus runner** (fixed, human-readable programs)
+2) A **differential fuzz runner** (many small generated programs)
+
+Both compare these observable outcomes:
+
+- termination class: `ok` / `lex` / `parse` / `runtime` / `internal`
+- stdout (normalized for newlines)
+- value equality (best-effort structural equality)
+- for errors: error type + coarse (line, column) location
+
+## Conformance corpus runner
+
+Command:
+
+```sh
+python tools/conformance/run.py
+```
+
+Default corpus location:
+
+- `tests/corpus/conformance/`
+
+Success output:
+
+- `conformance: ok (N files)`
+
+This runner is intended to be stable and used in CI.
+
+## Differential fuzz runner
+
+Command:
+
+```sh
+python -m tools.conformance.fuzz --seed 0 --n 5000
+```
+
+This generates `N` bounded programs, runs them on interpreter and VM, and reports divergences.
+
+### Recorded result (reproducible)
+
+- seed: `0`
+- N: `5000`
+- divergences: `0`
+
+If divergences occur, repro cases are written under:
+
+- `tools/conformance/fuzz_failures/`
+
+## Scope
+
+The conformance and fuzz layers target the subset supported by the VM compiler.
+See:
+
+- `docs/research/semantic_scope.md`
+- `docs/research/feature_matrix.md`

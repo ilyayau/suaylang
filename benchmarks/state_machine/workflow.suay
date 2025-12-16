@@ -1,0 +1,29 @@
+⍝ Cycle-heavy state machine benchmark.
+⍝ Models a tiny workflow with explicit states and transitions.
+
+step ← ⌁(st)
+  st ▷ ⟪
+  ▷ Start•n       ⇒ (n > 1000) ▷ ⟪
+        ▷ ⊤ ⇒ Done•n
+        ▷ ⊥ ⇒ Review•n
+      ⟫
+  ▷ Review•n      ⇒ (n % 7 = 0) ▷ ⟪
+        ▷ ⊤ ⇒ Reject•n
+        ▷ ⊥ ⇒ Approve•n
+      ⟫
+  ▷ Reject•n      ⇒ Start•(n + 3)
+  ▷ Approve•n     ⇒ (n % 5 = 0) ▷ ⟪
+        ▷ ⊤ ⇒ Done•n
+        ▷ ⊥ ⇒ Start•(n + 1)
+      ⟫
+  ▷ Done•n        ⇒ Done•n
+  ▷ _             ⇒ Done•0
+  ⟫
+
+run ← ⌁(seed)
+  ⟲ (Start•seed) ▷ ⟪
+  ▷ Done•n  ⇒ ↯ n
+  ▷ st      ⇒ ↩ (step · st)
+  ⟫
+
+run · 0

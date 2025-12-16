@@ -17,7 +17,7 @@ The ASCII forms below are:
 
 - intended for documentation, papers, and teaching materials,
 - designed to be mechanically translatable to the Unicode surface syntax,
-- **not claimed to be implemented** as a second parser in v0.1.
+- implemented as lexer-level aliases (Unicode remains the primary syntax).
 
 ## Mapping table (Unicode → ASCII)
 
@@ -25,13 +25,17 @@ The ASCII forms below are:
 |---|---|---|
 | `←` | `<-` | binding |
 | `⇐` | `<~` | mutation |
-| `▷` | `match` | dispatch head |
+| `▷` | `|>` | dispatch |
 | `⇒` | `=>` | dispatch arm arrow |
-| `⟲` | `cycle` | cycle head |
-| `↩` | `continue` | cycle “continue” arm mode |
-| `↯` | `finish` | cycle “finish” arm mode |
+| `⟲` | `~~` | cycle head |
+| `↩` | `>>` | cycle “continue” arm mode |
+| `↯` | `<<` | cycle “finish” arm mode |
 | `⟪` | `{` | block open |
 | `⟫` | `}` | block close |
+| `⌁` | `\\` | lambda |
+| `•` | `::` | variant separator |
+| `⟦⟧` | `[[ ]]` | map delimiters |
+| `↦` | `->` | map entry arrow |
 
 Notes:
 
@@ -80,11 +84,11 @@ classify ← ⌁(v)
 ASCII (presentation):
 
 ```text
-classify <- fn(v)
-  match v {
-  match Ok•x  => x + 1
-  match Err•x => x + 2
-  match _     => 0
+classify <- \\(v)
+  v |> {
+  |> Ok::x  => x + 1
+  |> Err::x => x + 2
+  |> _      => 0
   }
 ```
 
@@ -104,9 +108,9 @@ Unicode:
 ASCII (presentation):
 
 ```text
-cycle (Step•(1 0)) match {
-match Done•acc     => finish acc
-match Step•(i acc) => continue Step•(i + 1  acc + i)
+~~ (Step::(1 0)) |> {
+|> Done::acc     => << acc
+|> Step::(i acc) => >> Step::(i + 1  acc + i)
 }
 ```
 
