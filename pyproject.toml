@@ -18,6 +18,7 @@ classifiers = [
 dev = [
   "build>=1.0",
   "hypothesis>=6.0",
+  "pre-commit>=3.0",
   "pytest>=7.0",
   "ruff>=0.5",
 ]

@@ -16,17 +16,31 @@ source .venv/bin/activate
 python -m pip install -U pip
 
 # editable install (provides the `suay` CLI)
-python -m pip install -e .
+python -m pip install -e ".[dev]"
 
 # sanity check
 suay doctor
+
+## Pre-commit hooks
+
+This repo uses `pre-commit` to enforce formatting, lint, and basic file hygiene.
+
+Install the git hooks:
+
+```sh
+pre-commit install
+```
+
+Run on all files:
+
+```sh
+pre-commit run --all-files
+```
 ```
 
 ## Running tests
 
-SuayLang uses the standard library `unittest` runner.
-
-```sh
+pytest -q
 python -m unittest discover -s tests -v
 ```
 
