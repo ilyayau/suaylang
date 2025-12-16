@@ -1,11 +1,12 @@
-"""SuayLang front-end (lexer, parser, AST)."""
+"""SuayLang language implementation (lexer, parser, interpreter, VM)."""
 
 from importlib import metadata
 
 try:
     __version__ = metadata.version("suaylang")
 except metadata.PackageNotFoundError:  # pragma: no cover
-    __version__ = "0.0.0"
+    # Source checkout fallback.
+    __version__ = "0.1.0"
 
 from .tokens import Token, TokenType, Position, Span
 from .errors import SuayError, Diagnostic
