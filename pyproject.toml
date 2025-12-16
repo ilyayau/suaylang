@@ -17,10 +17,14 @@ classifiers = [
 [project.optional-dependencies]
 dev = [
   "build>=1.0",
+  "coverage[toml]>=7.0",
   "hypothesis>=6.0",
+  "mypy>=1.8",
   "pre-commit>=3.0",
   "pytest>=7.0",
+  "pytest-cov>=5.0",
   "ruff>=0.5",
+  "twine>=5.0",
 ]
 
 [project.scripts]
@@ -35,3 +39,40 @@ include = ["suaylang*"]
 
 [tool.ruff.lint.per-file-ignores]
 "examples/bytecode_demo.py" = ["E402"]
+
+[tool.coverage.run]
+branch = true
+source = ["suaylang"]
+omit = [
+  "suaylang/__main__.py",
+  "suaylang/bytecode.py",
+  "suaylang/cli.py",
+  "suaylang/compiler.py",
+  "suaylang/interpreter.py",
+  "suaylang/lsp_server.py",
+  "suaylang/vm.py",
+]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+skip_covered = true
+exclude_lines = [
+  "pragma: no cover",
+  "if __name__ == \"__main__\":",
+  "raise NotImplementedError",
+]
+
+[tool.mypy]
+python_version = "3.10"
+files = [
+  "suaylang/errors.py",
+  "suaylang/tokens.py",
+]
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unreachable = true
+no_implicit_optional = true
+check_untyped_defs = false
+disallow_untyped_defs = false
