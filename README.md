@@ -14,6 +14,57 @@ This repository is intended for public review: language design, semantics, error
 
 For a stability definition of “v0.1”, see [docs/LANGUAGE_CONTRACT_v0.1.md](docs/LANGUAGE_CONTRACT_v0.1.md).
 
+## Quickstart (2 minutes)
+
+### Linux/macOS
+
+```sh
+git clone https://github.com/ilyayau/suaylang
+cd suaylang
+./scripts/install.sh
+
+suay doctor
+suay run examples/hello.suay
+
+suay new my-project
+cd my-project
+suay run src/main.suay
+```
+
+### Windows (PowerShell)
+
+```powershell
+git clone https://github.com/ilyayau/suaylang
+cd suaylang
+./scripts/install.ps1
+
+suay doctor
+suay run examples/hello.suay
+
+suay new my-project
+cd my-project
+suay run src/main.suay
+```
+
+Reference sheet:
+- [docs/REFERENCE_SHEET.md](docs/REFERENCE_SHEET.md)
+
+## Start in 60 seconds
+
+Linux/macOS:
+
+```sh
+git clone https://github.com/ilyayau/suaylang && cd suaylang && ./scripts/install.sh
+suay run examples/hello.suay
+```
+
+Windows (PowerShell):
+
+```powershell
+git clone https://github.com/ilyayau/suaylang; cd suaylang; ./scripts/install.ps1
+suay run examples/hello.suay
+```
+
 ## Why this language exists
 
 SuayLang is a constraint-driven experiment:
