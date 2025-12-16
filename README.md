@@ -203,6 +203,12 @@ python examples/bytecode_demo.py
 
 ## Documentation index
 
+## Research Artifacts
+
+- Research folder: [docs/research/](docs/research/)
+- Evaluation plan (methodology only): [docs/research/evaluation_plan.md](docs/research/evaluation_plan.md)
+- Reviewer path (15 minutes): [docs/research/REVIEWER_PATH.md](docs/research/REVIEWER_PATH.md)
+
 - Grammar (formal EBNF aligned to implementation): [docs/GRAMMAR.md](docs/GRAMMAR.md)
 - Minimal standard library (builtins): [docs/STDLIB.md](docs/STDLIB.md)
 - Bytecode + VM (MVP): [docs/BYTECODE.md](docs/BYTECODE.md)
