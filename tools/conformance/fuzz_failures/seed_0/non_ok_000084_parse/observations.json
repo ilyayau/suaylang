@@ -1,0 +1,20 @@
+{
+  "i": 84,
+  "interp": {
+    "column": 14,
+    "error_type": "syntax",
+    "line": 1,
+    "stdout": "",
+    "termination": "parse",
+    "value": null
+  },
+  "seed": 0,
+  "vm": {
+    "column": 14,
+    "error_type": "syntax",
+    "line": 1,
+    "stdout": "",
+    "termination": "parse",
+    "value": null
+  }
+}

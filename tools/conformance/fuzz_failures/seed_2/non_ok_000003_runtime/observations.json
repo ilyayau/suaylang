@@ -1,0 +1,20 @@
+{
+  "i": 3,
+  "interp": {
+    "column": 8,
+    "error_type": "runtime",
+    "line": 1,
+    "stdout": "",
+    "termination": "runtime",
+    "value": null
+  },
+  "seed": 2,
+  "vm": {
+    "column": 8,
+    "error_type": "runtime",
+    "line": 1,
+    "stdout": "",
+    "termination": "runtime",
+    "value": null
+  }
+}

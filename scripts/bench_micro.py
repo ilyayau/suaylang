@@ -15,6 +15,7 @@ if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
 from suaylang.compiler import Compiler
+from suaylang.bytecode import Code
 from suaylang.interpreter import Interpreter
 from suaylang.lexer import Lexer
 from suaylang.parser import Parser
@@ -44,7 +45,30 @@ def _median_ms(times: list[float]) -> float:
     return statistics.median(times) * 1000.0
 
 
-def bench_file(path: Path, *, iters: int) -> tuple[float, float]:
+def _count_instrs(code: Code) -> int:
+    # Count instructions across the full program, including nested code objects
+    # produced by MAKE_CLOSURE.
+    seen: set[int] = set()
+
+    def walk(c: Code) -> int:
+        cid = id(c)
+        if cid in seen:
+            return 0
+        seen.add(cid)
+
+        total = len(c.instrs)
+        for ins in c.instrs:
+            arg = ins.arg
+            if isinstance(arg, Code):
+                total += walk(arg)
+            elif isinstance(arg, tuple) and len(arg) == 2 and isinstance(arg[0], Code):
+                total += walk(arg[0])
+        return total
+
+    return walk(code)
+
+
+def bench_file(path: Path, *, iters: int) -> tuple[float, float, int]:
     src = _read(path)
     program = _parse(src, filename=str(path))
 
@@ -59,6 +83,7 @@ def bench_file(path: Path, *, iters: int) -> tuple[float, float]:
 
     compiler = Compiler()
     code = compiler.compile_program(program, name=str(path))
+    instr_count = _count_instrs(code)
     vm = VM(source=src, filename=str(path), trace=False)
 
     def vm_run() -> None:
@@ -74,7 +99,7 @@ def bench_file(path: Path, *, iters: int) -> tuple[float, float]:
 
     t_interp = _timeit(interp_run, iters=iters)
     t_vm = _timeit(vm_run, iters=iters)
-    return _median_ms(t_interp), _median_ms(t_vm)
+    return _median_ms(t_interp), _median_ms(t_vm), instr_count
 
 
 def main() -> int:
@@ -99,12 +124,12 @@ def main() -> int:
         print("bench_micro: no .suay files found")
         return 2
 
-    print("Benchmark\tInterp(ms)\tVM(ms)\tRatio")
+    print("Benchmark\tInterp(ms)\tVM(ms)\tRatio\tVM_instr")
     for p in targets:
-        ti, tv = bench_file(p, iters=args.iters)
+        ti, tv, ninstr = bench_file(p, iters=args.iters)
         ratio = (ti / tv) if tv > 0 else float("inf")
         rel = p.as_posix()
-        print(f"{rel}\t{ti:.3f}\t{tv:.3f}\t{ratio:.2f}")
+        print(f"{rel}\t{ti:.3f}\t{tv:.3f}\t{ratio:.2f}\t{ninstr}")
 
     return 0
 

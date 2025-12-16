@@ -1,23 +1,102 @@
-# SuayLang Reference Sheet (ASCII mapping, v0.1)
+# SuayLang Reference Sheet (ASCII alternative, v0.1)
 
-This file is an accessibility aid. It does not change SuayLang’s Unicode-first design.
+This file is an accessibility aid.
 
-## Compact ASCII mapping (proposed / partial)
+- Unicode remains the primary, research-oriented surface syntax.
+- The ASCII forms below are an **optional presentation layer** for documentation and teaching.
+- Semantics are identical: each ASCII form is intended to be mechanically translatable to the Unicode form.
 
-| Unicode | ASCII | Meaning |
+This document does not claim that an ASCII parser is implemented in v0.1.
+
+## Core mapping table (Unicode → ASCII)
+
+| Unicode | ASCII | Construct |
 |---|---|---|
-| `⌁` | `fn` (proposal) | lambda |
-| `·` | `.` (proposal) | application |
-| `←` | `<-` (proposal) | binding |
-| `⇐` | `<=` (proposal) | mutation |
-| `▷` | `match` (proposal) | dispatch |
-| `⟲` | `loop` (proposal) | cycle |
-| `↩` | `continue` (proposal) | cycle continue |
-| `↯` | `break` (proposal) | cycle finish |
-| `×` | `*` | multiply (currently accepted) |
-| `÷` | `/` | divide (currently accepted) |
-| `−` | `-` | minus (currently accepted) |
+| `←` | `<-` | binding |
+| `⇐` | `<~` | mutation |
+| `▷` | `match` | dispatch head |
+| `⇒` | `=>` | dispatch arm arrow |
+| `⟲` | `cycle` | cycle head |
+| `↩` | `continue` | cycle arm mode: continue |
+| `↯` | `finish` | cycle arm mode: finish |
+| `⟪` | `{` | block open |
+| `⟫` | `}` | block close |
 
 Notes:
-- This table is intentionally conservative. Not all ASCII forms are implemented.
-- See docs/ACCESSIBILITY_REDESIGN.md for the longer discussion and design constraints.
+
+- Mutation uses `<~` (not `<=`) to avoid clashing with comparison operators in ASCII-heavy settings.
+- This table focuses only on the constructs required for the optional ASCII layer.
+
+## Equivalent examples
+
+### Example 1: binding + block
+
+Unicode:
+
+```suay
+x ← ⟪
+	a ← 10
+	b ← 20
+	a + b
+⟫
+```
+
+ASCII (presentation):
+
+```text
+x <- {
+	a <- 10
+	b <- 20
+	a + b
+}
+```
+
+Semantics: identical.
+
+### Example 2: dispatch
+
+Unicode:
+
+```suay
+classify ← ⌁(v)
+	v ▷ ⟪
+	▷ Ok•x  ⇒ x + 1
+	▷ Err•x ⇒ x + 2
+	▷ _     ⇒ 0
+	⟫
+```
+
+ASCII (presentation):
+
+```text
+classify <- fn(v)
+	match v {
+	match Ok•x  => x + 1
+	match Err•x => x + 2
+	match _     => 0
+	}
+```
+
+Semantics: identical.
+
+### Example 3: cycle
+
+Unicode:
+
+```suay
+⟲ (Step•(1 0)) ▷ ⟪
+▷ Done•acc     ⇒ ↯ acc
+▷ Step•(i acc) ⇒ ↩ Step•(i + 1  acc + i)
+⟫
+```
+
+ASCII (presentation):
+
+```text
+cycle (Step•(1 0)) match {
+match Done•acc     => finish acc
+match Step•(i acc) => continue Step•(i + 1  acc + i)
+}
+```
+
+Semantics: identical.

@@ -1,0 +1,14 @@
+⍝ Fibonacci (iterative via cycle). No output; final expression is the result.
+
+fib ← ⌁(n)
+  ⟲ (State•(0 0 1)) ▷ ⟪
+  ▷ Done•x        ⇒ ↯ x
+  ▷ State•(i a b) ⇒ ↩ (
+        (i ≥ n) ▷ ⟪
+        ▷ ⊤ ⇒ Done•a
+        ▷ ⊥ ⇒ State•(i + 1  b  a + b)
+        ⟫
+      )
+  ⟫
+
+fib · 25
