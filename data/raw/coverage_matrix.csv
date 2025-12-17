@@ -1,0 +1,16 @@
+construct,in_corpus,in_fuzz,in_vm,in_interpreter,in_golden
+Literals,1,1,1,1,1
+Names,1,1,1,1,1
+Binding/Mutation,1,1,1,1,1
+Blocks,1,0,1,1,1
+Tuples,1,1,1,1,1
+Lists,1,1,1,1,1
+Maps,1,0,1,1,1
+Variants,1,1,1,1,1
+Lambda/Closures,1,0,1,1,1
+Call/Application,1,1,1,1,1
+Unary ops,0,0,1,1,1
+Binary ops,1,1,1,1,1
+Dispatch,1,1,0,1,1
+Cycle,1,1,0,1,1
+Modules (link),0,0,0,1,1

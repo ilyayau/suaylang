@@ -1,0 +1,12 @@
+countdown ← ⌁(n)
+  ⟲ (Step•n) ▷ ⟪
+  ▷ Done•x    ⇒ ↯ x
+  ▷ Step•x    ⇒ ↩ (
+      (x ≤ 0) ▷ ⟪
+      ▷ ⊤ ⇒ Done•0
+      ▷ ⊥ ⇒ Step•(x − 1)
+      ⟫
+    )
+  ⟫
+
+countdown · 10

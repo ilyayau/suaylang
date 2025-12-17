@@ -1,3 +1,47 @@
+# Differential testing (interpreter↔VM)
+
+## What is tested
+
+Two execution backends are run on the same generated program text:
+
+- reference interpreter
+- compiler + bytecode VM
+
+The comparison is by *observation* (termination class, normalized stdout, value, error class + coarse location). Any disagreement is a divergence.
+
+## Reproducible commands
+
+```sh
+python -m tools.conformance.fuzz --seed 0 --n 1000 --raw
+```
+
+Optional generator restriction (template subset):
+
+```sh
+python -m tools.conformance.fuzz --seed 0 --n 1000 --subset arith,dispatch,cycle_sum --raw
+```
+
+## Snapshot numbers
+
+- seeds used: 0 (deterministic)
+- N programs: 1000
+- divergences: 0
+
+## Raw outputs (audit trail)
+
+Each run writes a JSONL file:
+
+- `data/raw/fuzz_runs/seed_<seed>_n_<n>.jsonl`
+
+Each line contains:
+
+- program id + seed
+- SHA-256 hash of the source
+- SHA-256 hashes of interpreter and VM observations
+- whether the comparison matched
+- termination classes
+
+This supports reviewer auditing without embedding the entire generated corpus in the repository.
 # Differential testing: Interpreter vs VM (v0.1 subset)
 
 ## Goal

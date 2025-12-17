@@ -1,0 +1,4 @@
+xs ← [1 2 3 4]
+ys ← map · (⌁(x) (2 × x) + 1) · xs
+total ← fold · (⌁(a b) a + b) · 0 · ys
+total

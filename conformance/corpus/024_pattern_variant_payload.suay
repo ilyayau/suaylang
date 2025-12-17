@@ -1,0 +1,7 @@
+unwrap ← ⌁(v)
+  v ▷ ⟪
+  ▷ Ok•x  ⇒ x
+  ▷ Err•m ⇒ 0
+  ⟫
+
+unwrap · (Ok•(41 + 1))

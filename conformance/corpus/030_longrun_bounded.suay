@@ -1,0 +1,12 @@
+loop ← ⌁(n)
+  ⟲ (Step•(0 0)) ▷ ⟪
+  ▷ Done•acc       ⇒ ↯ acc
+  ▷ Step•(i acc)   ⇒ ↩ (
+        (i ≥ n) ▷ ⟪
+        ▷ ⊤ ⇒ Done•acc
+        ▷ ⊥ ⇒ Step•(i + 1  acc + 1)
+        ⟫
+      )
+  ⟫
+
+loop · 500

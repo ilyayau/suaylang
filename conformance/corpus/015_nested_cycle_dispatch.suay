@@ -1,0 +1,19 @@
+step ← ⌁(state)
+  state ▷ ⟪
+  ▷ Done•x ⇒ Done•x
+  ▷ Step•(i acc) ⇒ (
+      (i ≥ 5) ▷ ⟪
+      ▷ ⊤ ⇒ Done•acc
+      ▷ ⊥ ⇒ Step•(i + 1  acc + i)
+      ⟫
+    )
+  ▷ _ ⇒ Done•0
+  ⟫
+
+run ← ⌁(seed)
+  ⟲ seed ▷ ⟪
+  ▷ Done•x ⇒ ↯ x
+  ▷ _      ⇒ ↩ (step · seed)
+  ⟫
+
+run · (Step•(0 0))
