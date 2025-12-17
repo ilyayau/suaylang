@@ -1,55 +1,43 @@
 # Core Research Claim (SuayLang v0.1)
 
-## 1) Hypothesis
+## A) Hypothesis
 
-SuayLang’s expression-based, explicit control flow (`dispatch` and `cycle`) enables **reproducible, artifact-backed observational equivalence testing** between a reference interpreter and a bytecode VM for a documented, VM-supported subset.
+Expression-based, explicit control flow (SuayLang `dispatch`/`cycle`) improves local semantic checkability and enables observational equivalence between a reference interpreter and a bytecode VM on a defined, VM-supported subset.
 
-## 2) What is measured
+## B) What we will measure
 
-- **Differential testing (interpreter vs VM)**
-  - Evidence artifact: the shared observation/comparison policy in [suaylang/conformance.py](suaylang/conformance.py) and the seeded runner in [tools/conformance/fuzz_runner.py](tools/conformance/fuzz_runner.py).
-  - Outputs compared: termination class, stdout, result values (best-effort), and coarse error location for diagnostics/runtime errors.
+- Differential testing (interpreter vs VM)
+  - Observable outputs: termination class, stdout (normalized), returned value (best-effort structural equality), and coarse error location (line/column).
+  - Evidence artifacts: [tools/conformance/run.py](tools/conformance/run.py), [tools/conformance/fuzz_runner.py](tools/conformance/fuzz_runner.py), and the comparison policy in [suaylang/conformance.py](suaylang/conformance.py).
 
-- **Semantic construct coverage (within the VM-supported subset)**
-  - Covered by corpus and fuzz templates: `dispatch`, `cycle`, binding (`←`), calls (`·`), variants, lists/tuples, arithmetic/comparison.
-  - Scope statement: [docs/research/semantic_scope.md](docs/research/semantic_scope.md).
-  - Corpus runner: [tools/conformance/run.py](tools/conformance/run.py) with inputs under [tests/corpus/conformance](tests/corpus/conformance).
+- Semantic construct coverage
+  - Covered constructs (subset-level): `dispatch`, `cycle`, binding/mutation, blocks, lambdas, calls, variants, lists/tuples, maps, arithmetic/comparison.
+  - Scope statement: [docs/research/semantic_scope.md](docs/research/semantic_scope.md) and [docs/research/feature_matrix.md](docs/research/feature_matrix.md).
 
-- **Error-class coverage**
-  - Measured termination categories: `ok | lex | parse | runtime | internal`.
-  - Differential testing records counts per category (see [docs/research/differential_testing.md](docs/research/differential_testing.md)).
+- Number of distinct error classes covered
+  - Measured termination categories: `ok | lex | parse | runtime | internal` (5 classes), with counts recorded by the differential harness.
 
-- **Key properties (as exercised and observed in artifacts)**
-  - **Determinism**: the reference implementation provides deterministic execution for a fixed program and fixed input; the differential harness uses deterministic seeds and compares observable outputs.
-  - **Absence of implicit state (at the language level)**: state changes are explicit via binding (`←`) and mutation (`⇐`), and loops are explicit via `cycle` state transitions.
-  - **Predictable evaluation order (in the reference implementation)**: the interpreter defines a single evaluation strategy; the VM is validated against that strategy via observation-based equivalence checks.
+- Key properties (as exercised and checked via artifacts)
+  - Determinism (fixed program + fixed seed yields stable observations)
+  - No implicit state transitions (state changes are explicit via `←`/`⇐` and `cycle` transitions)
+  - Predictable evaluation order (interpreter defines a single evaluation strategy; VM is checked against it)
+  - Stable diagnostic structure (span-anchored errors with stable formatting, maintained via golden diagnostics)
 
-## 3) Experimental protocol
+## C) Experimental protocol
 
-- **Program generation (property-based / fuzzing)**
-  - The runner [tools/conformance/fuzz_runner.py](tools/conformance/fuzz_runner.py) generates randomized programs from a bounded subset designed to terminate.
+- Program generation (property-based / differential testing)
+  - Generate many small, bounded programs from the VM-supported subset using [tools/conformance/fuzz_runner.py](tools/conformance/fuzz_runner.py).
   - Generation is reproducible via `--seed` and bounded via `--n`.
 
-- **Execution on both backends**
-  - For each generated program:
-    1. Run on the reference interpreter.
-    2. Compile with the bytecode compiler and run on the VM.
-  - Both runs capture stdout and classify termination (success, diagnostic, runtime error, internal error).
+- Subset definition (in/out)
+  - In-scope: constructs supported by the compiler/VM, per [docs/research/semantic_scope.md](docs/research/semantic_scope.md) and [docs/research/feature_matrix.md](docs/research/feature_matrix.md).
+  - Out-of-scope: interpreter-only features (e.g., `link` modules), external I/O, and constructs not implemented by the compiler.
 
-- **Equivalence checking**
-  - Observations are compared by [suaylang/conformance.py](suaylang/conformance.py):
-    - termination class must match,
-    - stdout must match (normalized for line endings),
-    - on success, result values are compared with best-effort structural equality,
-    - on errors, coarse error type and (line, column) are compared.
-  - On any mismatch, the harness saves a reproducer program and both observations.
+- Equivalence checking
+  - Run each program on the interpreter and on the VM.
+  - Compare: (1) termination class, (2) stdout, (3) value on success, (4) error type + coarse (line, column) location on failure.
+  - On any mismatch, save the program and both observations as a reproducer.
 
-- **Subset covered and exclusions**
-  - The evaluation is explicitly limited to the **VM-supported subset** (AST nodes supported by the compiler/VM), per [docs/research/semantic_scope.md](docs/research/semantic_scope.md).
-  - Excluded (because they are not required for the current equivalence claim, are interpreter-only, or introduce external nondeterminism):
-    - module loading via `link` (interpreter-only in current v0.1 scope),
-    - file IO and interactive input,
-    - constructs not implemented by the bytecode compiler,
-    - unbounded recursion and unbounded loops.
-
-This protocol is designed to support a narrow, defensible claim: **interpreter and VM agree observationally on the tested VM-supported subset**, not on the full language.
+- Reporting
+  - Report: “N programs tested, 0 divergences, K divergences found (and fixed)”, with the seed, N, and saved repro paths.
+  - Fixed-program coverage is reported by the conformance corpus runner: `python tools/conformance/run.py` (inputs under `tests/corpus/conformance/`).

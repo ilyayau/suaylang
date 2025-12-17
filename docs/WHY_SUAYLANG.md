@@ -105,3 +105,7 @@ ASCII fallbacks exist for some operators, but SuayLang is not trying to be frien
 - **Pattern-centric programming scales down well.** For small languages, patterns give you a lot of expressiveness without a full type system.
 
 SuayLang is an experiment in *deliberate constraint*: remove features until what remains has a coherent shape.
+
+## Related Work
+
+See [docs/RELATED_WORK.md](docs/RELATED_WORK.md) for concise, design-relevant comparisons (8–12 bullets).

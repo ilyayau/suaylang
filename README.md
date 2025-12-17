@@ -16,7 +16,7 @@ For a stability definition of “v0.1”, see [docs/LANGUAGE_CONTRACT_v0.1.md](d
 
 ## Research Orientation
 
-This project prioritizes reproducible experiments, explicit semantics, and evidence (tests + benchmarks) intended for international academic review.
+This project is designed for open scientific review and international reproducibility, with clear semantics and rerunnable evaluation artifacts (tests, conformance, fuzzing, benchmarks).
 
 ## Quickstart (2 minutes)
 

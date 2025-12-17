@@ -1,70 +1,44 @@
-# Research Plan (SuayLang as a language/semantics artifact)
+# Research Plan (SuayLang)
 
-## 1) Field of Study
+## 1. Field of Study
 
-Programming Languages (PL) / Language Semantics / Systems
+Programming Languages / Language Semantics / Software Systems
 
-## 2) Research Objective
+## 2. Research Topic / Title
 
-Produce a small, reproducible research artifact in which a reference interpreter and a bytecode VM can be validated for observational equivalence on a documented subset of a language with explicit, expression-level control flow.
+Validating interpreter–VM observational equivalence for a small language with explicit, expression-level control flow
 
-## 3) Research Methodology
+## 3. Background & Motivation (2–3 sentences)
 
-SuayLang is used as a combined platform for:
+When a language has both a reference interpreter and an alternate execution engine (e.g., a bytecode VM), semantic drift can occur without being obvious to users. A small language with a compact semantic surface is suitable for controlled, repeatable evaluation of equivalence. SuayLang provides explicit control flow (`dispatch`/`cycle`) and span-based diagnostics, making it a practical artifact for measurable backend-comparison experiments.
 
-- **Language design experiment**
-  - The language emphasizes explicit control constructs (`dispatch` and `cycle`) and explicit state change (`←` binding vs `⇐` mutation).
-  - Semantics are scoped and documented for evaluation (see [docs/research/semantic_scope.md](docs/research/semantic_scope.md)).
+## 4. Research Objective (1–2 bullet points)
 
-- **Interpreter + VM validation platform**
-  - The reference interpreter defines baseline behavior.
-  - The bytecode VM is treated as an alternative execution strategy for a supported subset.
-  - Validation uses:
-    - differential testing (seeded fuzzing and a small conformance corpus), and
-    - micro-benchmarks that compare interpreter vs VM only.
+- Define a conservative, test-backed equivalence claim for a VM-supported subset of SuayLang.
+- Measure interpreter–VM agreement using a fixed corpus and seeded differential testing.
 
-Concrete evaluation artifacts already present in the repository:
+## 5. Methodology
 
-- Differential testing report: [docs/research/differential_testing.md](docs/research/differential_testing.md)
-- Fuzz runner: [tools/conformance/fuzz_runner.py](tools/conformance/fuzz_runner.py)
-- Corpus runner: [tools/conformance/run.py](tools/conformance/run.py)
-- Benchmark results: [benchmarks/results.md](benchmarks/results.md)
+- **Implementations**: reference interpreter + bytecode compiler/VM (alternate execution).
+- **Differential testing**: conformance corpus (`python tools/conformance/run.py`) and seeded fuzzing (`python -m tools.conformance.fuzz --seed S --n N`).
+- **Benchmarks (method only)**: micro-benchmarks compare interpreter vs VM on identical programs (see [benchmarks/results.md](benchmarks/results.md)).
+- **Documentation**: scope and feature coverage are documented (see [docs/research/semantic_scope.md](docs/research/semantic_scope.md) and [docs/research/feature_matrix.md](docs/research/feature_matrix.md)).
 
-## 4) Research Schedule (6–12 months)
+## 6. Research Schedule (6–12 months)
 
-Month 1–2:
-- Freeze evaluation scope and claims for v0.1.
-- Maintain a strict separation between “language semantics” and “tooling/implementation details”.
-- Deliverable: updated scope statement if needed; keep claims aligned with artifacts.
+- Months 1–2: freeze subset/scope claim; ensure all scope links and commands are reproducible.
+- Months 3–4: extend conformance corpus within scope; add regressions for any discovered mismatches.
+- Months 5–6: run multiple seeds with reported N; record divergences and fixes (if any).
+- Months 7–9: stabilize benchmark methodology reporting (median, instruction count, variability notes).
+- Months 10–12: finalize a short evaluation packet (claim + scope + results) and a reviewer checklist.
 
-Month 3–4:
-- Strengthen conformance evidence without expanding language features:
-  - extend the conformance corpus with additional small, deterministic programs (still within the VM-supported subset),
-  - add regression cases if any discrepancies are discovered.
-- Deliverable: expanded corpus and clear failure reproduction procedure.
+## 7. Expected Results / Contribution (conservative, measurable)
 
-Month 5–6:
-- Strengthen differential fuzz evidence:
-  - run multiple seeds and report $N$ programs per seed,
-  - track and document any divergences and fixes (if found).
-- Deliverable: updated differential testing report with numeric totals and reproduction commands.
+- A documented subset and an explicit observation policy for interpreter–VM equivalence.
+- Reported totals of programs tested (corpus size + fuzz N) and divergences observed per seed.
+- A stable, rerunnable evaluation artifact (tests + conformance + fuzz + benchmark methodology) suitable for independent reruns.
 
-Month 7–9:
-- Improve benchmark methodology reporting (not performance claims):
-  - verify benchmark programs are identical across backends,
-  - report median timing and VM instruction count,
-  - document expected variability and limitations.
-- Deliverable: stable benchmark table and reproducibility notes.
+## 8. Reproducibility & Dissemination
 
-Month 10–12:
-- Assemble the evaluation write-up:
-  - single-source documents suitable for conversion to a PDF,
-  - a short “core research claim” page,
-  - related work bullets focused on design relevance.
-- Deliverable: complete, review-ready document set and a reproducible evaluation checklist.
-
-## 5) Expected Results
-
-- **Validated execution equivalence** (for a clearly documented VM-supported subset), supported by reproducible differential testing.
-- **Reproducible research artifact**: a repository with scoped semantics, tests, and benchmark methodology that can be rerun by third parties.
-- **Publishable evaluation package**: concise documents and numeric results suitable for academic review, without broad or inflated claims.
+- Open-source repository with pinned commands and runnable artifacts.
+- Primary evidence artifacts: tests (`pytest`), conformance runner, fuzz runner, and benchmark scripts/results.
