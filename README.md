@@ -50,6 +50,51 @@ suay run examples/hello.suay
 
 This project is designed for open scientific review and international reproducibility, with clear semantics and rerunnable evaluation artifacts (tests, conformance, fuzzing, benchmarks).
 
+## Evaluation snapshot (v0.1.0)
+
+- Conformance corpus: 4 programs, divergences = 0 (`python tools/conformance/run.py`)
+- Fixed task set: 6 programs, divergences = 0 (`python tools/conformance/run.py evaluation/tasks`)
+- Differential fuzz: seed=0, N=1000, divergences = 0 (`python -m tools.conformance.fuzz --seed 0 --n 1000`)
+- Micro-benchmarks: interpreter vs VM median timings + VM instruction counts (see [docs/research/results.md](docs/research/results.md))
+- Golden diagnostics: 3 stable snapshots (`tests/golden/cases/*.txt`)
+
+## How to reproduce results
+
+```sh
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+python -m pip install -e ".[dev]"
+
+pytest -q
+python tools/conformance/run.py
+python tools/conformance/run.py evaluation/tasks
+python -m tools.conformance.fuzz --seed 0 --n 1000
+python benchmarks/run.py evaluation/tasks --iters 200
+```
+
+## Related Work (brief)
+
+- Rust: both use pattern matching; SuayLang makes branching/looping expression-shaped (`dispatch`/`cycle`) and validates an interpreter against a bytecode VM.
+- OCaml: both use variants + pattern matching; SuayLang adds an explicit state-machine loop (`cycle`) with continue/finish modes.
+- Haskell: both encourage expression-oriented style; SuayLang models looping via `cycle` rather than recursion as the default.
+- Erlang: both use tagged values for control flow; SuayLang is single-process and focuses on interpreter↔VM equivalence evidence.
+- Scheme/Racket: both treat many constructs as expressions; SuayLang keeps a fixed, small operator surface to keep the semantics scorable and test-backed.
+- WebAssembly (Wasm): both expose a bytecode execution model; SuayLang treats bytecode as an alternate backend validated against an interpreter.
+- Lua: both aim for a small core; SuayLang’s main measurable output is backend equivalence + diagnostics stability rather than embeddability.
+- Crafting Interpreters-style systems: both build interpreters/VMs; SuayLang makes the equivalence test harness and scope statement part of the artifact.
+
+## References
+
+- G. D. Plotkin, “A Structural Approach to Operational Semantics,” 1981.
+- G. Kahn, “Natural Semantics,” 1987.
+- L. Maranget, “Compiling Pattern Matching to Good Decision Trees,” 2008.
+- K. Claessen and J. Hughes, “QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs,” 2000.
+- W. M. McKeeman, “Differential Testing for Software,” 1998.
+- X. Yang et al., “Finding and Understanding Bugs in C Compilers,” 2011.
+- V. Le et al., “Compiler Validation via Equivalence Modulo Inputs,” 2014.
+- A. V. Aho, M. S. Lam, R. Sethi, and J. D. Ullman, “Compilers: Principles, Techniques, and Tools,” 2nd ed., 2006.
+
 ## Quickstart (2 minutes)
 
 ### Linux/macOS
