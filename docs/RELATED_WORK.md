@@ -1,12 +1,34 @@
-# Related Work (design-relevant, bullet-level)
+# Related Work (high-signal, 1-page positioning)
 
-- Rust: both support pattern matching over structured data; SuayLang makes branching and looping expression-shaped primitives (`dispatch`/`cycle`) rather than mixing expressions with statement-oriented control constructs.
-- Haskell: both support pattern matching and higher-order programming; SuayLang uses an explicit state-transition loop (`cycle`) instead of relying on recursion as the default looping mechanism.
-- OCaml: both use algebraic-data-style variants and pattern matching; SuayLang’s `cycle` couples pattern matching with explicit continue/finish modes to represent state machines directly.
-- Erlang: both encourage modeling control flow via tagged values (success/error variants); SuayLang is a single-process, deterministic semantics experiment rather than a concurrent fault-tolerant runtime.
-- Scheme/Racket: both treat many constructs as expressions; SuayLang restricts metaprogramming (no macros) to keep the semantic surface small and testable.
-- Lua: both emphasize a small core and embedding-friendly implementation; SuayLang’s evaluation focus is differential validation of two backends rather than an extensible production ecosystem.
-- WebAssembly (Wasm): both use a compact instruction model for execution; SuayLang’s VM is validated against a reference interpreter for a subset, whereas Wasm standardizes the bytecode as the primary specification target.
-- Forth: both can be understood as small-core languages with explicit execution models; SuayLang uses lexical scoping, closures, and structured pattern matching rather than stack-manipulation as the programmer-facing abstraction.
-- Elm: both restrict features to preserve predictability; SuayLang’s constraints are aimed at semantic checkability and backend equivalence evidence, not at UI architecture.
-- Smalltalk: both can treat computation as value-producing expressions; SuayLang does not use an object/message model and instead centers on data shape (variants/lists/tuples) plus pattern matching.
+This project treats SuayLang as an **instrument**: a small, explicit-control-flow language used to evaluate falsifiable claims about interpreter↔VM equivalence (H2) and (optionally) structural proxies for local reasoning complexity (H1).
+
+## Expression-oriented control flow / pattern matching
+
+- **Pattern matching compilation:** SuayLang’s `dispatch` is a minimal, expression-shaped match; its design is aligned with decision-tree views of pattern matching (but does not attempt to optimize or generalize the full space).
+
+## Operational semantics (small-step / big-step)
+
+- **Semantics framing:** The interpreter is treated as the baseline operational semantics for v0.1, and equivalence is evaluated observationally against that baseline (rather than asserting a separate, implementation-independent standard).
+
+## Differential testing / compiler fuzzing
+
+- **Differential testing:** H2 evidence is produced via a fixed corpus plus seeded differential fuzzing, following the basic idea that implementation disagreements are counterexamples.
+
+## VM equivalence / testing language implementations
+
+- **Two-backend validation:** The project’s core evaluation loop is interpreter vs VM observation comparison, similar in spirit to compiler-testing work where independent execution paths are compared for disagreements.
+
+## Tooling / diagnostics
+
+- **Diagnostics stability:** Tests include golden diagnostic snapshots to make user-visible errors stable enough to audit and to keep evaluation artifacts reproducible.
+
+## References (5–7)
+
+- G. D. Plotkin, “A Structural Approach to Operational Semantics,” 1981.
+- G. Kahn, “Natural Semantics,” 1987.
+- L. Maranget, “Compiling Pattern Matching to Good Decision Trees,” 2008.
+- W. M. McKeeman, “Differential Testing for Software,” 1998.
+- K. Claessen and J. Hughes, “QuickCheck: A Lightweight Tool for Random Testing of Haskell Programs,” 2000.
+- X. Yang et al., “Finding and Understanding Bugs in C Compilers,” 2011. (Csmith)
+- R. Nystrom, “Crafting Interpreters,” 2021.
+

@@ -1,0 +1,13 @@
+count_pos ← ⌁(xs)
+  ⟲ (Step•(xs 0)) ▷ ⟪
+  ▷ Done•acc        ⇒ ↯ acc
+  ▷ Step•([] acc)   ⇒ ↩ (Done•acc)
+  ▷ Step•([x ⋯rest] acc) ⇒ ↩ (
+        (x > 0) ▷ ⟪
+        ▷ ⊤ ⇒ Step•(rest  acc + 1)
+        ▷ ⊥ ⇒ Step•(rest  acc)
+        ⟫
+      )
+  ⟫
+
+count_pos · [1 0 (0 − 2) 7 3]
