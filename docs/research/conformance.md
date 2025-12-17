@@ -33,7 +33,7 @@ Default corpus location:
 
 Success output:
 
-- `conformance: ok (N files)`
+- `conformance: OK files=N divergences=0 pass=N fail=0`
 
 This runner is intended to be stable and used in CI.
 

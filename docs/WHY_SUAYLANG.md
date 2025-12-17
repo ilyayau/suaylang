@@ -109,3 +109,7 @@ SuayLang is an experiment in *deliberate constraint*: remove features until what
 ## Related Work
 
 See [docs/RELATED_WORK.md](docs/RELATED_WORK.md) for concise, design-relevant comparisons (8–12 bullets).
+
+## References
+
+See the short bibliography in [README.md](../README.md#references).
