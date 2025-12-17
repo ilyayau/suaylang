@@ -14,6 +14,38 @@ This repository is intended for public review: language design, semantics, error
 
 For a stability definition of “v0.1”, see [docs/LANGUAGE_CONTRACT_v0.1.md](docs/LANGUAGE_CONTRACT_v0.1.md).
 
+## 60-second Quickstart
+
+If you can copy-paste this, you can run SuayLang.
+
+### Linux/macOS
+
+```sh
+git clone https://github.com/ilyayau/suaylang
+cd suaylang
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -U pip
+python -m pip install -e .
+
+suay doctor
+suay run examples/hello.suay
+```
+
+### Windows (PowerShell)
+
+```powershell
+git clone https://github.com/ilyayau/suaylang
+cd suaylang
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -U pip
+python -m pip install -e .
+
+suay doctor
+suay run examples/hello.suay
+```
+
 ## Research Orientation
 
 This project is designed for open scientific review and international reproducibility, with clear semantics and rerunnable evaluation artifacts (tests, conformance, fuzzing, benchmarks).
