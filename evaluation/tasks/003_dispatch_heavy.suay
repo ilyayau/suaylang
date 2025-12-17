@@ -1,0 +1,20 @@
+⍝ Task 003: dispatch-heavy branching.
+
+classify ← ⌁(v)
+  v ▷ ⟪
+  ▷ Ok•x  ⇒ x + 1
+  ▷ Err•x ⇒ x + 2
+  ▷ _     ⇒ 0
+  ⟫
+
+⍝ Run classify many times via cycle (no printing)
+
+⟲ (Step•(0 0)) ▷ ⟪
+▷ Done•acc     ⇒ ↯ acc
+▷ Step•(i acc) ⇒ ↩ (
+    (i ≥ 2000) ▷ ⟪
+    ▷ ⊤ ⇒ Done•acc
+    ▷ ⊥ ⇒ Step•(i + 1  acc + (classify · (Ok•i)))
+    ⟫
+  )
+⟫

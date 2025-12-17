@@ -1,0 +1,17 @@
+⍝ Task 002: map + fold. Build [0..999], map, then fold. Final expression is the result.
+
+nums ← ⟪
+  ⟲ (Step•(0 [])) ▷ ⟪
+  ▷ Done•xs     ⇒ ↯ xs
+  ▷ Step•(i xs) ⇒ ↩ (
+        (i ≥ 1000) ▷ ⟪
+        ▷ ⊤ ⇒ Done•xs
+        ▷ ⊥ ⇒ Step•(i + 1  xs ⊞ [i])
+        ⟫
+      )
+  ⟫
+⟫
+
+inc ← ⌁(x) x + 1
+ys ← map · inc · nums
+fold · (⌁(a b) a + b) · 0 · ys

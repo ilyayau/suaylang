@@ -59,10 +59,19 @@ def main() -> int:
         )
 
     if failures:
-        print(f"conformance: {failures} failure(s) out of {len(files)}")
+        print(
+            "conformance: FAIL files={n} divergences={d} pass={p} fail={f}".format(
+                n=len(files),
+                d=failures,
+                p=(len(files) - failures),
+                f=failures,
+            )
+        )
         return 1
 
-    print(f"conformance: ok ({len(files)} files)")
+    print(
+        "conformance: OK files={n} divergences=0 pass={n} fail=0".format(n=len(files))
+    )
     return 0
 
 
