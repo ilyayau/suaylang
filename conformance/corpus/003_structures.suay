@@ -1,0 +1,5 @@
+tup ← (1 2)
+lst ← [1 2 3]
+mp ← ⟦ "a" ↦ 1, "b" ↦ 2 ⟧
+v ← Ok•(tup)
+(tup lst mp v)

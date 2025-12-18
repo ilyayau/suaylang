@@ -1,0 +1,8 @@
+classify ← ⌁(v)
+  v ▷ ⟪
+  ▷ Ok•x  ⇒ x + 1
+  ▷ Err•x ⇒ x + 2
+  ▷ _     ⇒ 0
+  ⟫
+
+(classify · (Ok•41)  classify · (Err•41)  classify · ø)

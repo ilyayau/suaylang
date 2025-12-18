@@ -1,0 +1,8 @@
+a ← 10
+b ← 3
+say · (text · (a + b))
+say · (text · (a − b))
+say · (text · (a × b))
+say · (text · (a ÷ b))
+say · (text · (a % b))
+((a > b) (a ≥ b) (a < b) (a ≤ b) (a = b) (a ≠ b))

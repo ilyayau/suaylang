@@ -1,0 +1,12 @@
+sum_to ← ⌁(n)
+  ⟲ (Step•(1 0)) ▷ ⟪
+  ▷ Done•acc     ⇒ ↯ acc
+  ▷ Step•(i acc) ⇒ ↩ (
+        (i > n) ▷ ⟪
+        ▷ ⊤ ⇒ Done•acc
+        ▷ ⊥ ⇒ Step•(i + 1  acc + i)
+        ⟫
+      )
+  ⟫
+
+sum_to · 200

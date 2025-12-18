@@ -1,0 +1,3 @@
+res1 ← (⊥ ∧ boom)
+res2 ← (⊤ ∨ boom)
+(res1 res2)

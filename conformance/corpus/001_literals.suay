@@ -1,0 +1,8 @@
+say · "ok"
+u ← ø
+t ← ⊤
+f ← ⊥
+i ← 42
+d ← 3.5
+s ← "hi"
+(u t f i d s)

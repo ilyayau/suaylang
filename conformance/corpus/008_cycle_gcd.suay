@@ -1,0 +1,12 @@
+gcd ← ⌁(a b)
+  ⟲ (Step•(a b)) ▷ ⟪
+  ▷ Done•x       ⇒ ↯ x
+  ▷ Step•(x y)   ⇒ ↩ (
+        (y = 0) ▷ ⟪
+        ▷ ⊤ ⇒ Done•x
+        ▷ ⊥ ⇒ Step•(y  (x % y))
+        ⟫
+      )
+  ⟫
+
+gcd · 1071 · 462

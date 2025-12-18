@@ -1,0 +1,14 @@
+step ← ⌁(s)
+  s ▷ ⟪
+  ▷ Start•x ⇒ Next•(x + 1)
+  ▷ Next•x  ⇒ Done•x
+  ▷ Done•x  ⇒ Done•x
+  ⟫
+
+run ← ⌁(seed)
+  ⟲ seed ▷ ⟪
+  ▷ Done•x  ⇒ ↯ x
+  ▷ state   ⇒ ↩ (step · state)
+  ⟫
+
+run · (Start•0)

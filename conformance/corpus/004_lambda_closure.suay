@@ -1,0 +1,5 @@
+mk_adder ← ⌁(x)
+  ⌁(y) x + y
+
+add5 ← mk_adder · 5
+add5 · 7

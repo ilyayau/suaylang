@@ -1,0 +1,8 @@
+unwrap ← ⌁(v)
+  v ▷ ⟪
+  ▷ Ok•(Ok•x)  ⇒ x
+  ▷ Ok•(Err•x) ⇒ x + 100
+  ▷ _          ⇒ 0
+  ⟫
+
+unwrap · (Ok•(Err•2))

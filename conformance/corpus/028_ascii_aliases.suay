@@ -1,0 +1,17 @@
+# ASCII aliases: <- <~ [[ ]] -> |> ~~ >> << :: ... . 
+
+inc <- \(x) x + 1
+
+classify <- \(v)
+  v |> {
+  |> Ok::x  => x
+  |> _      => 0
+  }
+
+run <- \(seed)
+  ~~ seed |> {
+  |> Done::x => << x
+  |> s       => >> (Done::(inc . 41))
+  }
+
+run . (Ok::0)
