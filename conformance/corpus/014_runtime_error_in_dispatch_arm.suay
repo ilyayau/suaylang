@@ -1,0 +1,7 @@
+run ← ⌁(v)
+  v ▷ ⟪
+  ▷ Ok•x  ⇒ x
+  ▷ _     ⇒ missing_name
+  ⟫
+
+run · (Err•1)
