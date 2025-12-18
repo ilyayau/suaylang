@@ -1,7 +1,0 @@
-head_or_zero ← ⌁(xs)
-  xs ▷ ⟪
-  ▷ []        ⇒ 0
-  ▷ [x ⋯_ ]   ⇒ x
-  ⟫
-
-head_or_zero · [9 8 7]

@@ -3,14 +3,8 @@ from __future__ import annotations
 import argparse
 import json
 import random
-import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Any, Callable
-
-_REPO_ROOT = Path(__file__).resolve().parents[2]
-if str(_REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(_REPO_ROOT))
 
 from suaylang.conformance import compare_observations, observe_interpreter, observe_vm
 
@@ -104,21 +98,12 @@ def _expr(rng: random.Random, *, depth: int) -> str:
     return f"({left} {op} {right})"
 
 
-_TEMPLATES = ["arith", "dispatch", "cycle_sum", "map_fold", "fib", "undef_name"]
-
-
-def _program_template(rng: random.Random, *, subset_templates: set[str] | None) -> str:
+def _program_template(rng: random.Random) -> str:
     # Choose between a handful of templates. The goal is to produce programs that:
     # - terminate quickly
     # - are supported by the VM compiler
     # - sometimes exercise stdout via `say`
-    allowed = _TEMPLATES
-    if subset_templates is not None:
-        unknown = sorted(set(subset_templates) - set(_TEMPLATES))
-        if unknown:
-            raise ValueError(f"Unknown templates in --subset: {unknown}")
-        allowed = sorted(subset_templates)
-    t = rng.choice(list(allowed))
+    t = rng.choice(["arith", "dispatch", "cycle_sum", "map_fold", "fib", "undef_name"])
 
     if t == "arith":
         x = _gen_ident(rng)
@@ -204,8 +189,6 @@ def run_fuzz(
     fail_fast: bool,
     save_non_ok: bool,
     save_non_ok_limit: int,
-    subset_templates: set[str] | None = None,
-    on_case: Callable[[int, int, str, Any, Any, bool, str], None] | None = None,
 ) -> tuple[FuzzStats, list[Path]]:
     rng = random.Random(seed)
 
@@ -220,14 +203,11 @@ def run_fuzz(
     saved_non_ok: dict[str, int] = {"runtime": 0, "lex": 0, "parse": 0, "internal": 0}
 
     for i in range(1, n + 1):
-        src = _program_template(rng, subset_templates=subset_templates)
+        src = _program_template(rng)
         filename = f"<fuzz:{seed}:{i}>"
         interp = observe_interpreter(src, filename=filename)
         vm = observe_vm(src, filename=filename)
         res = compare_observations(interp, vm)
-
-        if on_case is not None:
-            on_case(i, seed, src, interp, vm, bool(res.ok), str(res.reason))
 
         if res.ok:
             if interp.termination == "ok":

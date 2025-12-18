@@ -1,3 +1,0 @@
-mk ← ⌁(x) ⌁(y) x + y
-add5 ← mk · 5
-add5 · 37
