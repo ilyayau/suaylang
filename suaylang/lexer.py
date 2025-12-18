@@ -203,11 +203,24 @@ class Lexer:
                 self._advance()
                 continue
             # Comment: ⍝ ... end of line (but keep newline token).
-            if ch == "⍝":
+            # ASCII alias: // ... end of line.
+            if ch == "⍝" or (ch == "/" and not self._at_end() and self._peek_n(2) == "//"):
+                if ch == "/":
+                    # consume both slashes
+                    self._advance()
+                    self._advance()
+                else:
+                    self._advance()
                 while not self._at_end() and self._peek() != "\n":
                     self._advance()
                 continue
             break
+
+    def _peek_n(self, n: int) -> str:
+        j = self._i + n
+        if j > len(self.source):
+            return ""
+        return self.source[self._i : j]
 
     def _lex_symbol(self) -> Token:
         start = self._pos()

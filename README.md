@@ -12,6 +12,12 @@ It is implemented in pure Python and includes two execution paths:
 
 This repository is intended for public review: language design, semantics, error model, and tooling are documented and tested.
 
+Canonical contract docs:
+
+- [docs/LANGUAGE_REFERENCE.md](docs/LANGUAGE_REFERENCE.md) (single source-of-truth)
+- [docs/ASCII_SYNTAX.md](docs/ASCII_SYNTAX.md) (ASCII aliases; normative)
+- [docs/ERROR_CODES.md](docs/ERROR_CODES.md) (stable error codes)
+
 For a stability definition of “v0.1”, see [docs/LANGUAGE_CONTRACT_v0.1.md](docs/LANGUAGE_CONTRACT_v0.1.md).
 
 ## 60-second Quickstart
@@ -30,6 +36,11 @@ python -m pip install -e .
 
 suay doctor
 suay run examples/hello.suay
+
+# Contract-mode helpers:
+suay ref ascii
+suay explain E-SYNTAX
+suay --error-codes run examples/hello.suay
 ```
 
 ### Windows (PowerShell)
@@ -56,7 +67,7 @@ This project is designed for open scientific review and international reproducib
 - Fixed task set: 6 programs, divergences = 0 (`python tools/conformance/run.py evaluation/tasks`)
 - Differential fuzz: seed=0, N=1000, divergences = 0 (`python -m tools.conformance.fuzz --seed 0 --n 1000`)
 - Micro-benchmarks: interpreter vs VM median timings + VM instruction counts (see [docs/research/results.md](docs/research/results.md))
-- Golden diagnostics: 3 stable snapshots (`tests/golden/cases/*.txt`)
+- Golden diagnostics: stable snapshots (`tests/golden/cases/*.txt`, `tests/golden/diagnostics/*.txt`)
 
 ## How to reproduce results
 

@@ -326,7 +326,7 @@ def main(argv: list[str] | None = None) -> int:
     p_explain = sub.add_parser(
         "explain", help="Explain a stable error code from the error catalog"
     )
-    p_explain.add_argument("code", help="Error code like E0201")
+    p_explain.add_argument("code", help="Error code like E-LEX or E-SYNTAX")
 
     args = parser.parse_args(argv)
 

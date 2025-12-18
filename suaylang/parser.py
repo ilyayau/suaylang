@@ -87,7 +87,7 @@ class Parser:
             )
             arms: list[ast.DispatchArm] = []
             self._skip_newlines()
-            while not self._check(TokenType.RDBLOCK):
+            while not (self._check(TokenType.RDBLOCK) or self._check(TokenType.EOF)):
                 self._consume(TokenType.DISPATCH, "Expected ▷ to start a dispatch arm")
                 pat = self._parse_pattern()
                 self._consume(
@@ -103,6 +103,8 @@ class Parser:
                     )
                 )
                 self._skip_newlines()
+            if self._check(TokenType.EOF):
+                self._error_here("Expected ⟫ to close dispatch")
             end_tok = self._consume(TokenType.RDBLOCK, "Expected ⟫ to close dispatch")
             expr = ast.Dispatch(
                 value=expr, arms=arms, span=Span(expr.span.start, end_tok.span.end)
@@ -254,7 +256,7 @@ class Parser:
             self._consume(TokenType.LDBLOCK, "Expected ⟪ to start cycle arms")
             arms: list[ast.CycleArm] = []
             self._skip_newlines()
-            while not self._check(TokenType.RDBLOCK):
+            while not (self._check(TokenType.RDBLOCK) or self._check(TokenType.EOF)):
                 self._consume(TokenType.DISPATCH, "Expected ▷ to start a cycle arm")
                 pat = self._parse_pattern()
                 self._consume(TokenType.FAT_ARROW, "Expected ⇒ after cycle arm pattern")
@@ -275,6 +277,8 @@ class Parser:
                     )
                 )
                 self._skip_newlines()
+            if self._check(TokenType.EOF):
+                self._error_here("Expected ⟫ to close cycle")
             end_tok = self._consume(TokenType.RDBLOCK, "Expected ⟫ to close cycle")
             return ast.Cycle(
                 seed=seed, arms=arms, span=Span(start_tok.span.start, end_tok.span.end)
@@ -303,7 +307,7 @@ class Parser:
             start_tok = self._previous()
             items: list[ast.Expr] = []
             self._skip_newlines()
-            while not self._check(TokenType.RDBLOCK):
+            while not (self._check(TokenType.RDBLOCK) or self._check(TokenType.EOF)):
                 items.append(self._parse_expr())
                 # Inside blocks, require line breaks between forms.
                 if not (
@@ -311,6 +315,8 @@ class Parser:
                 ):
                     self._error_here("Expected end of line after block expression")
                 self._skip_newlines()
+            if self._check(TokenType.EOF):
+                self._error_here("Expected ⟫ to close block")
             end_tok = self._consume(TokenType.RDBLOCK, "Expected ⟫ to close block")
             if not items:
                 self._raise_at_span(

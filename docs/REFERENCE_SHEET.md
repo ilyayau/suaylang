@@ -2,6 +2,12 @@
 
 This is a short, scannable reference for writing SuayLang.
 
+Canonical contract docs:
+
+- [docs/LANGUAGE_REFERENCE.md](LANGUAGE_REFERENCE.md)
+- [docs/ASCII_SYNTAX.md](ASCII_SYNTAX.md)
+- [docs/ERROR_CODES.md](ERROR_CODES.md)
+
 ## 1) Syntax overview (cheat table)
 
 | Concept | Syntax | Notes |
@@ -17,6 +23,8 @@ This is a short, scannable reference for writing SuayLang.
 | Map | `⟦ key ↦ value, ... ⟧` | Keys must be hashable |
 
 ## 2) Values & literals
+
+Evaluation is eager and left-to-right (except short-circuit `∧`/`∨`).
 
 - Int: `123`
 - Dec: `3.14`
