@@ -8,6 +8,7 @@ from pathlib import Path
 from dataclasses import is_dataclass
 
 from .errors import SuayError
+from .contract import lookup_ref, format_error
 from .lexer import Lexer
 from .parser import Parser
 from .interpreter import Interpreter
@@ -271,6 +272,11 @@ def cmd_test(*, args: list[str] | None = None) -> int:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="suay", description="SuayLang CLI")
+    parser.add_argument(
+        "--error-codes",
+        action="store_true",
+        help="Include stable error codes in diagnostics (contract-mode tooling)",
+    )
     sub = parser.add_subparsers(dest="cmd", required=True)
 
     p_run = sub.add_parser("run", help="Execute a .suay file (or -e expression)")
@@ -314,6 +320,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_test.add_argument("pytest_args", nargs=argparse.REMAINDER)
 
+    p_ref = sub.add_parser("ref", help="Print a reference link for a topic/operator/error")
+    p_ref.add_argument("topic", nargs="?", default="", help="Topic, operator, or error code")
+
+    p_explain = sub.add_parser(
+        "explain", help="Explain a stable error code from the error catalog"
+    )
+    p_explain.add_argument("code", help="Error code like E0201")
+
     args = parser.parse_args(argv)
 
     try:
@@ -344,6 +358,34 @@ def main(argv: list[str] | None = None) -> int:
             if rest and rest[0] == "--":
                 rest = rest[1:]
             return cmd_test(args=rest)
+        if args.cmd == "ref":
+            target = lookup_ref(str(getattr(args, "topic", "") or ""))
+            print(target.format())
+            return 0
+        if args.cmd == "explain":
+            code = str(getattr(args, "code"))
+            catalog = lookup_ref(code).path
+            if not catalog.exists():
+                _print_err(f"Missing error catalog: {catalog}")
+                return 2
+            text = catalog.read_text(encoding="utf-8")
+            needle = f"## {code.upper()}"
+            lines = text.splitlines()
+            start = None
+            for i, line in enumerate(lines):
+                if line.strip().startswith(needle):
+                    start = i
+                    break
+            if start is None:
+                _print_err(f"Unknown error code: {code}")
+                return 2
+            end = len(lines)
+            for j in range(start + 1, len(lines)):
+                if lines[j].startswith("## "):
+                    end = j
+                    break
+            print("\n".join(lines[start:end]).rstrip())
+            return 0
         _print_err("Unknown command")
         return 2
 
@@ -357,7 +399,7 @@ def main(argv: list[str] | None = None) -> int:
         _print_err(f"{getattr(args, 'file', '<input>')}: {e}")
         return 1
     except SuayError as e:
-        _print_err(str(e))
+        _print_err(format_error(e, include_code=bool(getattr(args, "error_codes", False))))
         return 1
     except Exception as e:
         # Last-resort: keep the CLI user-facing (no raw Python tracebacks).
