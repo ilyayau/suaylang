@@ -1,8 +1,8 @@
-⍝ Interactive IO demo (interpreter + VM both support hear)
-name ← hear · "name? "
+// Interactive IO demo (interpreter + VM both support hear)
+name <- hear . "name? "
 
-say · ("hello, " ⊞ name)
+say . ("hello, " ++ name)
 
-⍝ Expected interaction:
-⍝ - prompts: name?
-⍝ - if input is "Aya", prints: hello, Aya
+// Expected interaction:
+// - prompts: name?
+// - if input is "Aya", prints: hello, Aya

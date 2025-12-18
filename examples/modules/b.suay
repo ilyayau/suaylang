@@ -1,9 +1,9 @@
-⍝ Circular example partner.
+// Circular example partner.
 
-a ← link · "./a"
+a <- link . "./a"
 
-_force ← a · "value"  ⍝ force module load at top-level
+_force <- a . "value"  // force module load at top-level
 
-value ← 2
+value <- 2
 
-say · ("b.value=" ⊞ (text · value))
+say . ("b.value=" ++ (text . value))

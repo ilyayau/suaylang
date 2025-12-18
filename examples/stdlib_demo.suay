@@ -1,30 +1,30 @@
-⍝ Minimal stdlib demo
+// Minimal stdlib demo
 
-xs ← [1 2 3 4 5]
+xs <- [1 2 3 4 5]
 
-say · ("count(xs)=" ⊞ (text · (count · xs)))
+say . ("count(xs)=" ++ (text . (count . xs)))
 
-say · ("at(xs,2)=" ⊞ (text · (at · xs · 2)))
+say . ("at(xs,2)=" ++ (text . (at . xs . 2)))
 
-say · ("take(xs,3)=" ⊞ (text · (take · xs · 3)))
+say . ("take(xs,3)=" ++ (text . (take . xs . 3)))
 
-say · ("drop(xs,3)=" ⊞ (text · (drop · xs · 3)))
+say . ("drop(xs,3)=" ++ (text . (drop . xs . 3)))
 
-m ← ⟦"a" ↦ 1, "b" ↦ 2⟧
+m <- [["a" -> 1, "b" -> 2]]
 
-say · ("keys(m)=" ⊞ (text · (keys · m)))
+say . ("keys(m)=" ++ (text . (keys . m)))
 
-say · ("has(m,'a')=" ⊞ (text · (has · m · "a")))
+say . ("has(m,'a')=" ++ (text . (has . m . "a")))
 
-m2 ← put · m · "c" · (abs · -7)
+m2 <- put . m . "c" . (abs . -7)
 
-say · ("m2=" ⊞ (text · m2))
+say . ("m2=" ++ (text . m2))
 
-⍝ Expected stdout:
-⍝ count(xs)=5
-⍝ at(xs,2)=3
-⍝ take(xs,3)=[1 2 3]
-⍝ drop(xs,3)=[4 5]
-⍝ keys(m)=[a b]
-⍝ has(m,'a')=⊤
-⍝ m2=⟦a ↦ 1, b ↦ 2, c ↦ 7⟧
+// Expected stdout:
+// count(xs)=5
+// at(xs,2)=3
+// take(xs,3)=[1 2 3]
+// drop(xs,3)=[4 5]
+// keys(m)=[a b]
+// has(m,'a')=⊤
+// m2=⟦a ↦ 1, b ↦ 2, c ↦ 7⟧

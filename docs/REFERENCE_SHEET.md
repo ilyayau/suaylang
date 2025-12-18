@@ -12,55 +12,55 @@ Canonical contract docs:
 
 | Concept | Syntax | Notes |
 |---|---|---|
-| Binding | `name ← expr` | Introduces a new binding in current scope |
-| Mutation | `name ⇐ expr` | Updates an existing binding in an enclosing scope |
-| Block | `⟪ ... ⟫` | Newlines separate expressions |
-| Lambda | `⌁(pattern ...) expr` | Closures, lexical scope |
-| Call (curried) | `f · x · y` | Left-associative application |
-| Dispatch | `value ▷ ⟪ ▷ pat ⇒ expr ... ⟫` | First-match wins |
-| Cycle | `⟲ seed ▷ ⟪ ▷ pat ⇒ ↩ expr | ▷ pat ⇒ ↯ expr ... ⟫` | Explicit state-machine loop |
-| Variants | `Tag•payload` | Tagged value |
-| Map | `⟦ key ↦ value, ... ⟧` | Keys must be hashable |
+| Binding | `name <- expr` | Introduces a new binding in current scope |
+| Mutation | `name <~ expr` | Updates an existing binding in an enclosing scope |
+| Block | `{ ... }` | Newlines separate expressions |
+| Lambda | `\(pattern ...) expr` | Closures, lexical scope |
+| Call (curried) | `f . x . y` | Left-associative application |
+| Dispatch | `value |> { |> pat => expr ... }` | First-match wins |
+| Cycle | `~~ seed |> { |> pat => >> expr | |> pat => << expr ... }` | Explicit state-machine loop |
+| Variants | `Tag::payload` | Tagged value |
+| Map | `[[ key -> value, ... ]]` | Keys must be hashable |
 
 ## 2) Values & literals
 
-Evaluation is eager and left-to-right (except short-circuit `∧`/`∨`).
+Evaluation is eager and left-to-right (except short-circuit `&&`/`||`).
 
 - Int: `123`
 - Dec: `3.14`
 - Text: `"hello"`
-- Unit: `ø`
-- Bool: `⊤` / `⊥`
+- Unit: `#u`
+- Bool: `#t` / `#f`
 - Tuple: `(1 2)` (grouping uses `(expr)`; 1-tuple uses `(expr,)`)
 - List: `[1 2 3]`
-- Map: `⟦ "a" ↦ 1, "b" ↦ 2 ⟧`
-- Variant: `Ok•41`, `Err•"bad"`
+- Map: `[[ "a" -> 1, "b" -> 2 ]]`
+- Variant: `Ok::41`, `Err::"bad"`
 
-## 3) Binding vs mutation (`←` vs `⇐`)
+## 3) Binding vs mutation (`<-` vs `<~`)
 
 ```suay
-x ← 1
-x ⇐ 2
+x <- 1
+x <~ 2
 ```
 
-- `←` fails if the name is already bound in the same scope.
-- `⇐` fails if the name is not bound in any enclosing scope.
+- `<-` fails if the name is already bound in the same scope.
+- `<~` fails if the name is not bound in any enclosing scope.
 
-## 4) Blocks `⟪ ⟫`
+## 4) Blocks `{ }`
 
 ```suay
-x ← ⟪
-  a ← 10
-  b ← 20
+x <- {
+  a <- 10
+  b <- 20
   a + b
-⟫
+}
 ```
 
-## 5) Functions (`⌁`), calling (`·`), currying
+## 5) Functions (`\`), calling (`.`), currying
 
 ```suay
-add ← ⌁(a b) a + b
-say · (text · (add · 2 · 3))
+add <- \(a b) a + b
+say . (text . (add . 2 . 3))
 ```
 
 Builtins are curried by arity; over-application is an error.
@@ -68,38 +68,38 @@ Builtins are curried by arity; over-application is an error.
 ## 6) `dispatch` patterns (examples)
 
 ```suay
-classify ← ⌁(v)
-  v ▷ ⟪
-  ▷ Ok•x  ⇒ "ok:" ⊞ (text · x)
-  ▷ Err•m ⇒ "err:" ⊞ m
-  ▷ _     ⇒ "unknown"
-  ⟫
+classify <- \(v)
+  v |> {
+  |> Ok::x  => "ok:" ++ (text . x)
+  |> Err::m => "err:" ++ m
+  |> _      => "unknown"
+  }
 
-say · (classify · (Ok•41))
+say . (classify . (Ok::41))
 ```
 
 Common patterns:
 - `_` wildcard
 - `x` name binding
-- literals (`1`, `"hi"`, `ø`, `⊤`, `⊥`)
-- tuples/lists (including list rest: `[a b ⋯ rest]`)
-- variants: `Tag•pat`
+- literals (`1`, `"hi"`, `#u`, `#t`, `#f`)
+- tuples/lists (including list rest: `[a b ... rest]`)
+- variants: `Tag::pat`
 
 ## 7) `cycle` (examples)
 
 ```suay
-sum_to ← ⌁(n)
-  ⟲ (Step•(1 0)) ▷ ⟪
-  ▷ Done•acc     ⇒ ↯ acc
-  ▷ Step•(i acc) ⇒ ↩ (
-        (i > n) ▷ ⟪
-        ▷ ⊤ ⇒ Done•acc
-        ▷ ⊥ ⇒ Step•(i + 1  acc + i)
-        ⟫
+sum_to <- \(n)
+  ~~ (Step::(1 0)) |> {
+  |> Done::acc     => << acc
+  |> Step::(i acc) => >> (
+        (i > n) |> {
+        |> #t => Done::acc
+        |> #f => Step::(i + 1  acc + i)
+        }
       )
-  ⟫
+  }
 
-say · (text · (sum_to · 5))
+say . (text . (sum_to . 5))
 ```
 
 ## 8) Errors / diagnostics
@@ -116,7 +116,9 @@ The CLI must not print Python tracebacks.
 
 ## 9) Modules with `link` (MVP)
 
-`link · path · name → value`
+`link . path` loads a module by file path (extension optional).
+
+`module . name` returns the value of the top-level binding `name`.
 
 Example layout:
 - `examples/modules/` contains `.suay` modules
@@ -124,9 +126,9 @@ Example layout:
 Example use:
 
 ```suay
-m ← link · "./examples/modules/math"
-add ← m · "add"
-say · (text · (add · 2 · 3))
+m <- link . "./examples/modules/math"
+add <- m . "add"
+say . (text . (add . 2 . 3))
 ```
 
 ## 10) CLI commands
@@ -139,4 +141,4 @@ say · (text · (add · 2 · 3))
 - `suay new <project-name>` — scaffold a starter project
 - `suay repl` — interactive mode (experimental)
 - `suay test` — run project tests (requires dev deps)
-- `suay fmt` — placeholder (planned)
+- `suay fmt <files...>` — rewrite to canonical ASCII (default)

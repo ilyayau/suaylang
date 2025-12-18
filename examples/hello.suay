@@ -1,9 +1,9 @@
-square ← ⌁(x) x × x
+square <- \(x) x * x
 
-nums ← [1 2 3 4]
-total ← fold · (⌁(a b) a + b) · 0 · (map · square · nums)
+nums <- [1 2 3 4]
+total <- fold . (\(a b) a + b) . 0 . (map . square . nums)
 
-say · ("total=" ⊞ (text · total))
+say . ("total=" ++ (text . total))
 
-⍝ Expected stdout:
-⍝ total=30
+// Expected stdout:
+// total=30

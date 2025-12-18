@@ -107,3 +107,10 @@ def test_error_spans_are_correct_in_each_syntax(
     assert obs.termination == "runtime"
     assert obs.line == expected_line
     assert obs.column == expected_col
+
+
+def test_ascii_slash_slash_line_comments_are_supported() -> None:
+    src = "x <- 1 // comment\n" "x\n"
+    obs = observe_interpreter(src, filename="<ascii-comment>")
+    assert obs.termination == "ok"
+    assert obs.value == 1

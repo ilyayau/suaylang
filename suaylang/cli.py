@@ -13,6 +13,7 @@ from .lexer import Lexer
 from .parser import Parser
 from .interpreter import Interpreter
 from .runtime import Env, UNIT
+from .formatter import FormatOptions, format_file
 
 
 def cmd_doctor() -> int:
@@ -247,9 +248,32 @@ def cmd_repl(*, trace: bool = False) -> int:
             _print_err(f"internal error: {type(e).__name__}: {e}")
 
 
-def cmd_fmt(_: list[str] | None = None) -> int:
-    _print_err("suay fmt: not implemented yet (planned)")
-    return 2
+def cmd_fmt(paths: list[str], *, unicode: bool = False, check: bool = False) -> int:
+    if not paths:
+        _print_err("suay fmt: missing files")
+        return 2
+
+    opts = FormatOptions(unicode=unicode)
+    needs_changes: list[str] = []
+
+    for path in paths:
+        p = Path(path)
+        src = p.read_text(encoding="utf-8")
+        formatted = format_file(p, options=opts)
+        if formatted != src:
+            needs_changes.append(path)
+            if not check:
+                p.write_text(formatted, encoding="utf-8")
+
+    if check:
+        if needs_changes:
+            for p in needs_changes:
+                _print_err(f"needs formatting: {p}")
+            return 1
+        return 0
+
+    # In-place mode
+    return 0
 
 
 def cmd_test(*, args: list[str] | None = None) -> int:
@@ -313,7 +337,10 @@ def main(argv: list[str] | None = None) -> int:
         "--trace", action="store_true", help="Print step-by-step evaluation trace"
     )
 
-    sub.add_parser("fmt", help="Format Suay source (planned; placeholder)")
+    p_fmt = sub.add_parser("fmt", help="Rewrite Suay source into canonical ASCII (default) or Unicode")
+    p_fmt.add_argument("files", nargs="+", help="One or more .suay files")
+    p_fmt.add_argument("--unicode", action="store_true", help="Emit Unicode spellings instead of ASCII")
+    p_fmt.add_argument("--check", action="store_true", help="Check formatting without modifying files")
 
     p_test = sub.add_parser(
         "test", help="Run the project test suite (requires dev deps)"
@@ -352,7 +379,11 @@ def main(argv: list[str] | None = None) -> int:
         if args.cmd == "repl":
             return cmd_repl(trace=bool(getattr(args, "trace", False)))
         if args.cmd == "fmt":
-            return cmd_fmt(None)
+            return cmd_fmt(
+                list(getattr(args, "files", []) or []),
+                unicode=bool(getattr(args, "unicode", False)),
+                check=bool(getattr(args, "check", False)),
+            )
         if args.cmd == "test":
             rest = list(getattr(args, "pytest_args", []) or [])
             if rest and rest[0] == "--":

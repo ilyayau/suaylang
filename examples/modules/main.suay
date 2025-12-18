@@ -1,7 +1,7 @@
-math ← link · "./math"  ⍝ extension optional
+math <- link . "./math"  // extension optional
 
-say · ("pi=" ⊞ (text · (math · "pi")))
+say . ("pi=" ++ (text . (math . "pi")))
 
-say · ("add(2,3)=" ⊞ (text · (((math · "add") · 2) · 3)))
+say . ("add(2,3)=" ++ (text . (((math . "add") . 2) . 3)))
 
-say · ("square(7)=" ⊞ (text · ((math · "square") · 7)))
+say . ("square(7)=" ++ (text . ((math . "square") . 7)))

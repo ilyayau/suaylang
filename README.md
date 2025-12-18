@@ -17,6 +17,11 @@ Canonical contract docs:
 - [docs/LANGUAGE_REFERENCE.md](docs/LANGUAGE_REFERENCE.md) (single source-of-truth)
 - [docs/ASCII_SYNTAX.md](docs/ASCII_SYNTAX.md) (ASCII aliases; normative)
 - [docs/ERROR_CODES.md](docs/ERROR_CODES.md) (stable error codes)
+- [docs/TOOLING.md](docs/TOOLING.md) (CLI surface)
+- [docs/MODULE_SYSTEM.md](docs/MODULE_SYSTEM.md) (modules status + direction)
+- [docs/STDLIB_REFERENCE.md](docs/STDLIB_REFERENCE.md) (stdlib/builtins contract)
+- [docs/CONFORMANCE.md](docs/CONFORMANCE.md) (interpreter↔VM definition)
+- [docs/MIGRATION.md](docs/MIGRATION.md) (breaking-change notes)
 
 For a stability definition of “v0.1”, see [docs/LANGUAGE_CONTRACT_v0.1.md](docs/LANGUAGE_CONTRACT_v0.1.md).
 
@@ -177,15 +182,15 @@ It is not trying to compete with mainstream languages or their ecosystems.
 
 SuayLang is expression-first. Its signature constructs are:
 
-- Binding: `name ← expr`
-- Mutation: `name ⇐ expr` (updates an existing binding)
-- Blocks: `⟪ ... ⟫` (newlines separate forms)
-- Lambda: `⌁(pattern ...) expr` (closures, lexical scoping)
-- Application: `f · x · y` (curried)
-- Pattern match: `value ▷ ⟪ ▷ pat ⇒ expr ... ⟫` ("dispatch")
-- Pattern-driven loop: `⟲ seed ▷ ⟪ ▷ pat ⇒ ↩ expr | ▷ pat ⇒ ↯ expr ... ⟫` ("cycle")
-- Variants: `Tag•payload`
-- Maps: `⟦ key ↦ value , ... ⟧`
+- Binding: `name <- expr`
+- Mutation: `name <~ expr` (updates an existing binding)
+- Blocks: `{ ... }` (newlines separate forms)
+- Lambda: `\(pattern ...) expr` (closures, lexical scoping)
+- Application: `f . x . y` (curried)
+- Pattern match: `value |> { |> pat => expr ... }` ("dispatch")
+- Pattern-driven loop: `~~ seed |> { |> pat => >> expr | |> pat => << expr ... }` ("cycle")
+- Variants: `Tag::payload`
+- Maps: `[[ key -> value , ... ]]`
 
 Newlines are significant; top-level and block forms are separated by newline(s).
 
@@ -194,41 +199,41 @@ Newlines are significant; top-level and block forms are separated by newline(s).
 ### 1) Higher-order style (map + fold)
 
 ```suay
-square ← ⌁(x) x × x
+square <- \(x) x * x
 nums ← [1 2 3 4]
 
-total ← fold · (⌁(a b) a + b) · 0 · (map · square · nums)
-say · ("total=" ⊞ (text · total))
+total <- fold . (\(a b) a + b) . 0 . (map . square . nums)
+say . ("total=" ++ (text . total))
 ```
 
 ### 2) Dispatch: branch on data shape
 
 ```suay
-classify ← ⌁(v)
-    v ▷ ⟪
-    ▷ Ok•x  ⇒ "ok:" ⊞ (text · x)
-    ▷ Err•m ⇒ "err:" ⊞ m
-    ▷ _     ⇒ "unknown"
-    ⟫
+classify <- \(v)
+    v |> {
+    |> Ok::x  => "ok:" ++ (text . x)
+    |> Err::m => "err:" ++ m
+    |> _      => "unknown"
+    }
 
-say · (classify · (Ok•41))
+say . (classify . (Ok::41))
 ```
 
 ### 3) Cycle: explicit state machine
 
 ```suay
-sum_to ← ⌁(n)
-    ⟲ (Step•(1 0)) ▷ ⟪
-    ▷ Done•acc     ⇒ ↯ acc
-    ▷ Step•(i acc) ⇒ ↩ (
-            (i > n) ▷ ⟪
-            ▷ ⊤ ⇒ Done•acc
-            ▷ ⊥ ⇒ Step•(i + 1  acc + i)
-            ⟫
+sum_to <- \(n)
+    ~~ (Step::(1 0)) |> {
+    |> Done::acc     => << acc
+    |> Step::(i acc) => >> (
+            (i > n) |> {
+            |> #t => Done::acc
+            |> #f => Step::(i + 1  acc + i)
+            }
         )
-    ⟫
+    }
 
-say · (text · (sum_to · 5))
+say . (text . (sum_to . 5))
 ```
 
 ## Demo (3 commands)
@@ -246,9 +251,9 @@ python scripts/smoke.py
 ### 4) Modules (MVP): explicit loading via `link`
 
 ```suay
-m ← link · "./examples/modules/math"  
-add ← m · "add"
-say · (text · (add · 2 · 3))
+m <- link . "./examples/modules/math"
+add <- m . "add"
+say . (text . (add . 2 . 3))
 ```
 
 ## Execution model (what runs)
@@ -258,7 +263,7 @@ say · (text · (add · 2 · 3))
 - Deterministic evaluation order.
 - Lexical scoping + closures.
 - `dispatch` chooses the first matching arm; arm bindings exist only inside that arm.
-- `cycle` repeats by matching the current state; each arm explicitly chooses `↩` (continue) or `↯` (finish).
+- `cycle` repeats by matching the current state; each arm explicitly chooses `>>` (continue) or `<<` (finish).
 
 ### Bytecode VM (MVP)
 

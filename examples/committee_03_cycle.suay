@@ -1,16 +1,16 @@
-⍝ Committee example 03: cycle (explicit state machine loop)
-sum_to ← ⌁(n)
-  ⟲ (Step•(1 0)) ▷ ⟪
-  ▷ Done•acc     ⇒ ↯ acc
-  ▷ Step•(i acc) ⇒ ↩ (
-      (i > n) ▷ ⟪
-      ▷ ⊤ ⇒ Done•acc
-      ▷ ⊥ ⇒ Step•(i + 1  acc + i)
-      ⟫
+// Committee example 03: cycle (explicit state machine loop)
+sum_to <- \(n)
+  ~~ (Step::(1 0)) |> {
+  |> Done::acc     => << acc
+  |> Step::(i acc) => >> (
+      (i > n) |> {
+      |> #t => Done::acc
+      |> #f => Step::(i + 1  acc + i)
+      }
     )
-  ⟫
+  }
 
-say · ("sum_to(5)=" ⊞ (text · (sum_to · 5)))
+say . ("sum_to(5)=" ++ (text . (sum_to . 5)))
 
-⍝ Expected stdout:
-⍝ sum_to(5)=15
+// Expected stdout:
+// sum_to(5)=15

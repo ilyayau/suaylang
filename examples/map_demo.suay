@@ -1,5 +1,5 @@
-m ← ⟦ "a" ↦ 1 , "b" ↦ 2 ⟧
-say · (text · m)
+m <- [[ "a" -> 1 , "b" -> 2 ]]
+say . (text . m)
 
-⍝ Expected stdout:
-⍝ ⟦a ↦ 1, b ↦ 2⟧
+// Expected stdout:
+// ⟦a ↦ 1, b ↦ 2⟧

@@ -15,6 +15,12 @@ See also:
 - Whitespace is insignificant **except** where it separates tokens.
 - Newlines are separators between top-level forms and between forms inside blocks.
 
+### 1.1 Canonical surface spelling (ASCII-first)
+
+The canonical spelling for v0.1 docs and tooling is **ASCII** (see [docs/ASCII_SYNTAX.md](ASCII_SYNTAX.md)).
+
+Unicode spellings are supported as aliases and must be equivalent.
+
 ## 2. Evaluation model (strict)
 
 ### 2.1 Strict evaluation
@@ -26,12 +32,12 @@ Evaluation is eager everywhere.
 Decision #1 (contract): evaluation order is **strict left-to-right**.
 
 - Binary operators evaluate the left operand first, then the right operand.
-- Function application `f · x` evaluates `f` then `x`.
+- Function application `f . x` evaluates `f` then `x`.
 - Tuple/list/map literals evaluate elements left-to-right.
 
 Notes:
 
-- Short-circuit operators (`∧`, `∨`) are a deliberate exception: they may skip RHS evaluation.
+- Short-circuit operators (`&&`, `||`) are a deliberate exception: they may skip RHS evaluation.
 
 ### 2.3 Control-flow evaluation
 
@@ -40,19 +46,20 @@ Notes:
 
 ### 2.4 Boolean short-circuit
 
-- `∧` and `∨` are short-circuiting operators.
+- `&&` and `||` are short-circuiting operators.
 
 ## 3. Values
 
 ### 3.1 Unit
 
 - Unit is the unique empty value.
-- The canonical surface spelling is `ø`.
+- Canonical ASCII spelling: `#u`.
+- Unicode alias: `ø`.
 
 ### 3.2 Booleans
 
-- True: `⊤` (ASCII `#t`)
-- False: `⊥` (ASCII `#f`)
+- True: `#t` (Unicode alias `⊤`)
+- False: `#f` (Unicode alias `⊥`)
 
 ### 3.3 Numbers
 
@@ -65,13 +72,13 @@ Notes:
 
 ## 4. Binding and mutation
 
-- Binding: `name ← expr` defines a new name in the current scope.
-- Mutation: `name ⇐ expr` updates an existing binding in the nearest enclosing scope.
+- Binding: `name <- expr` defines a new name in the current scope.
+- Mutation: `name <~ expr` updates an existing binding in the nearest enclosing scope.
 - Both binding and mutation evaluate their RHS and return unit.
 
 ## 5. Blocks and scoping
 
-- Blocks `⟪ ... ⟫` introduce a new scope.
+- Blocks `{ ... }` introduce a new scope.
 - Inside a block, each form must end at a newline or block end.
 
 ## 6. Equality
