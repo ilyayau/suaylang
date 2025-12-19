@@ -41,6 +41,11 @@ jobs:
         run: |
           python -m tools.human_proxy.run --out-dir results
 
+      - name: Build research plan PDF
+        run: |
+          make research-pdf
+          test -s docs/RESEARCH_PLAN.pdf
+
       - name: Upload reports
         uses: actions/upload-artifact@v4
         with:
@@ -50,3 +55,4 @@ jobs:
             results/*.json
             results/*.md
             results/*.csv
+            docs/RESEARCH_PLAN.pdf

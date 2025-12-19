@@ -24,6 +24,12 @@ Canonical contract docs:
 - [docs/CONFORMANCE.md](docs/CONFORMANCE.md) (interpreter↔VM definition)
 - [docs/MIGRATION.md](docs/MIGRATION.md) (breaking-change notes)
 
+Research plan (committee-friendly, 1–2 pages):
+
+- [docs/RESEARCH_PLAN.pdf](docs/RESEARCH_PLAN.pdf) (generated)
+- Source: [docs/RESEARCH_PLAN.md](docs/RESEARCH_PLAN.md)
+- Regenerate: `make research-pdf`
+
 For a stability definition of “v0.1”, see [docs/LANGUAGE_CONTRACT_v0.1.md](docs/LANGUAGE_CONTRACT_v0.1.md).
 
 ## 60-second Quickstart
