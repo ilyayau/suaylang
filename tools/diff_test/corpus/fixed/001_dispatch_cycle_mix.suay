@@ -1,0 +1,16 @@
+inc <- \(x) x + 1
+
+v <- Ok::(1 2)
+
+sum <- v |> {
+|> Ok::(a b) => a + b
+|> _ => 0
+}
+
+~~ (Step::(0 sum)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 (inc . acc))
+})
+}

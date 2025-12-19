@@ -1,0 +1,17 @@
+inc ← link · "mod" · "inc"
+v ← link · "mod" · "value"
+
+// A tiny loop via cycle to amplify module access costs without using Python-level loops.
+
+run ← ⌁(n)
+  ⟲ (S•(0 v)) ▷ ⟪
+  ▷ Done•x        ⇒ ↯ x
+  ▷ S•(i acc)     ⇒ ↩ (
+        (i ≥ n) ▷ ⟪
+        ▷ ⊤ ⇒ Done•acc
+        ▷ ⊥ ⇒ S•(i + 1  (inc · acc))
+        ⟫
+      )
+  ⟫
+
+run · 200

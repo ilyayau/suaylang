@@ -1,0 +1,9 @@
+t <- []
+i <- Step::[[ 18 -> t ]]
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}

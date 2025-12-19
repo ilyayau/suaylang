@@ -1,0 +1,9 @@
+t0 <- Done::2 . 16
+v <- Done::[[ 20 -> t0, #u -> 0.5 ]]
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}

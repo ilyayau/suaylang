@@ -1,0 +1,13 @@
+acc <- (\(acc2 m7) [('mext' * 9)] * \(m4 m) (m m) . [#u])
+x <- [[ 13 -> \(acc n) [(n 10) [3.0] #t . 2.1], 'b' -> Ok::((acc acc) = \(n m) #f), 11 -> (0.1 . acc . (acc #u) [\(y7 m) y7]) ]]
+a3 <- ((Err::#u . (x * 18) * (\(x1 a) 0.7 = [2])) != (\(y z5) [[ 'a' -> 0.4, 'hi' -> 18, -3 -> acc ]] - [\(n x2) acc]))
+x <- ([] (((5 >= x) <= [[  ]]) / ((acc / 2.6) <= (#f <= #u))))
+acc4 <- \(x v) ((#f - a3) [[ 'hi' -> acc ]]) . (((x #u) / Ok::1.5) != [[15] acc . x (#u = x)])
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}
+z_undefined

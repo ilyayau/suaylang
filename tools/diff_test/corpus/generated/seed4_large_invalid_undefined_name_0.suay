@@ -1,0 +1,16 @@
+m <- (\(acc3 v8) [] <= Err::[])
+y <- [[ 1.5 -> m . #f . 4 . m, #t -> \(t y) (-3 >= m) ]] . [[  ]] . (#t != #u) . \(x6 y) x6 . (((#u m) . Step::m Err::\(a b8) b8) >= ((\(z acc) 0.1 [m]) Ok::(9 - #t))) . [[ #u -> Step::(17 . m . Done::0.2 >= Step::m . m) ]]
+i <- (\(i i2) (i . m . Err::y Done::[[  ]]) + (Ok::Err::1 . [#f . m [[ 10 -> m, #u -> 2.0 ]] \(i3 v) 3.5] - \(z x) [y 'hi' 'b'] . [[  ]])) . \(t b) ([[ 'hi' -> (t - 4), 'b' -> (b * b) ]] / [y t t] . \(n m) 0.3) . (\(m3 a) ((m3 >= 3.7) Done::m3) [[ 'mext' -> (\(x8 b) 3.9 (y y)), 2 -> ([[ #u -> #t ]] [m]) ]])
+m <- ([[  ]] [[ #t -> \(v t) (((m / t) Step::v) != (\(y z) 2 / t . v)), -1 -> [[  ]] ]])
+y <- [[ #t -> Err::\(acc y) (\(i b) 2.6 . 0 + ([[ -5 -> #f ]] [acc 'ok' y])) ]]
+acc <- (Step::([[ 2.8 -> y, 2.3 -> y, 1.1 -> i ]] >= \(t3 n) m) . (([3.2 i] \(z6 x9) m) - [[ 2.0 -> \(x a) y, 'hi' -> (y * 'mext'), 'ok' -> Ok::#f ]]) . (([[  ]] / [[ 20 -> [i #f m] ]]) / \(i9 n) Ok::[#u]) = \(m i8) \(n v8) (Done::m . #f . #u (['mext' #t m] v8 . i8)))
+n <- []
+n <- (((Err::((-4 0.0) <= (acc * n)) (((15 = #f) * [[ 'hi' -> y, 7 -> n ]]) (\(n x) i - (y / 'b')))) Done::Done::(y . acc = \(b m7) acc)) >= Err::[([[ #u -> (y 0.1) ]] + \(acc7 t) (m #u)) [((i <= y) <= [y m acc])] [[ 3 -> (\(v3 t) #u [[  ]]), 7 -> [] ]]])
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}
+z_undefined

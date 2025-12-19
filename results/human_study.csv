@@ -1,0 +1,7 @@
+task,language,loc_nonempty,token_count,max_nesting,control_flow_markers,operator_diversity
+classify_variant,suay,8,66,2,4,10
+classify_variant,python,9,76,3,2,7
+map_fold,suay,8,69,3,3,8
+map_fold,python,7,61,3,1,7
+sum_to,suay,10,99,4,7,10
+sum_to,python,9,51,2,1,7

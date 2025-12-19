@@ -16,6 +16,7 @@ Canonical contract docs:
 
 - [docs/LANGUAGE_REFERENCE.md](docs/LANGUAGE_REFERENCE.md) (single source-of-truth)
 - [docs/ASCII_SYNTAX.md](docs/ASCII_SYNTAX.md) (ASCII aliases; normative)
+- [docs/ASCII_REFERENCE.md](docs/ASCII_REFERENCE.md) (ASCII mapping table + examples)
 - [docs/ERROR_CODES.md](docs/ERROR_CODES.md) (stable error codes)
 - [docs/TOOLING.md](docs/TOOLING.md) (CLI surface)
 - [docs/MODULE_SYSTEM.md](docs/MODULE_SYSTEM.md) (modules status + direction)
@@ -29,6 +30,19 @@ For a stability definition of “v0.1”, see [docs/LANGUAGE_CONTRACT_v0.1.md](d
 
 If you can copy-paste this, you can run SuayLang.
 
+### Hello in 60 seconds (ASCII)
+
+`examples/hello.suay` is ASCII-only:
+
+```suay
+square <- \(x) x * x
+
+nums <- [1 2 3 4]
+total <- fold . (\(a b) a + b) . 0 . (map . square . nums)
+
+say . ("total=" ++ (text . total))
+```
+
 ### Linux/macOS
 
 ```sh
@@ -41,6 +55,10 @@ python -m pip install -e .
 
 suay doctor
 suay run examples/hello.suay
+
+# ASCII-first tooling (default). To emit Unicode formatting/templates:
+suay fmt --syntax unicode examples/hello.suay
+suay new --syntax unicode my-project
 
 # Contract-mode helpers:
 suay ref ascii
@@ -64,17 +82,24 @@ suay run examples/hello.suay
 
 ## Research Orientation
 
-This project is designed for open scientific review and international reproducibility, with clear semantics and rerunnable evaluation artifacts (tests, conformance, fuzzing, benchmarks).
+This repository is structured as a small, runnable PL research artifact.
 
-## Evaluation snapshot (v0.1.0)
+## Research Summary (committee-friendly)
 
-- Conformance corpus: 4 programs, divergences = 0 (`python tools/conformance/run.py`)
-- Fixed task set: 6 programs, divergences = 0 (`python tools/conformance/run.py evaluation/tasks`)
-- Differential fuzz: seed=0, N=1000, divergences = 0 (`python -m tools.conformance.fuzz --seed 0 --n 1000`)
-- Micro-benchmarks: interpreter vs VM median timings + VM instruction counts (see [docs/research/results.md](docs/research/results.md))
-- Golden diagnostics: stable snapshots (`tests/golden/cases/*.txt`, `tests/golden/diagnostics/*.txt`)
+- **Claim (falsifiable)**: the reference interpreter and the bytecode VM are observationally equivalent for the v0.1 scope (see [docs/RESEARCH_CLAIM.md](docs/RESEARCH_CLAIM.md)).
+- **Method**: deterministic, multi-seed differential testing + coverage reporting (see [docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md) and [tools/diff_test/](tools/diff_test/)).
+- **Key results (current snapshot; reproducible in `results/`)**:
+    - Differential test (CI profile): seeds `0..9`, `N=500/seed`, total programs `5001`, divergences `0`, VM executed steps (ok runs) `11554` (see [results/diff_report.md](results/diff_report.md) and [results/coverage.md](results/coverage.md)).
+    - Benchmarks (smoke): 6-program v1 suite (see [results/benchmarks.md](results/benchmarks.md) and raw JSON [results/bench_raw.json](results/bench_raw.json)).
+    - Human-facing evidence (proxy): 3 paired tasks with computed static metrics (see [docs/HUMAN_STUDY.md](docs/HUMAN_STUDY.md) and [results/human_study.md](results/human_study.md)).
 
-## How to reproduce results
+What would falsify our claim:
+
+- Any divergence reported by the full differential test run (`make diff-test`) beyond the thresholds in [docs/RESEARCH_CLAIM.md](docs/RESEARCH_CLAIM.md).
+
+## 15-minute reviewer path
+
+These commands produce the saved evidence under `results/`.
 
 ```sh
 python -m venv .venv
@@ -82,12 +107,48 @@ source .venv/bin/activate
 python -m pip install -U pip
 python -m pip install -e ".[dev]"
 
+# 1) Unit tests
 pytest -q
-python tools/conformance/run.py
-python tools/conformance/run.py evaluation/tasks
-python -m tools.conformance.fuzz --seed 0 --n 1000
-python benchmarks/run.py evaluation/tasks --iters 200
+
+# 2) Fixed conformance corpus (interpreter vs VM)
+python tools/conformance/run.py conformance/corpus
+
+# 3) Differential testing + coverage (CI subset)
+python -m tools.diff_test.main --profile ci --out-dir results
+
+# 4) Benchmarks (smoke)
+python benchmarks/benchmark_runner.py --profile smoke --out-dir results
+
+# 5) Human-facing proxy metrics
+python -m tools.human_proxy.run --out-dir results
 ```
+
+Full external-validity run (longer):
+
+```sh
+make diff-test
+```
+
+Diff-test scaling notes:
+
+- CI gate (`--profile ci`): seeds `0..9`, `N=500/seed`.
+- Local full run (`--profile full`): seeds `0..99`, `N=2000/seed`.
+
+## Baselines
+
+See [docs/BASELINES.md](docs/BASELINES.md) for an explicit comparison table and related-work analysis.
+
+## Reviewer Evidence Map
+
+- **Claim**: [docs/RESEARCH_CLAIM.md](docs/RESEARCH_CLAIM.md)
+- **Protocol**: [docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md)
+- **Differential testing implementation**: [tools/diff_test/](tools/diff_test/)
+- **Differential testing results**: [results/diff_report.md](results/diff_report.md) and [results/diff_report.json](results/diff_report.json)
+- **Coverage results**: [results/coverage.md](results/coverage.md) and [results/coverage.json](results/coverage.json)
+- **Benchmarks protocol + runner**: [benchmarks/benchmark_runner.py](benchmarks/benchmark_runner.py)
+- **Benchmarks results**: [results/benchmarks.md](results/benchmarks.md) and [results/bench_raw.json](results/bench_raw.json)
+- **Human-facing evidence (proxy)**: [docs/HUMAN_STUDY.md](docs/HUMAN_STUDY.md), tasks in [evaluation/human_proxy/](evaluation/human_proxy/), results in [results/human_study.md](results/human_study.md) and [results/human_study.csv](results/human_study.csv)
+- **Accessibility / ASCII-first**: [docs/ASCII_SYNTAX.md](docs/ASCII_SYNTAX.md), [docs/REFERENCE_SHEET.md](docs/REFERENCE_SHEET.md), CLI `--syntax` + `SUAY_OUTPUT_SYNTAX`, and VS Code extension in [vscode-extension/](vscode-extension/)
 
 ## Related Work (brief)
 

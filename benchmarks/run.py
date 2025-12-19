@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import csv
 import io
+import json
 import statistics
 import sys
 import time
@@ -68,7 +70,7 @@ def _count_instrs(code: Code) -> int:
     return walk(code)
 
 
-def bench_file(path: Path, *, iters: int, warmup: int) -> tuple[float, float, int]:
+def bench_file(path: Path, *, iters: int, warmup: int) -> tuple[float, float, int, int]:
     src = _read(path)
     program = _parse(src, filename=str(path))
 
@@ -86,6 +88,13 @@ def bench_file(path: Path, *, iters: int, warmup: int) -> tuple[float, float, in
     instr_count = _count_instrs(code)
     vm = VM(source=src, filename=str(path), trace=False)
 
+    def vm_run_with_stats() -> tuple[object, int]:
+        with (
+            contextlib.redirect_stdout(io.StringIO()),
+            contextlib.redirect_stderr(io.StringIO()),
+        ):
+            return vm.run_with_stats(code)
+
     def vm_run() -> None:
         with (
             contextlib.redirect_stdout(io.StringIO()),
@@ -97,9 +106,12 @@ def bench_file(path: Path, *, iters: int, warmup: int) -> tuple[float, float, in
         interp_run()
         vm_run()
 
+    # Executed instruction count is deterministic for a given program.
+    _val, exec_steps = vm_run_with_stats()
+
     t_interp = _timeit(interp_run, iters=iters)
     t_vm = _timeit(vm_run, iters=iters)
-    return _median_ms(t_interp), _median_ms(t_vm), instr_count
+    return _median_ms(t_interp), _median_ms(t_vm), instr_count, int(exec_steps)
 
 
 def _iter_suay_files(root: Path) -> list[Path]:
@@ -113,7 +125,7 @@ def _iter_suay_files(root: Path) -> list[Path]:
 def main() -> int:
     ap = argparse.ArgumentParser(
         prog="benchmarks",
-        description="Run SuayLang micro-benchmarks and print a Markdown table.",
+        description="Run SuayLang micro-benchmarks and optionally write JSON/CSV/Markdown results.",
     )
     ap.add_argument(
         "paths",
@@ -123,6 +135,24 @@ def main() -> int:
     )
     ap.add_argument("--iters", type=int, default=200, help="Iterations per program")
     ap.add_argument("--warmup", type=int, default=5, help="Warm-up runs per backend")
+    ap.add_argument(
+        "--json-out",
+        type=str,
+        default="",
+        help="Write machine-readable JSON results to this path",
+    )
+    ap.add_argument(
+        "--csv-out",
+        type=str,
+        default="",
+        help="Write machine-readable CSV results to this path",
+    )
+    ap.add_argument(
+        "--md-out",
+        type=str,
+        default="",
+        help="Write Markdown summary table to this path",
+    )
     args = ap.parse_args()
 
     roots = [Path(p) for p in args.paths]
@@ -134,16 +164,77 @@ def main() -> int:
         print("benchmarks: no .suay files found")
         return 2
 
-    rows: list[tuple[str, float, float, float, int]] = []
+    rows: list[dict[str, object]] = []
     for p in targets:
-        ti, tv, ninstr = bench_file(p, iters=int(args.iters), warmup=int(args.warmup))
+        ti, tv, ninstr, steps = bench_file(
+            p, iters=int(args.iters), warmup=int(args.warmup)
+        )
         ratio = (ti / tv) if tv > 0 else float("inf")
-        rows.append((p.as_posix(), ti, tv, ratio, ninstr))
+        rows.append(
+            {
+                "program": p.as_posix(),
+                "interp_ms_median": float(ti),
+                "vm_ms_median": float(tv),
+                "relative_interp_over_vm": float(ratio),
+                "vm_instr_static": int(ninstr),
+                "vm_instr_executed": int(steps),
+                "iters": int(args.iters),
+                "warmup": int(args.warmup),
+            }
+        )
 
-    print("| Program | Interpreter (ms) | VM (ms) | Relative (interp/vm) | VM instr |")
-    print("|---|---:|---:|---:|---:|")
-    for rel, ti, tv, ratio, ninstr in rows:
-        print(f"| {rel} | {ti:.3f} | {tv:.3f} | {ratio:.2f} | {ninstr} |")
+    md_lines: list[str] = []
+    md_lines.append(
+        "| Program | Interpreter (ms, median) | VM (ms, median) | Relative (interp/vm) | VM instr (static) | VM instr (executed) |"
+    )
+    md_lines.append("|---|---:|---:|---:|---:|---:|")
+    for r in rows:
+        md_lines.append(
+            "| {program} | {ti:.3f} | {tv:.3f} | {ratio:.2f} | {ninstr} | {steps} |".format(
+                program=r["program"],
+                ti=float(r["interp_ms_median"]),
+                tv=float(r["vm_ms_median"]),
+                ratio=float(r["relative_interp_over_vm"]),
+                ninstr=int(r["vm_instr_static"]),
+                steps=int(r["vm_instr_executed"]),
+            )
+        )
+
+    # Default behavior: print a Markdown table to stdout.
+    if not args.json_out and not args.csv_out and not args.md_out:
+        print("\n".join(md_lines))
+        return 0
+
+    if args.md_out:
+        out = Path(str(args.md_out))
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text("\n".join(md_lines) + "\n", encoding="utf-8")
+
+    if args.json_out:
+        out = Path(str(args.json_out))
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps({"rows": rows}, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    if args.csv_out:
+        out = Path(str(args.csv_out))
+        out.parent.mkdir(parents=True, exist_ok=True)
+        with out.open("w", encoding="utf-8", newline="") as f:
+            w = csv.DictWriter(
+                f,
+                fieldnames=[
+                    "program",
+                    "interp_ms_median",
+                    "vm_ms_median",
+                    "relative_interp_over_vm",
+                    "vm_instr_static",
+                    "vm_instr_executed",
+                    "iters",
+                    "warmup",
+                ],
+            )
+            w.writeheader()
+            for r in rows:
+                w.writerow(r)
 
     return 0
 

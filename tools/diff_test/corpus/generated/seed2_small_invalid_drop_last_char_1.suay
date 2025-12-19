@@ -1,0 +1,9 @@
+t3 <- \(n n) n . 15
+m <- (Done::t3 != t3 . 'b')
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}

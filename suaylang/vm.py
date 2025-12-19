@@ -1,9 +1,13 @@
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 
 from . import ast
 from .bytecode import Code, Instr
+from .compiler import Compiler
+from .lexer import Lexer
+from .parser import Parser
 from .runtime import (
     Builtin,
     Closure,
@@ -63,26 +67,52 @@ class ClosureBC:
     name: str | None = None
 
 
+@dataclass
+class ModuleSystem:
+    cache: dict[str, Env]
+    loading: list[str]
+
+
 class VM:
     def __init__(
-        self, *, source: str, filename: str | None = None, trace: bool = False
+        self,
+        *,
+        source: str,
+        filename: str | None = None,
+        trace: bool = False,
+        modules: ModuleSystem | None = None,
     ) -> None:
         self.source = source
         self.filename = filename
         self.trace = trace
         self._depth = 0
+        self.modules = modules
+
+        self._builtins_env = Env(parent=None)
+        self._install_builtins(self._builtins_env)
+        if self.modules is None:
+            self.modules = ModuleSystem(cache={}, loading=[])
 
     def run(self, code: Code) -> object:
-        env = Env(parent=None)
-        self._install_builtins(env)
+        env = Env(parent=self._builtins_env)
         return self.run_in_env(code, env)
 
+    def run_with_stats(self, code: Code) -> tuple[object, int]:
+        env = Env(parent=self._builtins_env)
+        return self.run_in_env_with_stats(code, env)
+
     def run_in_env(self, code: Code, env: Env) -> object:
+        val, _steps = self.run_in_env_with_stats(code, env)
+        return val
+
+    def run_in_env_with_stats(self, code: Code, env: Env) -> tuple[object, int]:
         stack: list[object] = []
         pc = 0
+        steps = 0
 
         while pc < len(code.instrs):
             ins = code.instrs[pc]
+            steps += 1
             if self.trace:
                 self._trace_step(code, pc, ins, stack)
 
@@ -242,7 +272,7 @@ class VM:
                         filename=self.filename,
                     )
                 elif op == "HALT":
-                    return stack[-1] if stack else UNIT
+                    return (stack[-1] if stack else UNIT), steps
                 else:
                     raise SuayRuntimeError(
                         f"Unknown opcode {op}",
@@ -270,7 +300,67 @@ class VM:
 
             pc += 1
 
-        return stack[-1] if stack else UNIT
+        return (stack[-1] if stack else UNIT), steps
+
+    # ---------- Modules (v0.1: `link`) ----------
+
+    def _resolve_module_path(self, raw: str) -> str:
+        p = raw
+        if not os.path.splitext(p)[1]:
+            p = p + ".suay"
+        base = (
+            os.path.dirname(os.path.abspath(self.filename)) if self.filename else os.getcwd()
+        )
+        return os.path.abspath(os.path.join(base, p))
+
+    def _load_module_env(self, abs_path: str, *, call_span) -> Env:
+        assert self.modules is not None
+        if abs_path in self.modules.cache:
+            return self.modules.cache[abs_path]
+
+        if abs_path in self.modules.loading:
+            chain = " -> ".join([*self.modules.loading, abs_path])
+            raise SuayRuntimeError(
+                f"Circular module load detected: {chain}",
+                span=call_span,
+                source=self.source,
+                filename=self.filename,
+            )
+
+        self.modules.loading.append(abs_path)
+        try:
+            try:
+                with open(abs_path, "r", encoding="utf-8") as f:
+                    mod_source = f.read()
+            except OSError as e:
+                raise SuayRuntimeError(
+                    f"Cannot load module {abs_path!r}: {e}",
+                    span=call_span,
+                    source=self.source,
+                    filename=self.filename,
+                )
+
+            mod_tokens = Lexer(mod_source, filename=abs_path).tokenize()
+            mod_program = Parser(mod_tokens, mod_source, filename=abs_path).parse_program()
+            mod_code = Compiler().compile_program(mod_program, name=abs_path)
+
+            mod_vm = VM(
+                source=mod_source,
+                filename=abs_path,
+                trace=self.trace,
+                modules=self.modules,
+            )
+            mod_env = Env(parent=mod_vm._builtins_env)
+            mod_vm.run_in_env(mod_code, mod_env)
+
+            self.modules.cache[abs_path] = mod_env
+            return mod_env
+        except SuayRuntimeError as e:
+            if call_span is not None:
+                raise e.with_frame(StackFrame(label=f"load module {abs_path}", span=call_span))
+            raise
+        finally:
+            self.modules.loading.pop()
 
     # -------- Builtins --------
 
@@ -471,16 +561,70 @@ class VM:
         env.define("put", Builtin(name="put", arity=3, impl=put3))
         env.define("map", Builtin(name="map", arity=2, impl=map1))
         env.define("fold", Builtin(name="fold", arity=3, impl=fold1))
+        # `link` is special-cased in _apply to perform module loading.
+        env.define("link", Builtin(name="link", arity=2, impl=lambda _path, _name: UNIT))
 
     # -------- Call / operators --------
 
     def _apply(self, fn_val: object, arg_val: object, *, call_span) -> object:
         if isinstance(fn_val, Builtin):
+            # Special-case `link` for v0.1 modules (filesystem-backed, cached).
+            if fn_val.name == "link":
+                new_bound = (*fn_val.bound, arg_val)
+                if len(new_bound) < fn_val.arity:
+                    return Builtin(
+                        name=fn_val.name,
+                        arity=fn_val.arity,
+                        impl=fn_val.impl,
+                        bound=new_bound,
+                    )
+                if len(new_bound) > fn_val.arity:
+                    raise SuayRuntimeError(
+                        "Builtin over-applied",
+                        span=call_span,
+                        source=self.source,
+                        filename=self.filename,
+                    )
+
+                path, name = new_bound
+                if not isinstance(path, str) or not isinstance(name, str):
+                    raise SuayRuntimeError(
+                        f"link expects (Text,Text); got ({type(path).__name__},{type(name).__name__})",
+                        span=call_span,
+                        source=self.source,
+                        filename=self.filename,
+                    )
+                if name.startswith("_"):
+                    raise SuayRuntimeError(
+                        f"Module member {name!r} is private",
+                        span=call_span,
+                        source=self.source,
+                        filename=self.filename,
+                    )
+
+                abs_path = self._resolve_module_path(path)
+                mod_env = self._load_module_env(abs_path, call_span=call_span)
+                try:
+                    return mod_env.get_local(name)
+                except KeyError:
+                    raise SuayRuntimeError(
+                        f"Module {abs_path!r} has no exported name {name!r}",
+                        span=call_span,
+                        source=self.source,
+                        filename=self.filename,
+                    )
+
             try:
                 return fn_val.apply(arg_val)
             except SuayRuntimeError as e:
-                raise e.with_location(
-                    span=call_span, source=self.source, filename=self.filename
+                raise e.with_location(span=call_span, source=self.source, filename=self.filename)
+            except ValueError:
+                # Builtin.apply uses ValueError for over-application; convert to user-facing runtime error.
+                raise SuayRuntimeError(
+                    "Builtin over-applied",
+                    span=call_span,
+                    source=self.source,
+                    filename=self.filename,
                 )
 
         if isinstance(fn_val, ClosureBC):

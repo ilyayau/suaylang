@@ -1,0 +1,7 @@
+n <- (#t + #u) . \(t z0) 'a'
+x <- [n n] . (n n)
+x |> {
+|> Ok::a => a
+|> _ => 0
+}
+z_undefined

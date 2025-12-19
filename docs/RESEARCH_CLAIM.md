@@ -1,43 +1,66 @@
-# Core Research Claim (SuayLang v0.1)
+# Research claim (SuayLang v0.1)
 
-## A) Hypothesis
+## Problem (2–4 sentences)
 
-Expression-based, explicit control flow (SuayLang `dispatch`/`cycle`) improves local semantic checkability and enables observational equivalence between a reference interpreter and a bytecode VM on a defined, VM-supported subset.
+Small languages often claim “clear semantics” and “tooling-first design”, but those claims are rarely falsifiable: the reference interpreter, the VM/compiler, and the diagnostics drift over time without a measurable contract.
+SuayLang treats backend equivalence and diagnostic stability as first-class research objects and makes them executable: the interpreter is the reference semantics and the bytecode VM is continuously validated against it.
 
-## B) What we will measure
+## Hypotheses
 
-- Differential testing (interpreter vs VM)
-  - Observable outputs: termination class, stdout (normalized), returned value (best-effort structural equality), and coarse error location (line/column).
-  - Evidence artifacts: [tools/conformance/run.py](tools/conformance/run.py), [tools/conformance/fuzz_runner.py](tools/conformance/fuzz_runner.py), and the comparison policy in [suaylang/conformance.py](suaylang/conformance.py).
+### H1 (primary, falsifiable)
 
-- Semantic construct coverage
-  - Covered constructs (subset-level): `dispatch`, `cycle`, binding/mutation, blocks, lambdas, calls, variants, lists/tuples, maps, arithmetic/comparison.
-  - Scope statement: [docs/research/semantic_scope.md](docs/research/semantic_scope.md) and [docs/research/feature_matrix.md](docs/research/feature_matrix.md).
+For the v0.1 feature subset (Scope), SuayLang’s interpreter and bytecode VM are observationally equivalent on a large, diverse, deterministic program set.
 
-- Number of distinct error classes covered
-  - Measured termination categories: `ok | lex | parse | runtime | internal` (5 classes), with counts recorded by the differential harness.
+For all generated **valid** programs in the differential test suite (seeds 0–99; size buckets; see protocol), the interpreter and VM agree on:
 
-- Key properties (as exercised and checked via artifacts)
-  - Determinism (fixed program + fixed seed yields stable observations)
-  - No implicit state transitions (state changes are explicit via `←`/`⇐` and `cycle` transitions)
-  - Predictable evaluation order (interpreter defines a single evaluation strategy; VM is checked against it)
-  - Stable diagnostic structure (span-anchored errors with stable formatting, maintained via golden diagnostics)
+- termination class (`ok|lex|parse|runtime|internal`)
+- normalized stdout
+- and, when `ok`, the returned value (best-effort structural equality)
 
-## C) Experimental protocol
+### H2 (optional)
 
-- Program generation (property-based / differential testing)
-  - Generate many small, bounded programs from the VM-supported subset using [tools/conformance/fuzz_runner.py](tools/conformance/fuzz_runner.py).
-  - Generation is reproducible via `--seed` and bounded via `--n`.
+For generated **intentionally-invalid** programs, SuayLang’s diagnostics are stable across backends: error kind (`lex|parse|runtime`) and location (line/column) match.
 
-- Subset definition (in/out)
-  - In-scope: constructs supported by the compiler/VM, per [docs/research/semantic_scope.md](docs/research/semantic_scope.md) and [docs/research/feature_matrix.md](docs/research/feature_matrix.md).
-  - Out-of-scope: interpreter-only features (e.g., `link` modules), external I/O, and constructs not implemented by the compiler.
+## Success metrics (quantitative thresholds)
 
-- Equivalence checking
-  - Run each program on the interpreter and on the VM.
-  - Compare: (1) termination class, (2) stdout, (3) value on success, (4) error type + coarse (line, column) location on failure.
-  - On any mismatch, save the program and both observations as a reproducer.
+- **Equivalence rate (valid programs)**: 100.0% agreement (0 divergences) for the default full run:
+  - seeds = `0..99`
+  - `N_valid >= 1000` programs per seed
+  - stratified across size buckets `{small, medium, large}`
+- **Diagnostic stability (invalid programs)**: ≥ 99.5% agreement on (error kind, line, column) for the same full run.
+- **Coverage** (measured on the executed suite):
+  - AST node-kind coverage: each AST node kind defined in `suaylang/ast.py` is observed at least once, or explicitly reported as “unreached by generator”.
+  - Opcode-kind coverage (static): each opcode kind emitted by the compiler is observed at least once across compiled programs, or explicitly reported as “unreached by generator”.
 
-- Reporting
-  - Report: “N programs tested, 0 divergences, K divergences found (and fixed)”, with the seed, N, and saved repro paths.
-  - Fixed-program coverage is reported by the conformance corpus runner: `python tools/conformance/run.py` (inputs under `tests/corpus/conformance/`).
+## Explicit falsification conditions
+
+H1/H2 are falsified if **any** of the following occur in the reproducible full run:
+
+- Any interpreter/VM divergence on valid programs (termination/stdout/value mismatch).
+- Any mismatch in diagnostic kind or location (line/column) on invalid programs beyond the 0.5% tolerance.
+- Coverage report shows a claimed in-scope construct/opcode is never exercised.
+
+## Scope (feature subset covered by the claim)
+
+Included:
+
+- expressions, blocks, eager left-to-right evaluation (with `&&`/`||` short-circuit)
+- binding (`<-`) and mutation (`<~`)
+- lambdas and curried calls
+- dispatch (`|> { ... }`) pattern matching and variants (`Tag::payload`)
+- cycle (`~~ seed |> { ... }`) state-machine loop
+- tuples, lists, maps, text, numbers, booleans, unit
+- modules via `link` (filesystem modules)
+
+Excluded:
+
+- performance claims (handled separately in [results/benchmarks.md](../results/benchmarks.md))
+- human usability claims (handled via proxy protocol in [docs/HUMAN_STUDY.md](HUMAN_STUDY.md))
+- proposed future features not implemented in v0.1
+
+## Why this matters academically (6–10 lines)
+
+This artifact operationalizes a semantics/tooling claim as a continuous, executable contract rather than a prose guarantee.
+By fixing a reference interpreter as the specification and using large-scale, deterministic differential testing, SuayLang provides a concrete instance of compiler/VM validation under realistic tooling constraints.
+The work connects operational semantics concerns (observable behavior, error localization) with practical reproducibility (CI gating, minimized regressions, saved raw reports).
+It is designed to be reviewed like a small PL experiment: a falsifiable hypothesis, a protocol, and auditable artifacts.

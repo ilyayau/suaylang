@@ -1,0 +1,5 @@
+# Module import cycle (B -> A -> B).
+
+y ← link · "049_module_cycle_a" · "y"
+
+ø

@@ -1,0 +1,2 @@
+# Lists are not hashable, so this must raise a runtime error.
+⟦ [1] ↦ 2 ⟧

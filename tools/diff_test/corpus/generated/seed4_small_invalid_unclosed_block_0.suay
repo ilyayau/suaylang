@@ -1,0 +1,9 @@
+acc5 <- ('ok' . 'err' [])
+m <- ([acc5 acc5 acc5] = 3.8 . 1.1)
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+)
+}

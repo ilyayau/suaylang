@@ -1,4 +1,4 @@
-.PHONY: install test lint format format-check smoke build check conformance fuzz bench golden contract
+.PHONY: install test lint format format-check smoke build check conformance fuzz bench golden contract diff-test diff-test-ci human-study bench-report
 
 PY := .venv/bin/python
 PIP := .venv/bin/pip
@@ -28,6 +28,12 @@ conformance:
 fuzz:
 	$(PY) -m tools.conformance.fuzz --seed 0 --n 1000
 
+diff-test:
+	$(PY) -m tools.diff_test.main --profile full --out-dir results
+
+diff-test-ci:
+	$(PY) -m tools.diff_test.main --profile ci --out-dir results
+
 golden:
 	$(PY) -m pytest -q tests/test_golden_diagnostics.py tests/test_golden_error_codes.py
 
@@ -35,7 +41,13 @@ contract:
 	$(PY) tools/decisions/generate_decision_log.py --check
 
 bench:
-	$(PY) scripts/bench_micro.py --iters 200 benchmarks
+	$(PY) benchmarks/benchmark_runner.py --profile full --out-dir results
+
+bench-report:
+	$(PY) benchmarks/benchmark_runner.py --profile full --out-dir results
+
+human-study:
+	$(PY) -m tools.human_proxy.run --out-dir results
 
 smoke:
 	$(PY) scripts/smoke.py

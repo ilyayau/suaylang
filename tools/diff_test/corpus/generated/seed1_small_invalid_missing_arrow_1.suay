@@ -1,0 +1,9 @@
+n5   Ok::Ok::#t
+v <- Step::\(t acc) 17
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}

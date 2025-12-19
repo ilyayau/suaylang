@@ -1,0 +1,12 @@
+acc <- Err::\(t6 i) (\(y n) #t <= (i >= t6))
+m <- [(#u <= acc) (acc acc) \(acc3 m) #u] . Step::[[  ]] . (((#t * acc) \(a b4) a) >= ((acc 13) (acc 2.0)))
+a <- [[ 'hi' -> ((\(t acc) 'err' \(i m) 5) [(m = acc) Ok::#u \(n n8) n8]), #u -> Ok::\(t z1) (t / t) ]]
+z7 <- (\(b n7) [('ok' n7) (n7 #u)] [[ 19 -> ((acc + m) + #f . a) ]])
+m8 <- [([[ 8 -> a ]] . (#u <= acc) >= \(b8 b1) [m 3.6 z7]) [] (\(y9 m5) [#u m5] - Ok::Step::19)]
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}

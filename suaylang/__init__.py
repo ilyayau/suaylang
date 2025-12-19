@@ -6,7 +6,7 @@ try:
     __version__ = metadata.version("suaylang")
 except metadata.PackageNotFoundError:  # pragma: no cover
     # Source checkout fallback.
-    __version__ = "0.1.0"
+    __version__ = "0.2.0"
 
 from .tokens import Token, TokenType, Position, Span
 from .errors import SuayError, Diagnostic

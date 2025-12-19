@@ -1,0 +1,10 @@
+b <- [3.0 . #u]
+z <- ([2.7 b b] \(t z) z)
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}
+@

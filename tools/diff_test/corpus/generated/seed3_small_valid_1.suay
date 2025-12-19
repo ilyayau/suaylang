@@ -1,0 +1,9 @@
+acc <- ('ok' . 3.3 (1.5 'a'))
+n <- \(t n8) Step::t
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}

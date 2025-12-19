@@ -20,7 +20,14 @@ source .venv/bin/activate
 python -m pip install -U pip
 python -m pip install -e ".[dev]"
 
-python scripts/bench.py --iters 200
+python benchmarks/benchmark_runner.py --profile full --out-dir results
+
+# Smoke profile (CI-like)
+python benchmarks/benchmark_runner.py --profile smoke --out-dir results
+
+# Outputs:
+# - results/bench_raw.json
+# - results/benchmarks.md
 ```
 
 ## Methodology notes

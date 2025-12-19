@@ -1,0 +1,8 @@
+# Simple module exporting a function + value.
+
+add1 ← ⌁(x)
+  x + 1
+
+answer ← 41
+
+ø

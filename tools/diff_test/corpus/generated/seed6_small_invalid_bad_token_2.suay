@@ -1,0 +1,10 @@
+y <- Ok::17 . 13
+y5 <- [] . (3.0 y)
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}
+@

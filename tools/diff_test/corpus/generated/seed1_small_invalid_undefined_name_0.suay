@@ -1,0 +1,10 @@
+acc4 <- ([[ 1.1 -> #t, 'b' -> 'hi' ]] != (1.4 <= 'mext'))
+v <- [(acc4 acc4) acc4 . acc4 \(t x) 0.0]
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}
+z_undefined

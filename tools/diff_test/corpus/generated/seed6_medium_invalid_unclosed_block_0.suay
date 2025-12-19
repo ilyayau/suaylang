@@ -1,0 +1,12 @@
+m8 <- \(z5 acc) ((Ok::z5 >= acc . acc) != ([z5 #f] = (z5 acc)))
+a6 <- Ok::\(b i) Ok::[#u 'ok']
+acc <- [[ 10 -> [#u . 0.6] . [[ #f -> m8, #t -> 1.2, 'hi' -> 13 ]] . [], #t -> [[ #f -> \(b b) \(a z) a, 0.3 -> ((m8 = a6) != -2 . m8) ]] ]]
+y <- ((a6 >= a6) . (acc acc) >= ([m8] / \(v n) 1.3)) . Ok::(1.3 . 1.1 + Step::m8)
+i6 <- (Step::Step::a6 . (3.5 >= 'b') <= ((a6 >= m8) . \(z i) y != (#f . y \(t x0) m8)))
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+)
+}

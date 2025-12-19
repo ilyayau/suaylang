@@ -1,0 +1,7 @@
+sum <- \(xs)
+  xs |> {
+  |> []           => 0
+  |> [x ...rest]  => x + (sum . rest)
+  }
+
+say . (sum . [1 2 3 4])

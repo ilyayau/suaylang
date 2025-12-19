@@ -1,0 +1,12 @@
+gcd <- \(a b)
+  ~~ (Step::(a b)) |> {
+  |> Done::x       => << x
+  |> Step::(x y)   => >> (
+        (y = 0) |> {
+        |> #t => Done::x
+        |> #f => Step::(y  (x % y))
+        }
+      )
+  }
+
+say . (gcd . 1071 . 462)

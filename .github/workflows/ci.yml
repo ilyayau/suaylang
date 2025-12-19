@@ -29,8 +29,24 @@ jobs:
         run: |
           python tools/conformance/run.py conformance/corpus | tee artifacts/conformance.txt
 
+      - name: Run diff-test (CI subset)
+        run: |
+          python -m tools.diff_test.main --profile ci --out-dir results
+
+      - name: Run benchmarks (smoke)
+        run: |
+          python benchmarks/benchmark_runner.py --profile smoke --out-dir results
+
+      - name: Run human-study proxy (static metrics)
+        run: |
+          python -m tools.human_proxy.run --out-dir results
+
       - name: Upload reports
         uses: actions/upload-artifact@v4
         with:
           name: contract-reports
-          path: artifacts/*.txt
+          path: |
+            artifacts/*.txt
+            results/*.json
+            results/*.md
+            results/*.csv

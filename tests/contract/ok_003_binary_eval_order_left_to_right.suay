@@ -1,0 +1,16 @@
+x <- 0
+
+left <- \(_) {
+  x <~ x + 1
+  say . 1
+  10
+}
+
+right <- \(_) {
+  x <~ x + 1
+  say . 2
+  20
+}
+
+say . ((left . #u) + (right . #u))
+say . x

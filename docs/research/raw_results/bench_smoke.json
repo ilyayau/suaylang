@@ -1,0 +1,74 @@
+{
+  "rows": [
+    {
+      "interp_ms_median": 0.7895240014477167,
+      "iters": 10,
+      "program": "benchmarks/fib/fib.suay",
+      "relative_interp_over_vm": 1.0284652867578732,
+      "vm_instr_executed": 7,
+      "vm_instr_static": 60,
+      "vm_ms_median": 0.767671997891739,
+      "warmup": 1
+    },
+    {
+      "interp_ms_median": 44.85984750135685,
+      "iters": 10,
+      "program": "benchmarks/map_fold/map_fold.suay",
+      "relative_interp_over_vm": 1.0794873958085636,
+      "vm_instr_executed": 32056,
+      "vm_instr_static": 81,
+      "vm_ms_median": 41.556619999028044,
+      "warmup": 1
+    },
+    {
+      "interp_ms_median": 86.03436500561656,
+      "iters": 10,
+      "program": "benchmarks/dispatch/dispatch_chain.suay",
+      "relative_interp_over_vm": 1.0586055612056857,
+      "vm_instr_executed": 68038,
+      "vm_instr_static": 89,
+      "vm_ms_median": 81.27140850046999,
+      "warmup": 1
+    },
+    {
+      "interp_ms_median": 139.1721135005355,
+      "iters": 10,
+      "program": "benchmarks/cycle/cycle_sum.suay",
+      "relative_interp_over_vm": 1.0310607539883125,
+      "vm_instr_executed": 7,
+      "vm_instr_static": 58,
+      "vm_ms_median": 134.97954699778347,
+      "warmup": 1
+    },
+    {
+      "interp_ms_median": 0.34890150345745496,
+      "iters": 10,
+      "program": "benchmarks/state_machine/workflow.suay",
+      "relative_interp_over_vm": 0.8512346536511491,
+      "vm_instr_executed": 10,
+      "vm_instr_static": 162,
+      "vm_ms_median": 0.40987699685501866,
+      "warmup": 1
+    },
+    {
+      "interp_ms_median": 0.010456002200953662,
+      "iters": 10,
+      "program": "benchmarks/module/mod.suay",
+      "relative_interp_over_vm": 1.3730799089430272,
+      "vm_instr_executed": 8,
+      "vm_instr_static": 12,
+      "vm_ms_median": 0.007614999049110338,
+      "warmup": 1
+    },
+    {
+      "interp_ms_median": 6.6141115021309815,
+      "iters": 10,
+      "program": "benchmarks/module/module_access.suay",
+      "relative_interp_over_vm": 1.0391840735329814,
+      "vm_instr_executed": 21,
+      "vm_instr_static": 72,
+      "vm_ms_median": 6.364716002281057,
+      "warmup": 1
+    }
+  ]
+}

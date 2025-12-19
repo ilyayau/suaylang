@@ -141,4 +141,8 @@ say . (text . (add . 2 . 3))
 - `suay new <project-name>` — scaffold a starter project
 - `suay repl` — interactive mode (experimental)
 - `suay test` — run project tests (requires dev deps)
-- `suay fmt <files...>` — rewrite to canonical ASCII (default)
+- `suay fmt --syntax ascii|unicode <files...>` — rewrite to canonical syntax (default: ASCII)
+
+Output preference:
+
+- Set `SUAY_OUTPUT_SYNTAX=ascii|unicode` to control how values are printed in the REPL and `suay run`.

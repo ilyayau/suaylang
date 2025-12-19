@@ -1,0 +1,20 @@
+// Cycle-heavy state machine — explicit control flow, minimal allocation
+
+run <- \(n)
+  ~~ (S::(0 0)) |> {
+  |> Done::acc   => << acc
+  |> S::(i acc)  => >> {
+        (i >= n) |> {
+        |> #t => Done::acc
+        |> #f => {
+            // two-state toggle to keep branches hot
+            ((i % 2) = 0) |> {
+            |> #t => S::(i + 1 acc + 3)
+            |> #f => S::(i + 1 acc + 1)
+            }
+          }
+        }
+      }
+  }
+
+say . (run . 5000)

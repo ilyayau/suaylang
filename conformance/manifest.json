@@ -31,6 +31,28 @@
     {"file": "027_workflow_min.suay", "covers": ["cycle", "dispatch", "state_machine"]},
     {"file": "028_ascii_aliases.suay", "covers": ["ascii_aliases", "dispatch", "cycle", "lambda"]},
     {"file": "029_lex_error.suay", "covers": ["lex_error"]},
-    {"file": "030_parse_error.suay", "covers": ["parse_error"]}
+    {"file": "030_parse_error.suay", "covers": ["parse_error"]},
+    {"file": "031_eval_order_left_to_right.suay", "covers": ["evaluation_order", "left_to_right"]},
+
+    {"file": "032_dispatch_tuple_deep.suay", "covers": ["dispatch", "pattern:tuple", "pattern:variant"]},
+    {"file": "033_cycle_state_machine_heavy.suay", "covers": ["cycle", "dispatch", "state_machine", "compare", "mod"]},
+    {"file": "034_closure_captures_mutation.suay", "covers": ["closure", "mutation", "scope"]},
+    {"file": "035_binding_shadowing.suay", "covers": ["binding", "scope", "block"]},
+    {"file": "036_map_put_has_keys.suay", "covers": ["map", "builtin:put", "builtin:has"]},
+    {"file": "037_list_take_drop_at.suay", "covers": ["list", "builtin:at", "builtin:take", "builtin:drop"]},
+    {"file": "038_text_compare_dispatch.suay", "covers": ["text", "compare", "dispatch", "pattern:bool"]},
+    {"file": "039_short_circuit_side_effects.suay", "covers": ["short_circuit", "mutation"]},
+    {"file": "040_error_div_zero.suay", "covers": ["runtime_error", "binary:÷"]},
+    {"file": "041_error_unhashable_map_key.suay", "covers": ["runtime_error", "map", "hashable_keys"]},
+    {"file": "042_lambda_pattern_param_variant.suay", "covers": ["lambda", "pattern:variant", "call"]},
+    {"file": "043_dispatch_list_tail_empty.suay", "covers": ["dispatch", "pattern:list", "pattern:list_tail"]},
+    {"file": "044_dispatch_variant_nested_payload.suay", "covers": ["dispatch", "pattern:variant"]},
+
+    {"file": "045_module_math.suay", "covers": ["modules", "link", "lambda"]},
+    {"file": "046_module_main_basic.suay", "covers": ["modules", "link", "call"]},
+    {"file": "047_module_private_member_error.suay", "covers": ["modules", "link", "runtime_error"]},
+    {"file": "048_module_missing_export_error.suay", "covers": ["modules", "link", "runtime_error"]},
+    {"file": "049_module_cycle_a.suay", "covers": ["modules", "link", "import_cycle", "runtime_error"]},
+    {"file": "050_module_cycle_b.suay", "covers": ["modules", "link", "import_cycle", "runtime_error"]}
   ]
 }

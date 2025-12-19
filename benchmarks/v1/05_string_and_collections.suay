@@ -1,0 +1,27 @@
+// Text + collections — concatenation, map operations, keys/has/put
+
+mk <- \(i)
+  ("k" ++ (text . i))
+
+m0 <- [["k0" -> 0]]
+
+run <- \(n)
+  ~~ (S::(1 m0)) |> {
+  |> Done::m      => << m
+  |> S::(i m)     => >> (
+        (i > n) |> {
+        |> #t => Done::m
+        |> #f => {
+            k <- mk . i
+            m2 <- put . m . k . i
+            S::(i + 1 m2)
+          }
+        }
+      )
+  }
+
+m <- run . 200
+
+say . (count . (keys . m))
+say . (has . m . "k17")
+say . (has . m . "nope")

@@ -1,0 +1,10 @@
+z <- []
+y <- \(v0 a) ([\(a y) #u (z a) (-5 * 0.5)] = (a . 3.9 + Done::a))
+i <- Step::\(z n6) ([[ #t -> z ]] + #u . n6)
+m <- [[ 2 -> [[[ 0.6 -> (z i) ]]], #u -> (Step::#f . [y] / Done::z . i) ]]
+v <- \(v6 acc) [m . z] . (z . y Done::acc)
+z |> {
+|> Ok::a => a
+|> _ => 0
+}
+z_undefined

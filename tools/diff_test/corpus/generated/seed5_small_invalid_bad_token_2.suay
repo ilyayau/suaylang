@@ -1,0 +1,10 @@
+t <- ((3.6 * 2.5) \(x4 t) 19)
+b7 <- t . t . \(t n) n
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}
+@

@@ -83,15 +83,15 @@ class Parser:
         while self._match(TokenType.DISPATCH):
             # value ▷ ⟪ ... ⟫
             self._consume(
-                TokenType.LDBLOCK, "Expected ⟪ after ▷ to start dispatch arms"
+                TokenType.LDBLOCK, "Expected { after |> to start dispatch arms"
             )
             arms: list[ast.DispatchArm] = []
             self._skip_newlines()
             while not (self._check(TokenType.RDBLOCK) or self._check(TokenType.EOF)):
-                self._consume(TokenType.DISPATCH, "Expected ▷ to start a dispatch arm")
+                self._consume(TokenType.DISPATCH, "Expected |> to start a dispatch arm")
                 pat = self._parse_pattern()
                 self._consume(
-                    TokenType.FAT_ARROW, "Expected ⇒ after dispatch arm pattern"
+                    TokenType.FAT_ARROW, "Expected => after dispatch arm pattern"
                 )
                 self._skip_newlines()
                 arm_expr = self._parse_expr()
@@ -104,8 +104,8 @@ class Parser:
                 )
                 self._skip_newlines()
             if self._check(TokenType.EOF):
-                self._error_here("Expected ⟫ to close dispatch")
-            end_tok = self._consume(TokenType.RDBLOCK, "Expected ⟫ to close dispatch")
+                self._error_here("Expected } to close dispatch")
+            end_tok = self._consume(TokenType.RDBLOCK, "Expected } to close dispatch")
             expr = ast.Dispatch(
                 value=expr, arms=arms, span=Span(expr.span.start, end_tok.span.end)
             )
@@ -252,20 +252,20 @@ class Parser:
             # Important: the ▷ after the seed belongs to the cycle syntax,
             # so we must parse the seed *without* consuming dispatch.
             seed = self._parse_or()
-            self._consume(TokenType.DISPATCH, "Expected ▷ after ⟲ seed")
-            self._consume(TokenType.LDBLOCK, "Expected ⟪ to start cycle arms")
+            self._consume(TokenType.DISPATCH, "Expected |> after ~~ seed")
+            self._consume(TokenType.LDBLOCK, "Expected { to start cycle arms")
             arms: list[ast.CycleArm] = []
             self._skip_newlines()
             while not (self._check(TokenType.RDBLOCK) or self._check(TokenType.EOF)):
-                self._consume(TokenType.DISPATCH, "Expected ▷ to start a cycle arm")
+                self._consume(TokenType.DISPATCH, "Expected |> to start a cycle arm")
                 pat = self._parse_pattern()
-                self._consume(TokenType.FAT_ARROW, "Expected ⇒ after cycle arm pattern")
+                self._consume(TokenType.FAT_ARROW, "Expected => after cycle arm pattern")
                 if self._match(TokenType.CONTINUE):
                     mode = "continue"
                 elif self._match(TokenType.FINISH):
                     mode = "finish"
                 else:
-                    self._error_here("Expected ↩ or ↯ after ⇒ in cycle arm")
+                    self._error_here("Expected >> or << after => in cycle arm")
                 self._skip_newlines()
                 arm_expr = self._parse_expr()
                 arms.append(
@@ -278,8 +278,8 @@ class Parser:
                 )
                 self._skip_newlines()
             if self._check(TokenType.EOF):
-                self._error_here("Expected ⟫ to close cycle")
-            end_tok = self._consume(TokenType.RDBLOCK, "Expected ⟫ to close cycle")
+                self._error_here("Expected } to close cycle")
+            end_tok = self._consume(TokenType.RDBLOCK, "Expected } to close cycle")
             return ast.Cycle(
                 seed=seed, arms=arms, span=Span(start_tok.span.start, end_tok.span.end)
             )
@@ -287,7 +287,7 @@ class Parser:
         # Lambda: ⌁(p1 p2 ...) body
         if self._match(TokenType.LAMBDA):
             start_tok = self._previous()
-            self._consume(TokenType.LPAREN, "Expected ( after ⌁")
+            self._consume(TokenType.LPAREN, "Expected ( after \\")
             params: list[ast.Pattern] = []
             self._skip_newlines()
             while not self._check(TokenType.RPAREN):
@@ -316,12 +316,12 @@ class Parser:
                     self._error_here("Expected end of line after block expression")
                 self._skip_newlines()
             if self._check(TokenType.EOF):
-                self._error_here("Expected ⟫ to close block")
-            end_tok = self._consume(TokenType.RDBLOCK, "Expected ⟫ to close block")
+                self._error_here("Expected } to close block")
+            end_tok = self._consume(TokenType.RDBLOCK, "Expected } to close block")
             if not items:
                 self._raise_at_span(
                     Span(start_tok.span.start, end_tok.span.end),
-                    "Empty block ⟪ ⟫ is not allowed",
+                    "Empty block { } is not allowed",
                 )
             return ast.Block(
                 items=items, span=Span(start_tok.span.start, end_tok.span.end)
@@ -362,7 +362,7 @@ class Parser:
             while not self._check(TokenType.RBRACK):
                 if self._check(TokenType.ELLIPSIS):
                     self._error_here(
-                        "⋯ (ellipsis) is only allowed in list patterns, not list expressions"
+                        "... (ellipsis) is only allowed in list patterns, not list expressions"
                     )
                 items.append(self._parse_expr())
                 self._skip_separators_in_listlike()
@@ -380,13 +380,13 @@ class Parser:
             self._skip_newlines()
             while not self._check(TokenType.RDBRACK):
                 key = self._parse_expr()
-                self._consume(TokenType.ARROW_MAP, "Expected ↦ after map key")
+                self._consume(TokenType.ARROW_MAP, "Expected -> after map key")
                 val = self._parse_expr()
                 entries.append((key, val))
                 self._skip_separators_in_listlike()
                 if self._check(TokenType.RDBRACK):
                     break
-            end_tok = self._consume(TokenType.RDBRACK, "Expected ⟧ to close map")
+            end_tok = self._consume(TokenType.RDBRACK, "Expected ]] to close map")
             return ast.MapExpr(
                 entries=entries, span=Span(start_tok.span.start, end_tok.span.end)
             )

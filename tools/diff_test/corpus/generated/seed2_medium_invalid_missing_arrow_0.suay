@@ -1,0 +1,12 @@
+acc   [[  ]] . [(2 >= 16)] . (\(z4 a9) (z4 / z4) \(v n) ('hi' n))
+t <- [[ 1 -> (('ok' != acc) [[ 9 -> 3.0 ]]) . [[  ]] ]]
+i2 <- Done::\(x t3) \(t v) [[ #f -> -4, 0.4 -> x, -3 -> v ]]
+i <- ([t . i2 i2 . i2] != [[ 'ok' -> \(a v) v, 'ok' -> [[ 'mext' -> acc, #t -> i2 ]] ]]) . \(m n) i2 . 'err' . Err::Done::i2
+acc <- [[ 10 -> Step::[[  ]] ]]
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}

@@ -1,0 +1,10 @@
+x <- 0
+
+bump <- \(tag) {
+  x <~ x + 1
+  say . tag
+  x
+}
+
+(bump . "L"  bump . "R"  bump . "Z")
+say . x

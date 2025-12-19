@@ -1,0 +1,6 @@
+# Module import cycle (A -> B -> A).
+
+x ← link · "050_module_cycle_b" · "y"
+y ← 1
+
+ø

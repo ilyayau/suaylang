@@ -1,0 +1,12 @@
+b <- (\(t a) \(m n) (a t) - \(t9 z9) [[  ]])
+x <- ((\(x8 acc) x8 (b / b)) . ([[  ]] Err::b) / \(y9 acc) Done::b . acc)
+m7 <- Ok::[[[  ]] b . x] . \(t3 v) b . (16 'mext') . \(t acc3) Err::t
+m <- ([\(y acc) []] * (\(z a7) a7 . [x #u] + (m7 . 8 Err::m7)))
+v <- ([[ -2 -> [[  ]], 19 -> [[  ]], -4 -> b . 3 . [[ 0.9 -> 'b', #u -> #t, #u -> b ]] ]] (((m m) / (m7 - x)) + ([[ #u -> b ]] * (0 <= m7))))
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+)
+}

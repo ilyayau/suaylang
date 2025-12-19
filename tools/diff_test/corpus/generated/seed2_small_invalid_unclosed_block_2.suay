@@ -1,0 +1,9 @@
+b2 <- Step::19 . 3.2
+z <- []
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+)
+}

@@ -1,0 +1,10 @@
+t <- (\(acc m) 3.4 #t . 2.9)
+x2 <- t . t . (18 t)
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}
+z_undefined

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "suaylang"
-version = "0.1.0"
+version = "0.2.0"
 description = "SuayLang: an explicit control-flow language (interpreter + bytecode VM)"
 readme = "README.md"
 requires-python = ">=3.10"

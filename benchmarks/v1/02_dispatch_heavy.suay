@@ -1,0 +1,30 @@
+// Dispatch-heavy — many match arms, repeated in a cycle
+
+step <- \(v)
+  v |> {
+  |> Ok::0  => Ok::1
+  |> Ok::1  => Ok::2
+  |> Ok::2  => Ok::3
+  |> Ok::3  => Ok::4
+  |> Ok::4  => Ok::5
+  |> Ok::5  => Ok::6
+  |> Ok::6  => Ok::7
+  |> Ok::7  => Ok::8
+  |> Ok::8  => Ok::9
+  |> Ok::9  => Ok::10
+  |> Ok::10 => Done::10
+  |> _      => Done::0
+  }
+
+run <- \(n)
+  ~~ (S::(0 (Ok::0))) |> {
+  |> Done::x      => << x
+  |> S::(i state) => >> {
+        (i >= n) |> {
+        |> #t => Done::state
+        |> #f => S::(i + 1 (step . state))
+        }
+      }
+  }
+
+say . (text . (run . 400))

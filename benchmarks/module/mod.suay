@@ -1,0 +1,8 @@
+// Module used by the module_access benchmark.
+
+inc ← ⌁(x)
+  x + 1
+
+value ← 12345
+
+ø

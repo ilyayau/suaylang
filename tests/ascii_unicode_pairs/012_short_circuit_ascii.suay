@@ -1,0 +1,8 @@
+x <- 0
+bump <- \(_) {
+	x <~ x + 1
+	#t
+}
+#f && (bump . #u)
+#t || (bump . #u)
+say . x

@@ -1,0 +1,12 @@
+acc <- \(t x) \(z z) (z . 'err' = 1.4 . 0.0)
+m <- [Err::Ok::[[ 1.1 -> acc ]] Ok::[#t acc acc] . [[ 'ok' -> acc, 'ok' -> acc, 'ok' -> acc ]] (((acc <= acc) (10 acc)) - Err::[[ 0.3 -> 1, 'err' -> -2 ]])]
+i <- \(y2 v) [[ 18 -> \(a acc) a, 0.8 -> [[ #u -> #f, 'ok' -> 11, -5 -> #u ]], 2.5 -> \(b a) v ]] . []
+x <- (\(z y1) (#t y1) [(acc / #u)]) . ((i != 'ok') = ('hi' = 'hi')) . [[[ #t -> i, -4 -> i, 1.9 -> 1.4 ]] [[ 8 -> acc, 'a' -> acc ]] (acc i)]
+x <- (([[#u #t i] ('b' 'a') \(y b) #t] + \(v7 n) Err::#u) \(v1 y) 0.4 . v1 . [])
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}

@@ -1,0 +1,13 @@
+y <- (Done::[[ 17 -> #t ]] . (\(x i4) 1.2 <= [[  ]]) != \(i5 t4) [])
+n <- (((0.9 - y) != y . 2.5) . (y . 13 y . y) <= Done::((y + 0.2) \(i i) y))
+t <- (\(z5 y) \(v n) v . Err::\(y x) n != (([] = [[ #t -> n, 0.2 -> 'hi' ]]) + ([[ 'hi' -> 15 ]] \(b i) b)))
+z <- ([] / \(n8 v9) \(n2 z) Err::z)
+b7 <- \(z x) Err::(\(y5 b) y5 (z = t))
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}
+z_undefined

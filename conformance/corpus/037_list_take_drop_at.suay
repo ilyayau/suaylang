@@ -1,0 +1,7 @@
+xs ← [1 2 3 4 5]
+
+a ← at · xs · 2
+b ← take · xs · 3
+c ← drop · xs · 2
+
+(a b c)

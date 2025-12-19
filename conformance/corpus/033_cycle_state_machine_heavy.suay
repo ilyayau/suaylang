@@ -1,0 +1,25 @@
+# Cycle-heavy workflow: state machine with nested dispatch.
+
+step ← ⌁(s)
+  s ▷ ⟪
+  ▷ Done•x              ⇒ ↯ Done•x
+  ▷ S•(i acc)           ⇒ ↩ (
+        (i ≥ 8) ▷ ⟪
+        ▷ ⊤ ⇒ Done•acc
+        ▷ ⊥ ⇒ (
+              (i % 2 = 0) ▷ ⟪
+              ▷ ⊤ ⇒ S•(i + 1  acc + i)
+              ▷ ⊥ ⇒ S•(i + 1  acc + (2 × i))
+              ⟫
+            )
+        ⟫
+      )
+  ▷ _                   ⇒ ↯ Done•0
+  ⟫
+
+final ← ⟲ (S•(0 0)) ▷ ⟪
+▷ Done•x ⇒ ↯ x
+▷ s      ⇒ ↩ (step · s)
+⟫
+
+final

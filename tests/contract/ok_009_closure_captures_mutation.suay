@@ -1,0 +1,11 @@
+x <- 0
+
+inc <- \(_) {
+  x <~ x + 1
+}
+
+inc . #u
+inc . #u
+inc . #u
+
+say . x

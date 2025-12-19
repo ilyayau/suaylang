@@ -16,7 +16,7 @@
       "patterns": [
         {
           "name": "comment.line.suay",
-          "match": "⍝.*$"
+          "match": "(⍝|//).*$"
         }
       ]
     },

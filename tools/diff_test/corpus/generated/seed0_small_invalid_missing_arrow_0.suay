@@ -1,0 +1,9 @@
+v6   Err::#t . [[ 'err' -> 1.4, 'hi' -> #u, #t -> #u ]]
+v <- \(acc z) 1 . acc
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}

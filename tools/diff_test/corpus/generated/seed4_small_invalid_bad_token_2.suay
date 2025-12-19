@@ -1,0 +1,10 @@
+y <- [#f #t 1] . (4 3.9)
+n <- \(i acc) [acc y i]
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}
+@

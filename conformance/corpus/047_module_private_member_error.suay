@@ -1,0 +1,3 @@
+# Accessing private names is a runtime error.
+
+link · "045_module_math" · "_secret"

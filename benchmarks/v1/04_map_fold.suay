@@ -1,0 +1,11 @@
+// Map+fold — exercises higher-order builtins + closures
+
+square <- \(x) x * x
+
+nums <- [1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20]
+
+sq <- map . square . nums
+
+total <- fold . (\(a b) a + b) . 0 . sq
+
+say . total

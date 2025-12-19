@@ -1,0 +1,9 @@
+n <- (\(m i) 'mext' != \(x1 b) x1)
+b <- [[ 15 -> [[ 1.8 -> n, #u -> n ]], 3.5 -> n . n ]]
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}

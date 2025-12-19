@@ -1,0 +1,10 @@
+x ← 0
+
+set1 ← ⌁(_)
+  x ⇐ 1
+
+# `∧` and `∨` must short-circuit (i.e., must not call set1 here).
+r1 ← (⊥ ∧ (set1 · ø = 0))
+r2 ← (⊤ ∨ (set1 · ø = 0))
+
+(x r1 r2)

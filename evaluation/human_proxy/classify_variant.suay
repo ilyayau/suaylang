@@ -1,0 +1,10 @@
+// Task: classify a tagged value
+
+classify <- \(v)
+  v |> {
+  |> Ok::x  => "ok:" ++ (text . x)
+  |> Err::m => "err:" ++ m
+  |> _      => "unknown"
+  }
+
+say . (classify . (Ok::41))

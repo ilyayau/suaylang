@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import platform
 import subprocess
 import sys
@@ -14,6 +15,7 @@ from .parser import Parser
 from .interpreter import Interpreter
 from .runtime import Env, UNIT
 from .formatter import FormatOptions, format_file
+from . import __version__
 
 
 def cmd_doctor() -> int:
@@ -154,6 +156,18 @@ def cmd_ast(path: str) -> int:
 
 
 def cmd_run(path: str, *, trace: bool = False) -> int:
+    p = Path(path)
+    if p.is_dir():
+        candidates = [p / "src" / "main.suay", p / "main.suay"]
+        entry = next((c for c in candidates if c.exists() and c.is_file()), None)
+        if entry is None:
+            _print_err(
+                "suay run: directory has no entrypoint; expected src/main.suay (or main.suay)"
+            )
+            return 2
+        p = entry
+        path = str(p)
+
     src = _read_text(path)
     tokens = Lexer(src, filename=path).tokenize()
     program = Parser(tokens, src, filename=path).parse_program()
@@ -169,7 +183,13 @@ def cmd_run_expr(source: str, *, trace: bool = False) -> int:
     return 0
 
 
-def cmd_new(project_name: str, *, directory: str | None = None) -> int:
+def cmd_new(
+    project_name: str,
+    *,
+    directory: str | None = None,
+    syntax: str = "ascii",
+    template: str = "starter",
+) -> int:
     # Keep this intentionally minimal and non-magical.
     base = Path(directory) if directory else Path.cwd()
     project_dir = base / project_name
@@ -178,13 +198,92 @@ def cmd_new(project_name: str, *, directory: str | None = None) -> int:
         return 1
 
     (project_dir / "src").mkdir(parents=True)
-    (project_dir / "src" / "main.suay").write_text(
-        "total ← fold · (⌁(a b) a + b) · 0 · [10 20]\n"
-        'say · ("total=" ⊞ (text · total))\n',
-        encoding="utf-8",
-    )
+    if syntax not in ("ascii", "unicode"):
+        _print_err("suay new: --syntax must be 'ascii' or 'unicode'")
+        return 2
+
+    if template not in ("starter", "2d"):
+        _print_err("suay new: --template must be 'starter' or '2d'")
+        return 2
+
+    if template == "starter":
+        if syntax == "unicode":
+            main_src = (
+                "total ← fold · (⌁(a b) a + b) · 0 · [10 20]\n"
+                'say · ("total=" ⊞ (text · total))\n'
+            )
+        else:
+            # ASCII-first starter project.
+            main_src = (
+                "total <- fold . (\\(a b) a + b) . 0 . [10 20]\n"
+                'say . ("total=" ++ (text . total))\n'
+            )
+    else:
+        # Small interactive demo: move a point on a 2D plane.
+        if syntax == "unicode":
+            main_src = (
+                "play ← ⌁(start)\n"
+                "  ~~ start |> {\n"
+                "  |> Quit::_ => << ø\n"
+                "  |> Pos::(x y) => >> {\n"
+                '      say · ("pos=(" ⊞ (text · x) ⊞ "," ⊞ (text · y) ⊞ ")")\n'
+                '      say · "move: w/a/s/d (or q to quit)"\n'
+                "      cmd ← hear · ø\n"
+                "      (cmd = \"q\") |> {\n"
+                "      |> ⊤ => Quit::ø\n"
+                "      |> ⊥ => (cmd = \"w\") |> {\n"
+                "          |> ⊤ => Pos::(x  y - 1)\n"
+                "          |> ⊥ => (cmd = \"s\") |> {\n"
+                "              |> ⊤ => Pos::(x  y + 1)\n"
+                "              |> ⊥ => (cmd = \"a\") |> {\n"
+                "                  |> ⊤ => Pos::(x - 1  y)\n"
+                "                  |> ⊥ => (cmd = \"d\") |> {\n"
+                "                      |> ⊤ => Pos::(x + 1  y)\n"
+                "                      |> ⊥ => Pos::(x y)\n"
+                "                      }\n"
+                "                  }\n"
+                "              }\n"
+                "          }\n"
+                "      }\n"
+                "    }\n"
+                "  }\n"
+                "\n"
+                "play · (Pos::(0 0))\n"
+            )
+        else:
+            main_src = (
+                "play <- \\(start)\n"
+                "  ~~ start |> {\n"
+                "  |> Quit::_ => << #u\n"
+                "  |> Pos::(x y) => >> {\n"
+                '      say . ("pos=(" ++ (text . x) ++ "," ++ (text . y) ++ ")")\n'
+                '      say . "move: w/a/s/d (or q to quit)"\n'
+                "      cmd <- hear . #u\n"
+                "      (cmd = \"q\") |> {\n"
+                "      |> #t => Quit::#u\n"
+                "      |> #f => (cmd = \"w\") |> {\n"
+                "          |> #t => Pos::(x  y - 1)\n"
+                "          |> #f => (cmd = \"s\") |> {\n"
+                "              |> #t => Pos::(x  y + 1)\n"
+                "              |> #f => (cmd = \"a\") |> {\n"
+                "                  |> #t => Pos::(x - 1  y)\n"
+                "                  |> #f => (cmd = \"d\") |> {\n"
+                "                      |> #t => Pos::(x + 1  y)\n"
+                "                      |> #f => Pos::(x y)\n"
+                "                      }\n"
+                "                  }\n"
+                "              }\n"
+                "          }\n"
+                "      }\n"
+                "    }\n"
+                "  }\n"
+                "\n"
+                "play . (Pos::(0 0))\n"
+            )
+
+    (project_dir / "src" / "main.suay").write_text(main_src, encoding="utf-8")
     (project_dir / "README.md").write_text(
-        "# SuayLang starter project\n\n## Run\n\n```sh\nsuay run src/main.suay\n```\n",
+        "# SuayLang project\n\n## Run\n\n```sh\nsuay run .\n```\n",
         encoding="utf-8",
     )
     (project_dir / ".gitignore").write_text(".venv/\n__pycache__/\n", encoding="utf-8")
@@ -192,33 +291,39 @@ def cmd_new(project_name: str, *, directory: str | None = None) -> int:
     print(f"Created {project_dir}")
     print("Next:")
     print(f"  cd {project_dir}")
-    print("  suay run src/main.suay")
+    print("  suay run .")
     return 0
 
 
-def _repl_to_text(v: object) -> str:
+def _repl_to_text(v: object, *, syntax: str) -> str:
     # REPL output formatting is a convenience, not part of language semantics.
     if v is UNIT:
-        return "ø"
+        return "#u" if syntax == "ascii" else "ø"
     if isinstance(v, bool):
+        if syntax == "ascii":
+            return "#t" if v else "#f"
         return "⊤" if v else "⊥"
     if isinstance(v, (int, float)):
         return str(v)
     if isinstance(v, str):
         return v
     if isinstance(v, tuple):
-        return "(" + " ".join(_repl_to_text(x) for x in v) + ")"
+        return "(" + " ".join(_repl_to_text(x, syntax=syntax) for x in v) + ")"
     if isinstance(v, list):
-        return "[" + " ".join(_repl_to_text(x) for x in v) + "]"
+        return "[" + " ".join(_repl_to_text(x, syntax=syntax) for x in v) + "]"
     if isinstance(v, dict):
+        arrow = "->" if syntax == "ascii" else "↦"
+        left = "[[" if syntax == "ascii" else "⟦"
+        right = "]]" if syntax == "ascii" else "⟧"
         inner = ", ".join(
-            f"{_repl_to_text(k)} ↦ {_repl_to_text(val)}" for k, val in v.items()
+            f"{_repl_to_text(k, syntax=syntax)} {arrow} {_repl_to_text(val, syntax=syntax)}"
+            for k, val in v.items()
         )
-        return "⟦" + inner + "⟧"
+        return left + inner + right
     return str(v)
 
 
-def cmd_repl(*, trace: bool = False) -> int:
+def cmd_repl(*, trace: bool = False, syntax: str = "ascii") -> int:
     print("SuayLang REPL (experimental) — Ctrl-D to exit")
     interp = Interpreter(source="", filename="<repl>", trace=trace)
     env = Env(parent=interp._builtins_env)  # intentionally shared across entries
@@ -241,7 +346,7 @@ def cmd_repl(*, trace: bool = False) -> int:
             for item in program.items:
                 result = interp.eval_expr(item, env)
             if result is not UNIT:
-                print(_repl_to_text(result))
+                print(_repl_to_text(result, syntax=syntax))
         except SuayError as e:
             _print_err(str(e))
         except Exception as e:
@@ -297,14 +402,23 @@ def cmd_test(*, args: list[str] | None = None) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="suay", description="SuayLang CLI")
     parser.add_argument(
+        "--version",
+        action="version",
+        version=f"suay {__version__}",
+        help="Print version and exit",
+    )
+    parser.add_argument(
         "--error-codes",
         action="store_true",
         help="Include stable error codes in diagnostics (contract-mode tooling)",
     )
     sub = parser.add_subparsers(dest="cmd", required=True)
 
-    p_run = sub.add_parser("run", help="Execute a .suay file (or -e expression)")
-    p_run.add_argument("file", nargs="?", help="Path to .suay file")
+    p_run = sub.add_parser(
+        "run",
+        help="Execute a .suay file (or a project directory) (or -e expression)",
+    )
+    p_run.add_argument("file", nargs="?", help="Path to .suay file or project directory")
     p_run.add_argument(
         "-e",
         "--expr",
@@ -313,6 +427,12 @@ def main(argv: list[str] | None = None) -> int:
     )
     p_run.add_argument(
         "--trace", action="store_true", help="Print step-by-step evaluation trace"
+    )
+    p_run.add_argument(
+        "--syntax",
+        choices=["ascii", "unicode"],
+        default=None,
+        help="Preferred output syntax (REPL/value printing). Parsing accepts both.",
     )
 
     p_check = sub.add_parser("check", help="Lex+parse only; no execution")
@@ -331,15 +451,46 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="Parent directory (default: current directory)",
     )
+    p_new.add_argument(
+        "--template",
+        choices=["starter", "2d"],
+        default="starter",
+        help="Project template (default: starter)",
+    )
+    p_new.add_argument(
+        "--syntax",
+        choices=["ascii", "unicode"],
+        default="ascii",
+        help="Syntax style for generated templates (default: ascii)",
+    )
 
     p_repl = sub.add_parser("repl", help="Start an interactive REPL (experimental)")
     p_repl.add_argument(
         "--trace", action="store_true", help="Print step-by-step evaluation trace"
     )
+    p_repl.add_argument(
+        "--syntax",
+        choices=["ascii", "unicode"],
+        default=None,
+        help="Preferred output syntax (value printing). Parsing accepts both.",
+    )
 
-    p_fmt = sub.add_parser("fmt", help="Rewrite Suay source into canonical ASCII (default) or Unicode")
+    p_fmt = sub.add_parser(
+        "fmt",
+        help="Rewrite Suay source into canonical ASCII (default) or Unicode",
+    )
     p_fmt.add_argument("files", nargs="+", help="One or more .suay files")
-    p_fmt.add_argument("--unicode", action="store_true", help="Emit Unicode spellings instead of ASCII")
+    p_fmt.add_argument(
+        "--syntax",
+        choices=["ascii", "unicode"],
+        default="ascii",
+        help="Output syntax style (default: ascii)",
+    )
+    p_fmt.add_argument(
+        "--unicode",
+        action="store_true",
+        help="Compatibility flag (equivalent to --syntax unicode)",
+    )
     p_fmt.add_argument("--check", action="store_true", help="Check formatting without modifying files")
 
     p_test = sub.add_parser(
@@ -356,6 +507,10 @@ def main(argv: list[str] | None = None) -> int:
     p_explain.add_argument("code", help="Error code like E-LEX or E-SYNTAX")
 
     args = parser.parse_args(argv)
+
+    output_syntax = str(getattr(args, "syntax", None) or os.environ.get("SUAY_OUTPUT_SYNTAX", "ascii"))
+    if output_syntax not in ("ascii", "unicode"):
+        output_syntax = "ascii"
 
     try:
         if args.cmd == "run":
@@ -375,13 +530,21 @@ def main(argv: list[str] | None = None) -> int:
         if args.cmd == "doctor":
             return cmd_doctor()
         if args.cmd == "new":
-            return cmd_new(str(args.name), directory=getattr(args, "directory", None))
+            return cmd_new(
+                str(args.name),
+                directory=getattr(args, "directory", None),
+                syntax=str(getattr(args, "syntax", "ascii")),
+                template=str(getattr(args, "template", "starter")),
+            )
         if args.cmd == "repl":
-            return cmd_repl(trace=bool(getattr(args, "trace", False)))
+            return cmd_repl(trace=bool(getattr(args, "trace", False)), syntax=output_syntax)
         if args.cmd == "fmt":
+            syntax = str(getattr(args, "syntax", "ascii"))
+            if bool(getattr(args, "unicode", False)):
+                syntax = "unicode"
             return cmd_fmt(
                 list(getattr(args, "files", []) or []),
-                unicode=bool(getattr(args, "unicode", False)),
+                unicode=(syntax == "unicode"),
                 check=bool(getattr(args, "check", False)),
             )
         if args.cmd == "test":

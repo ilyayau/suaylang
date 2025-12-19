@@ -23,7 +23,7 @@ def test_parse_dispatch_requires_fat_arrow() -> None:
     try:
         Parser(tokens, "x ▷ ⟪ ▷ _ 1 ⟫\n", filename="<test>").parse_program()
     except Exception as e:
-        assert "Expected ⇒" in str(e)
+        assert "Expected =>" in str(e)
     else:
         raise AssertionError("Expected parse to fail")
 
@@ -33,7 +33,7 @@ def test_parse_cycle_requires_arm_markers() -> None:
     try:
         Parser(tokens, "⟲ 0 ▷ ⟪ _ ⇒ ↯ 0 ⟫\n", filename="<test>").parse_program()
     except Exception as e:
-        assert "Expected ▷" in str(e)
+        assert "Expected |>" in str(e)
     else:
         raise AssertionError("Expected parse to fail")
 

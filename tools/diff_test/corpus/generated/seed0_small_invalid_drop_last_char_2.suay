@@ -1,0 +1,9 @@
+z <- [\(n m) m (#f #u) [[ 2.5 -> #f, #f -> 'err' ]]]
+t <- ((9 z) (z #t))
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}

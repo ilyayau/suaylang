@@ -1,0 +1,16 @@
+acc1 <- \(i0 y) ((Ok::[[ 'b' -> (#u + #u), 'b' -> \(t z) y, 0.3 -> Ok::y ]] - Err::Err::Err::i0) - [Step::Done::[[ 1.5 -> y, 0.6 -> i0 ]] \(m i1) [[ 6 -> 13 . m, 14 -> y . 0.2, #u -> i1 . m ]] [(y y) . \(x y) x ([] >= (#u 'hi'))]])
+y <- (\(z a5) ((Done::0.1 . z >= ([acc1 acc1 #t] [[ #u -> z, 0 -> a5, 2 -> 1.3 ]])) [[z]] . Done::'hi' . Done::z) <= ((acc1 * acc1) <= [[  ]]) . acc1 . acc1 . #f . acc1 . Ok::\(i m) acc1 . ['hi'] . (\(z6 b) acc1 . acc1 . (z6 9) != Step::([acc1 acc1 #f] \(z i) 1.2)))
+a8 <- Step::[]
+acc <- (\(i acc) [Ok::\(z3 a) a . \(z v) 'err'] + \(n x) Done::[(a8 0.6)] . Err::'mext' . (n = #t))
+n <- ((((\(b4 v5) a8 (y = 1.4)) (acc1 - 15) . (acc >= acc)) - ([[ #u -> 'ok', 3.0 -> acc1 ]] . (y <= acc) <= \(n m4) [[  ]])) ((((acc1 * acc1) \(m8 t) t) \(z i) 3.1 . y . acc) / (Err::('err' >= a8) \(x y) []))) . \(x2 acc) \(n t) [[ 14 -> (x2 . 'hi' ('err' acc1)), 19 -> \(n acc) ['err' 'b' 15] ]]
+n <- [([] ([-5 . y (y #u)] * \(n3 m) n . #t)) ([[ 13 -> Step::acc, 'err' -> y . n, 3.6 -> (acc1 / a8) ]] - \(n m) \(m n) 'mext') . \(m b) 18 . 'ok' . y . n . [[ 11 -> #u, 'mext' -> 10 ]]] . (([(#u != 5) Step::a8] + (n * a8) . Err::n) ((acc acc) . (#t 'err') != (Ok::'b' (y a8)))) . \(b b) ((Err::acc1 ('mext' b)) * [[ 20 -> Err::n, #t -> (b <= 3.5), #f -> (2 + #u) ]])
+n <- [[ #u -> [[([(n <= acc)] * 7 . n . \(v0 v8) 1.5) (\(z x) ['b'] - \(i2 m) (n + y))] \(v t) Done::([[  ]] <= [-3 v acc1]) [[ 1.0 -> [[[ #f -> 'hi' ]] a8 . 'err'] ]] . Err::[[ 1 -> #f . a8, 'ok' -> (y 20) ]]] ]]
+z3 <- [[ 3.8 -> \(z n) (0.8 . z - 19 . a8) . ((Step::0.6 2.9 . 19) [] . acc1 . n) . [[ 'hi' -> \(t9 a) [(y = n) \(acc t) 3.8 y . 1.2] ]] ]]
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}
+z_undefined

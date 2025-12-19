@@ -1,0 +1,21 @@
+// Module access — repeated `link` calls (cache + lookup) inside a cycle
+
+inc <- link . "mod" . "inc"
+v0 <- link . "mod" . "value"
+
+run <- \(n)
+  ~~ (S::(0 v0)) |> {
+  |> Done::x        => << x
+  |> S::(i acc)     => >> {
+        (i >= n) |> {
+        |> #t => Done::acc
+        |> #f => {
+            // call link each iteration to exercise module cache + env lookup
+            inc2 <- link . "mod" . "inc"
+            S::(i + 1 (inc2 . acc))
+          }
+        }
+      }
+  }
+
+say . (run . 800)

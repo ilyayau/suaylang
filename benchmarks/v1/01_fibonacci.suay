@@ -1,0 +1,23 @@
+// Fibonacci (recursive) — stresses call overhead and arithmetic
+
+fib <- \(n)
+  (n <= 1) |> {
+  |> #t => n
+  |> #f => (fib . (n - 1)) + (fib . (n - 2))
+  }
+
+run <- \(k)
+  ~~ (S::(0 0)) |> {
+  |> Done::acc   => << acc
+  |> S::(i acc)  => >> {
+        (i >= k) |> {
+        |> #t => Done::acc
+        |> #f => {
+            acc2 <- acc + (fib . 22)
+            S::(i + 1 acc2)
+          }
+        }
+      }
+  }
+
+say . (run . 10)

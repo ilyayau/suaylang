@@ -7,6 +7,17 @@ SuayLang supports two surface spellings:
 
 Guarantee: an ASCII program and its Unicode-equivalent program must parse to the same AST shape.
 
+## Tooling support (first-class)
+
+- Formatter: `suay fmt --syntax ascii|unicode` (default: `ascii`).
+- Project template: `suay new --syntax ascii|unicode` (default: `ascii`).
+- Output formatting (REPL and `suay run` result printing): set `SUAY_OUTPUT_SYNTAX=ascii|unicode` (default: `ascii`).
+
+Notes:
+
+- Parsing accepts both spellings regardless of output preference.
+- Diagnostics are ASCII-first by contract to avoid “invisible glyph” confusion in error messages.
+
 ## Operator and token mapping
 
 | ASCII (canonical) | Unicode (alias) | Meaning |

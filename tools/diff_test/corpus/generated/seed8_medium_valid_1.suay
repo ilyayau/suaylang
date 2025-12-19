@@ -1,0 +1,12 @@
+b <- [[[ #f -> 1.7 . 6 ]] ([2.0 2 0.6] + [18 14]) ((#f + #t) != [[ 11 -> #u, 'hi' -> #t, #t -> 1.8 ]])] . (3.2 . -2 . Err::11 Step::#u . 'hi')
+acc <- [(\(v a) (b = a) = Step::(b + b))]
+v <- ((1.7 acc) . Err::b * [[1.4 acc acc]]) . [b . acc . #f . acc \(v m) \(n6 n) b]
+m <- [[ #t -> (Err::(v acc) + Done::#u . #f) ]]
+x <- [Ok::[]] . [[  ]] . Ok::[v]
+~~ (Step::(1 0)) |> {
+|> Done::acc => << acc
+|> Step::(i acc) => >> ((i >= 3) |> {
+|> #t => Done::acc
+|> #f => Step::(i + 1 acc + i)
+})
+}

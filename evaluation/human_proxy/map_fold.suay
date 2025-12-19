@@ -1,0 +1,11 @@
+// Task: fold a small list with an accumulator
+
+add <- \(a b) a + b
+
+fold3 <- \(xs)
+  (xs |> {
+  |> [a b c] => add . (add . a . b) . c
+  |> _ => 0
+  })
+
+fold3 . [10 20 30]

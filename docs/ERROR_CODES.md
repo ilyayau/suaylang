@@ -67,10 +67,22 @@ This catalog defines stable diagnostic codes.
 - **Category:** IO/host
 - **Meaning:** Source file cannot be decoded as UTF-8.
 
+## E-FEATURE-NOT-IN-V1 — Feature gated / not in v1
+
+- **Category:** runtime
+- **Meaning:** A program used syntax or behavior that is intentionally excluded from the current language version contract.
+- **Span policy:** caret at the first token that requires the gated feature.
+
 ---
 
 ## W-* warnings
 
 Warnings are reserved for non-fatal diagnostics. v0.1 currently treats warnings as tooling-only.
+
+- `W-SHADOW` — Shadowing detected (reserved)
+
+- `W-UNICODE-SYNTAX` — Unicode spelling used (tooling-only)
+	- Emitted when a source file uses Unicode operator spellings where ASCII is canonical.
+	- Warnings are non-fatal and may be enabled/disabled by tooling.
 
 - `W-SHADOW` — Shadowing detected (reserved)
