@@ -20,28 +20,27 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-def _git_commit() -> str:
-    try:
-        out = subprocess.check_output(["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL)
-        return out.decode("utf-8").strip()
-    except Exception:
-        return "unknown"
+def _git_last_commit_and_epoch(paths: list[Path]) -> tuple[str, int] | None:
+    """Return (commit_hash, commit_epoch) for the most recent commit touching any path.
 
-
-def _git_commit_epoch() -> int | None:
-    """Return the current HEAD commit timestamp (unix epoch seconds), if available."""
+    We intentionally base metadata on *source* inputs (e.g. the markdown), not HEAD.
+    This prevents an infinite loop where embedding the commit hash causes the PDF
+    to differ, which changes the commit hash, etc.
+    """
 
     try:
-        out = subprocess.check_output(
-            ["git", "log", "-1", "--format=%ct"], stderr=subprocess.DEVNULL
-        )
-        return int(out.decode("utf-8").strip())
+        cmd = ["git", "log", "-1", "--format=%H%n%ct", "--"] + [str(p) for p in paths]
+        out = subprocess.check_output(cmd, stderr=subprocess.DEVNULL).decode("utf-8")
+        lines = [ln.strip() for ln in out.splitlines() if ln.strip()]
+        if len(lines) < 2:
+            return None
+        return (lines[0], int(lines[1]))
     except Exception:
         return None
 
 
-def _utc_date() -> str:
-    return _dt.datetime.now(tz=_dt.timezone.utc).strftime("%Y-%m-%d")
+def _utc_date_from_epoch(epoch: int) -> str:
+    return _dt.datetime.fromtimestamp(epoch, tz=_dt.timezone.utc).strftime("%Y-%m-%d")
 
 
 @dataclass(frozen=True)
@@ -119,15 +118,19 @@ def build_pdf(*, md_path: Path, out_path: Path) -> None:
             f"Import error: {e}"
         )
 
+    source_meta = _git_last_commit_and_epoch([md_path])
+    if source_meta is None:
+        source_commit = "unknown"
+        source_epoch = 946684800  # 2000-01-01 UTC (ReportLab's own invariant default)
+    else:
+        source_commit, source_epoch = source_meta
+
     # Make the build reproducible across machines/runs by pinning PDF metadata
     # timestamps (CreationDate/ModDate) via ReportLab's SOURCE_DATE_EPOCH hook.
-    if "SOURCE_DATE_EPOCH" not in os.environ:
-        epoch = _git_commit_epoch()
-        if epoch is not None:
-            os.environ["SOURCE_DATE_EPOCH"] = str(epoch)
+    os.environ.setdefault("SOURCE_DATE_EPOCH", str(source_epoch))
 
     md = md_path.read_text(encoding="utf-8")
-    meta = BuildMeta(commit=_git_commit(), date_utc=_utc_date())
+    meta = BuildMeta(commit=source_commit, date_utc=_utc_date_from_epoch(source_epoch))
 
     styles = getSampleStyleSheet()
     base = styles["Normal"]
