@@ -122,30 +122,48 @@ def _md_to_flowables(md: str, *, styles: dict[str, object], style_code) -> list[
 
     Paragraph = styles["Paragraph"]
     Spacer = styles["Spacer"]
-    ListFlowable = styles["ListFlowable"]
-    ListItem = styles["ListItem"]
     Preformatted = styles["Preformatted"]
 
     story: list[object] = []
-    list_stack: list[list[object]] = []
-    list_kind_stack: list[tuple[str, int | None]] = []  # (kind, start)
-    in_item = False
-    item_buf: list[object] = []
+
+    # We intentionally render list bullets via Paragraph(bulletText=...) to ensure
+    # no literal "bull"/"&bull;" ends up in the PDF text stream.
+    # (Some PDF extractors/encodings can surface Symbol-font bullets as "bull".)
+    @dataclass
+    class _ListCtx:
+        kind: str  # 'bullet' | 'ordered'
+        next_num: int
+
+    @dataclass
+    class _ItemCtx:
+        flowables: list[object]
+        bullet_text: str
+        bullet_used: bool
+        depth: int
+
+    list_ctx_stack: list[_ListCtx] = []
+    item_stack: list[_ItemCtx] = []
     para_inline = None
     current_heading_level: int | None = None
     heading_inline = None
 
-    def flush_item() -> None:
-        nonlocal item_buf
-        if not list_stack:
-            # Defensive: markdown-it should emit *_list_open before list_item_open,
-            # but keep generation robust.
-            list_stack.append([])
-            list_kind_stack.append(("bullet", None))
-        if not item_buf:
-            item_buf = [Paragraph("", styles["p"])]
-        list_stack[-1].append(ListItem(item_buf))
-        item_buf = []
+    def _cur_container() -> list[object]:
+        return item_stack[-1].flowables if item_stack else story
+
+    def _li_style_for_depth(depth: int):
+        base = styles["li"]
+        # Create a cheap per-depth derived style (avoid mutating shared style).
+        name = f"SuayLI_depth_{depth}"
+        try:
+            return styles[name]
+        except Exception:
+            pass
+        from reportlab.lib.styles import ParagraphStyle
+
+        left = base.leftIndent + (depth - 1) * 14
+        derived = ParagraphStyle(name, parent=base, leftIndent=left, bulletIndent=base.bulletIndent)
+        styles[name] = derived
+        return derived
 
     for tok in tokens:
         t = tok.type
@@ -160,54 +178,61 @@ def _md_to_flowables(md: str, *, styles: dict[str, object], style_code) -> list[
             inline_text = ""
             if heading_inline is not None:
                 inline_text = _render_inline(heading_inline.children or [])
-            (item_buf if in_item else story).append(Paragraph(inline_text, style))
+            _cur_container().append(Paragraph(inline_text, style))
             current_heading_level = None
             heading_inline = None
             continue
 
         if t == "bullet_list_open":
-            list_stack.append([])
-            list_kind_stack.append(("bullet", None))
+            list_ctx_stack.append(_ListCtx(kind="bullet", next_num=1))
             continue
         if t == "ordered_list_open":
-            list_stack.append([])
-            # markdown-it provides the starting number in tok.attrs, if any
-            start_val: int | None = None
+            start_val: int = 1
             if tok.attrs:
                 for k, v in tok.attrs:
                     if k == "start":
                         try:
                             start_val = int(v)
                         except Exception:
-                            start_val = None
-            list_kind_stack.append(("ordered", start_val))
+                            start_val = 1
+            list_ctx_stack.append(_ListCtx(kind="ordered", next_num=start_val))
             continue
 
         if t in ("bullet_list_close", "ordered_list_close"):
-            items = list_stack.pop() if list_stack else []
-            kind, start_val = list_kind_stack.pop() if list_kind_stack else ("bullet", None)
-            lf = ListFlowable(
-                items,
-                bulletType=("1" if kind == "ordered" else "bullet"),
-                start=(start_val if (kind == "ordered" and start_val is not None) else (1 if kind == "ordered" else "bullet")),
-                leftIndent=14,
-                bulletFontName="Helvetica",
-                bulletFontSize=9,
-            )
-            (item_buf if in_item else story).append(lf)
-            (item_buf if in_item else story).append(Spacer(1, 4))
+            if list_ctx_stack:
+                list_ctx_stack.pop()
             continue
 
         if t == "list_item_open":
-            if not list_stack:
-                list_stack.append([])
-                list_kind_stack.append(("bullet", None))
-            in_item = True
-            item_buf = []
+            ctx = list_ctx_stack[-1] if list_ctx_stack else _ListCtx(kind="bullet", next_num=1)
+            if ctx.kind == "ordered":
+                bullet_text = f"{ctx.next_num}."
+                ctx.next_num += 1
+            else:
+                bullet_text = "\u2022"  # •
+
+            item_stack.append(
+                _ItemCtx(
+                    flowables=[],
+                    bullet_text=bullet_text,
+                    bullet_used=False,
+                    depth=max(1, len(list_ctx_stack)),
+                )
+            )
             continue
         if t == "list_item_close":
-            flush_item()
-            in_item = False
+            if not item_stack:
+                continue
+            finished = item_stack.pop()
+            # Ensure at least one flowable so the bullet renders.
+            if not finished.flowables:
+                li_style = _li_style_for_depth(finished.depth)
+                finished.flowables.append(
+                    Paragraph("", li_style, bulletText=finished.bullet_text)
+                )
+
+            _cur_container().extend(finished.flowables)
+            _cur_container().append(Spacer(1, 2))
             continue
 
         if t == "paragraph_open":
@@ -218,7 +243,18 @@ def _md_to_flowables(md: str, *, styles: dict[str, object], style_code) -> list[
                 text = ""
             else:
                 text = _render_inline(para_inline.children or [])
-            (item_buf if in_item else story).append(Paragraph(text, styles["p"]))
+            if item_stack:
+                item = item_stack[-1]
+                li_style = _li_style_for_depth(item.depth)
+                if not item.bullet_used:
+                    item.flowables.append(
+                        Paragraph(text, li_style, bulletText=item.bullet_text)
+                    )
+                    item.bullet_used = True
+                else:
+                    item.flowables.append(Paragraph(text, li_style))
+            else:
+                story.append(Paragraph(text, styles["p"]))
             para_inline = None
             continue
 
@@ -231,13 +267,13 @@ def _md_to_flowables(md: str, *, styles: dict[str, object], style_code) -> list[
 
         if t in ("fence", "code_block"):
             code_text = tok.content.rstrip("\n")
-            (item_buf if in_item else story).append(Spacer(1, 4))
-            (item_buf if in_item else story).append(Preformatted(code_text, style_code))
-            (item_buf if in_item else story).append(Spacer(1, 6))
+            _cur_container().append(Spacer(1, 4))
+            _cur_container().append(Preformatted(code_text, style_code))
+            _cur_container().append(Spacer(1, 6))
             continue
 
         if t == "hr":
-            (item_buf if in_item else story).append(Spacer(1, 8))
+            _cur_container().append(Spacer(1, 8))
             continue
 
     return story
@@ -316,6 +352,13 @@ def build_pdf(*, md_path: Path, out_path: Path) -> None:
         leading=13,
         spaceAfter=4,
     )
+    style_li = ParagraphStyle(
+        "SuayLI",
+        parent=style_p,
+        leftIndent=18,
+        bulletIndent=6,
+        spaceAfter=2,
+    )
     style_code = ParagraphStyle(
         "SuayCode",
         parent=base,
@@ -347,13 +390,12 @@ def build_pdf(*, md_path: Path, out_path: Path) -> None:
     render_api = {
         "Paragraph": Paragraph,
         "Spacer": Spacer,
-        "ListFlowable": ListFlowable,
-        "ListItem": ListItem,
         "Preformatted": Preformatted,
         "h1": style_h1,
         "h2": style_h2,
         "h3": style_h3,
         "p": style_p,
+        "li": style_li,
     }
 
     story = _md_to_flowables(md, styles=render_api, style_code=style_code)

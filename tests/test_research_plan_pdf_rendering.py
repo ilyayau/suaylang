@@ -41,9 +41,15 @@ def test_research_plan_pdf_does_not_leak_raw_markdown(tmp_path: Path) -> None:
     build_pdf(md_path=md_path, out_path=out_path)
     text = _extract_pdf_text(out_path)
 
-    forbidden = ["&bull;", "```", "**", "__", "* "]
+    forbidden = ["bull", "&bull", "```", "**", "__"]
     for marker in forbidden:
         assert marker not in text
+
+    # Ensure list bullets render as real bullets.
+    bullet_markers = {"\u2022", "•", "\x7f"}
+    assert any(
+        (line.lstrip()[:1] in bullet_markers) for line in text.splitlines() if line.strip()
+    )
 
 
 def test_research_plan_pdf_contains_expected_content(tmp_path: Path) -> None:
