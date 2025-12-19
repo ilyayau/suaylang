@@ -13,11 +13,12 @@ from __future__ import annotations
 
 import argparse
 import datetime as _dt
+import html
 import os
-import re
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
+from xml.sax.saxutils import escape as _xml_escape
 
 
 def _git_last_commit_and_epoch(paths: list[Path]) -> tuple[str, int] | None:
@@ -49,58 +50,197 @@ class BuildMeta:
     date_utc: str
 
 
-_CODE_FENCE_RE = re.compile(r"^```")
-_HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)$")
-_BULLET_RE = re.compile(r"^\s*[-*]\s+(.*)$")
+def _preprocess_markdown(md: str) -> str:
+    """Normalize a few common inputs before parsing.
 
-
-def _parse_markdown(md: str) -> list[tuple[str, str]]:
-    """Return a list of (kind, text) blocks.
-
-    kind ∈ {h1,h2,h3,p,li,codeblank,code}
+    - Decode HTML entities (e.g. &bull; -> •).
+    - Treat leading "• " as a bullet list marker.
     """
 
-    blocks: list[tuple[str, str]] = []
-    in_code = False
+    md = html.unescape(md)
+    lines: list[str] = []
+    for line in md.splitlines():
+        stripped = line.lstrip(" ")
+        indent = line[: len(line) - len(stripped)]
+        if stripped.startswith("• "):
+            lines.append(indent + "- " + stripped[2:])
+        else:
+            lines.append(line)
+    return "\n".join(lines) + ("\n" if md.endswith("\n") else "")
 
-    for raw_line in md.splitlines():
-        line = raw_line.rstrip("\n")
 
-        if _CODE_FENCE_RE.match(line.strip()):
-            in_code = not in_code
+def _render_inline(tokens) -> str:
+    """Render markdown-it inline tokens to ReportLab Paragraph markup.
+
+    This intentionally supports a small safe subset: bold, italic, inline code,
+    and hard/soft breaks. Unmatched markers are treated as literal by markdown-it.
+    """
+
+    parts: list[str] = []
+
+    for tok in tokens:
+        t = tok.type
+        if t == "text":
+            parts.append(_xml_escape(tok.content))
+        elif t == "softbreak":
+            parts.append(" ")
+        elif t == "hardbreak":
+            parts.append("<br/>")
+        elif t == "code_inline":
+            parts.append(f'<font face="Courier">{_xml_escape(tok.content)}</font>')
+        elif t == "em_open":
+            parts.append("<i>")
+        elif t == "em_close":
+            parts.append("</i>")
+        elif t == "strong_open":
+            parts.append("<b>")
+        elif t == "strong_close":
+            parts.append("</b>")
+        else:
+            # Conservative fallback: keep content but do not emit unknown markup.
+            if getattr(tok, "content", ""):
+                parts.append(_xml_escape(tok.content))
+
+    return "".join(parts)
+
+
+def _md_to_flowables(md: str, *, styles: dict[str, object], style_code) -> list[object]:
+    """Parse markdown and return a sequence of ReportLab flowables."""
+
+    try:
+        from markdown_it import MarkdownIt
+    except Exception as e:
+        raise SystemExit(
+            "Missing dependency: markdown-it-py. Install dev deps (pip install -e '.[dev]') "
+            "or install it directly (pip install markdown-it-py).\n"
+            f"Import error: {e}"
+        )
+
+    md = _preprocess_markdown(md)
+    parser = MarkdownIt("commonmark", {"html": False, "linkify": False, "typographer": False})
+    tokens = parser.parse(md)
+
+    Paragraph = styles["Paragraph"]
+    Spacer = styles["Spacer"]
+    ListFlowable = styles["ListFlowable"]
+    ListItem = styles["ListItem"]
+    Preformatted = styles["Preformatted"]
+
+    story: list[object] = []
+    list_stack: list[list[object]] = []
+    list_kind_stack: list[tuple[str, int | None]] = []  # (kind, start)
+    in_item = False
+    item_buf: list[object] = []
+    para_inline = None
+    current_heading_level: int | None = None
+    heading_inline = None
+
+    def flush_item() -> None:
+        nonlocal item_buf
+        if not list_stack:
+            # Defensive: markdown-it should emit *_list_open before list_item_open,
+            # but keep generation robust.
+            list_stack.append([])
+            list_kind_stack.append(("bullet", None))
+        if not item_buf:
+            item_buf = [Paragraph("", styles["p"])]
+        list_stack[-1].append(ListItem(item_buf))
+        item_buf = []
+
+    for tok in tokens:
+        t = tok.type
+
+        if t == "heading_open":
+            current_heading_level = int(tok.tag[1:]) if tok.tag.startswith("h") else 2
+            heading_inline = None
+            continue
+        if t == "heading_close":
+            level = current_heading_level or 2
+            style = styles["h1"] if level <= 1 else styles["h2"] if level == 2 else styles["h3"]
+            inline_text = ""
+            if heading_inline is not None:
+                inline_text = _render_inline(heading_inline.children or [])
+            (item_buf if in_item else story).append(Paragraph(inline_text, style))
+            current_heading_level = None
+            heading_inline = None
             continue
 
-        if in_code:
-            if line.strip() == "":
-                blocks.append(("codeblank", ""))
+        if t == "bullet_list_open":
+            list_stack.append([])
+            list_kind_stack.append(("bullet", None))
+            continue
+        if t == "ordered_list_open":
+            list_stack.append([])
+            # markdown-it provides the starting number in tok.attrs, if any
+            start_val: int | None = None
+            if tok.attrs:
+                for k, v in tok.attrs:
+                    if k == "start":
+                        try:
+                            start_val = int(v)
+                        except Exception:
+                            start_val = None
+            list_kind_stack.append(("ordered", start_val))
+            continue
+
+        if t in ("bullet_list_close", "ordered_list_close"):
+            items = list_stack.pop() if list_stack else []
+            kind, start_val = list_kind_stack.pop() if list_kind_stack else ("bullet", None)
+            lf = ListFlowable(
+                items,
+                bulletType=("1" if kind == "ordered" else "bullet"),
+                start=(start_val if (kind == "ordered" and start_val is not None) else (1 if kind == "ordered" else "bullet")),
+                leftIndent=14,
+                bulletFontName="Helvetica",
+                bulletFontSize=9,
+            )
+            (item_buf if in_item else story).append(lf)
+            (item_buf if in_item else story).append(Spacer(1, 4))
+            continue
+
+        if t == "list_item_open":
+            if not list_stack:
+                list_stack.append([])
+                list_kind_stack.append(("bullet", None))
+            in_item = True
+            item_buf = []
+            continue
+        if t == "list_item_close":
+            flush_item()
+            in_item = False
+            continue
+
+        if t == "paragraph_open":
+            para_inline = None
+            continue
+        if t == "paragraph_close":
+            if para_inline is None:
+                text = ""
             else:
-                blocks.append(("code", line))
+                text = _render_inline(para_inline.children or [])
+            (item_buf if in_item else story).append(Paragraph(text, styles["p"]))
+            para_inline = None
             continue
 
-        if line.strip() == "":
-            blocks.append(("p", ""))
-            continue
-
-        m = _HEADING_RE.match(line)
-        if m:
-            level = len(m.group(1))
-            text = m.group(2).strip()
-            if level == 1:
-                blocks.append(("h1", text))
-            elif level == 2:
-                blocks.append(("h2", text))
+        if t == "inline":
+            if current_heading_level is not None:
+                heading_inline = tok
             else:
-                blocks.append(("h3", text))
+                para_inline = tok
             continue
 
-        m = _BULLET_RE.match(line)
-        if m:
-            blocks.append(("li", m.group(1).strip()))
+        if t in ("fence", "code_block"):
+            code_text = tok.content.rstrip("\n")
+            (item_buf if in_item else story).append(Spacer(1, 4))
+            (item_buf if in_item else story).append(Preformatted(code_text, style_code))
+            (item_buf if in_item else story).append(Spacer(1, 6))
             continue
 
-        blocks.append(("p", line.strip()))
+        if t == "hr":
+            (item_buf if in_item else story).append(Spacer(1, 8))
+            continue
 
-    return blocks
+    return story
 
 
 def build_pdf(*, md_path: Path, out_path: Path) -> None:
@@ -108,7 +248,14 @@ def build_pdf(*, md_path: Path, out_path: Path) -> None:
         from reportlab.lib.pagesizes import letter
         from reportlab.lib.units import inch
         from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, ListFlowable, ListItem, Preformatted
+        from reportlab.platypus import (
+            SimpleDocTemplate,
+            Paragraph,
+            Spacer,
+            ListFlowable,
+            ListItem,
+            Preformatted,
+        )
         from reportlab.lib import colors
         from reportlab.pdfgen.canvas import Canvas
     except Exception as e:
@@ -178,17 +325,6 @@ def build_pdf(*, md_path: Path, out_path: Path) -> None:
         textColor=colors.black,
     )
 
-    # Minimal inline formatting: turn `code` into <font face="Courier">code</font>
-    def fmt_inline(text: str) -> str:
-        def repl(m: re.Match[str]) -> str:
-            inner = m.group(1)
-            inner = inner.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-            return f'<font face="Courier">{inner}</font>'
-
-        # Escape first, then unescape code spans via repl.
-        escaped = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-        return re.sub(r"`([^`]+)`", repl, escaped)
-
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
     doc = SimpleDocTemplate(
@@ -208,65 +344,19 @@ def build_pdf(*, md_path: Path, out_path: Path) -> None:
             kwargs.setdefault("pageCompression", 0)
             super().__init__(*args, **kwargs)
 
-    story: list[object] = []
+    render_api = {
+        "Paragraph": Paragraph,
+        "Spacer": Spacer,
+        "ListFlowable": ListFlowable,
+        "ListItem": ListItem,
+        "Preformatted": Preformatted,
+        "h1": style_h1,
+        "h2": style_h2,
+        "h3": style_h3,
+        "p": style_p,
+    }
 
-    blocks = _parse_markdown(md)
-
-    pending_list: list[ListItem] = []
-    pending_code_lines: list[str] = []
-
-    def flush_list() -> None:
-        nonlocal pending_list
-        if not pending_list:
-            return
-        story.append(
-            ListFlowable(
-                pending_list,
-                bulletType="bullet",
-                start="bullet",
-                leftIndent=14,
-                bulletFontName="Helvetica",
-                bulletFontSize=9,
-            )
-        )
-        story.append(Spacer(1, 4))
-        pending_list = []
-
-    def flush_code() -> None:
-        nonlocal pending_code_lines
-        if not pending_code_lines:
-            return
-        story.append(Spacer(1, 4))
-        story.append(Preformatted("\n".join(pending_code_lines), style_code))
-        story.append(Spacer(1, 6))
-        pending_code_lines = []
-
-    for kind, text in blocks:
-        if kind != "li":
-            flush_list()
-        if kind not in ("code", "codeblank"):
-            flush_code()
-
-        if kind == "h1":
-            story.append(Paragraph(fmt_inline(text), style_h1))
-        elif kind == "h2":
-            story.append(Paragraph(fmt_inline(text), style_h2))
-        elif kind == "h3":
-            story.append(Paragraph(fmt_inline(text), style_h3))
-        elif kind == "li":
-            pending_list.append(ListItem(Paragraph(fmt_inline(text), style_p)))
-        elif kind == "code":
-            pending_code_lines.append(text)
-        elif kind == "codeblank":
-            pending_code_lines.append("")
-        else:  # paragraph
-            if text.strip() == "":
-                story.append(Spacer(1, 6))
-            else:
-                story.append(Paragraph(fmt_inline(text), style_p))
-
-    flush_list()
-    flush_code()
+    story = _md_to_flowables(md, styles=render_api, style_code=style_code)
 
     def on_page(canvas, doc_obj):
         canvas.saveState()

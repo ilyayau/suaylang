@@ -26,6 +26,8 @@ dev = [
   "reportlab>=4.0",
   "ruff>=0.5",
   "twine>=5.0",
+  "markdown-it-py",
+  "pypdf",
 ]
 
 [project.scripts]
