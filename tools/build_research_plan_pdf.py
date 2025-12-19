@@ -28,6 +28,18 @@ def _git_commit() -> str:
         return "unknown"
 
 
+def _git_commit_epoch() -> int | None:
+    """Return the current HEAD commit timestamp (unix epoch seconds), if available."""
+
+    try:
+        out = subprocess.check_output(
+            ["git", "log", "-1", "--format=%ct"], stderr=subprocess.DEVNULL
+        )
+        return int(out.decode("utf-8").strip())
+    except Exception:
+        return None
+
+
 def _utc_date() -> str:
     return _dt.datetime.now(tz=_dt.timezone.utc).strftime("%Y-%m-%d")
 
@@ -105,6 +117,13 @@ def build_pdf(*, md_path: Path, out_path: Path) -> None:
             "or install it directly (pip install reportlab).\n"
             f"Import error: {e}"
         )
+
+    # Make the build reproducible across machines/runs by pinning PDF metadata
+    # timestamps (CreationDate/ModDate) via ReportLab's SOURCE_DATE_EPOCH hook.
+    if "SOURCE_DATE_EPOCH" not in os.environ:
+        epoch = _git_commit_epoch()
+        if epoch is not None:
+            os.environ["SOURCE_DATE_EPOCH"] = str(epoch)
 
     md = md_path.read_text(encoding="utf-8")
     meta = BuildMeta(commit=_git_commit(), date_utc=_utc_date())
