@@ -111,6 +111,7 @@ def build_pdf(*, md_path: Path, out_path: Path) -> None:
         from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
         from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, ListFlowable, ListItem, Preformatted
         from reportlab.lib import colors
+        from reportlab.pdfgen.canvas import Canvas
     except Exception as e:
         raise SystemExit(
             "Missing dependency: reportlab. Install dev deps (pip install -e '.[dev]') "
@@ -197,6 +198,13 @@ def build_pdf(*, md_path: Path, out_path: Path) -> None:
         title="SuayLang Research Plan",
     )
 
+    class InvariantCanvas(Canvas):
+        def __init__(self, *args, **kwargs):
+            kwargs.setdefault("invariant", 1)
+            # Avoid zlib/version noise; file is small anyway.
+            kwargs.setdefault("pageCompression", 0)
+            super().__init__(*args, **kwargs)
+
     story: list[object] = []
 
     blocks = _parse_markdown(md)
@@ -264,7 +272,7 @@ def build_pdf(*, md_path: Path, out_path: Path) -> None:
         canvas.drawString(doc.leftMargin, 0.5 * inch, footer)
         canvas.restoreState()
 
-    doc.build(story, onFirstPage=on_page, onLaterPages=on_page)
+    doc.build(story, onFirstPage=on_page, onLaterPages=on_page, canvasmaker=InvariantCanvas)
 
 
 def main(argv: list[str] | None = None) -> int:
