@@ -1,5 +1,8 @@
 
+
 # SuayLang — Research Artifact (v1.0)
+
+[See: docs/RESEARCH_FRAMING.md](docs/RESEARCH_FRAMING.md)
 
 [![CI](https://github.com/ilyayau/suaylang/actions/workflows/ci.yml/badge.svg)](https://github.com/ilyayau/suaylang/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
@@ -22,7 +25,9 @@ flowchart LR
     H --> I[Results Artifacts]
 ```
 
+
 *See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for details.*
+*Formal core: [docs/FORMAL_CORE.md](docs/FORMAL_CORE.md), [docs/PROGRAM_EQUIVALENCE.md](docs/PROGRAM_EQUIVALENCE.md), [docs/DIAGNOSTICS_CONTRACT.md](docs/DIAGNOSTICS_CONTRACT.md)*
 
 ## Committee TL;DR (10 lines)
 

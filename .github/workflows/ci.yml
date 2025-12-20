@@ -29,6 +29,7 @@ jobs:
         run: |
           python tools/conformance/run.py conformance/corpus | tee artifacts/conformance.txt
 
+
       - name: Run diff-test (CI subset)
         run: |
           python -m tools.diff_test.main --profile ci --out-dir results
@@ -36,6 +37,14 @@ jobs:
       - name: Run benchmarks (smoke)
         run: |
           python benchmarks/benchmark_runner.py --profile smoke --out-dir results
+
+      - name: Run baseline runner
+        run: |
+          python experiments/baseline_runner.py
+
+      - name: Run ablation runner
+        run: |
+          python experiments/ablation_runner.py
 
       - name: Run human-study proxy (static metrics)
         run: |
@@ -46,13 +55,12 @@ jobs:
           make research-pdf
           test -s docs/RESEARCH_PLAN.pdf
 
-      - name: Upload reports
+
+      - name: Upload results and paper
         uses: actions/upload-artifact@v4
         with:
           name: contract-reports
           path: |
             artifacts/*.txt
-            results/*.json
-            results/*.md
-            results/*.csv
+            results/*
             docs/RESEARCH_PLAN.pdf

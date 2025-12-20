@@ -1,0 +1,6 @@
+{
+  "cases": [
+    {"file": "err1.suay", "expected_error_code": "E001", "span_category": "token"},
+    {"file": "err2.suay", "expected_error_code": "E002", "span_category": "expr"}
+  ]
+}
