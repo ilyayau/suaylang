@@ -7,6 +7,23 @@
 
 ---
 
+
+---
+
+```mermaid
+flowchart LR
+    A[Source] --> B[Lexer]
+    B --> C[Parser]
+    C --> D[AST]
+    D --> E[Interpreter]
+    D --> F[Bytecode Compiler]
+    F --> G[VM]
+    E & G --> H[Observation Policy & Diagnostics Contract]
+    H --> I[Results Artifacts]
+```
+
+*See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for details.*
+
 ## Committee TL;DR (10 lines)
 
 **Problem:** Most small languages claim “clear semantics” and “tooling-first design,” but backend equivalence and diagnostics stability are rarely falsifiable or reviewer-auditable.
