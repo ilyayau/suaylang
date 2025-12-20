@@ -1,11 +1,11 @@
 # Differential test report (ci)
 
-- commit: `ae3e32ee0f9e63f41798de93a2c9de71832d12cb`
+- commit: `e67d94e22cc3565de8cc2e928c4c08eb2eeaff36`
 - total programs: 5001
 - seeds: 10
-- VM executed steps (ok runs): 11554
+- VM executed steps (ok runs): 14376
 - divergences: 0 (unique: 0)
-- runtime: 5.02s
+- runtime: 6.67s
 
 ## Per-seed breakdown
 
@@ -27,10 +27,10 @@
 
 | termination | count |
 |---|---:|
-| lex | 4311 |
-| ok | 177 |
-| parse | 126 |
-| runtime | 387 |
+| lex | 4267 |
+| ok | 215 |
+| parse | 146 |
+| runtime | 373 |
 
 ## Divergences (if any)
 

@@ -1,66 +1,40 @@
-# Research claim (SuayLang v0.1)
+# Research claim (scorable)
 
-## Problem (2–4 sentences)
+## Problem statement (2–3 sentences)
 
-Small languages often claim “clear semantics” and “tooling-first design”, but those claims are rarely falsifiable: the reference interpreter, the VM/compiler, and the diagnostics drift over time without a measurable contract.
-SuayLang treats backend equivalence and diagnostic stability as first-class research objects and makes them executable: the interpreter is the reference semantics and the bytecode VM is continuously validated against it.
+Small languages often ship multiple execution backends (interpreter, compiler/VM), but “they behave the same” is usually asserted informally.
+In practice, semantics and diagnostics drift, and the claim becomes unreviewable.
+SuayLang treats backend equivalence and diagnostic stability as research objects and makes them auditable via deterministic, saved artifacts.
 
-## Hypotheses
+## Research question (1 sentence)
 
-### H1 (primary, falsifiable)
+Can a small language keep an interpreter and a bytecode VM observationally equivalent under a fixed, explicit Observation Policy, with evidence that is deterministic and reviewer-auditable?
 
-For the v0.1 feature subset (Scope), SuayLang’s interpreter and bytecode VM are observationally equivalent on a large, diverse, deterministic program set.
+## Falsifiable hypothesis (1–2 sentences)
 
-For all generated **valid** programs in the differential test suite (seeds 0–99; size buckets; see protocol), the interpreter and VM agree on:
+Under the v1 research scope and Observation Policy in [docs/SPEC_V1_SCOPE.md](SPEC_V1_SCOPE.md), the reference interpreter and the bytecode VM are observationally equivalent on the deterministic differential test suite.
+Equivalence is falsified by any reported divergence in the saved reports.
 
-- termination class (`ok|lex|parse|runtime|internal`)
-- normalized stdout
-- and, when `ok`, the returned value (best-effort structural equality)
+## Method (deterministic; executable)
 
-### H2 (optional)
+- **Seeded differential testing**: generate programs deterministically from seeds; run interpreter and VM; compare observations.
+  - Implementation: [tools/diff_test/](../tools/diff_test/)
+  - Protocol: [docs/EXPERIMENT_PROTOCOL.md](EXPERIMENT_PROTOCOL.md)
+- **Minimization**: divergences are minimized to a smaller counterexample and saved as regressions.
+- **Golden diagnostics**: representative failures are snapshotted to keep error-code mapping and caret-span rendering stable.
+  - [tests/test_golden_diagnostics.py](../tests/test_golden_diagnostics.py)
+  - [tests/test_golden_error_codes.py](../tests/test_golden_error_codes.py)
+- **Coverage reporting**: report observed AST node kinds and emitted opcode kinds on the executed suite.
 
-For generated **intentionally-invalid** programs, SuayLang’s diagnostics are stable across backends: error kind (`lex|parse|runtime`) and location (line/column) match.
+## Metrics & success criteria (exact)
 
-## Success metrics (quantitative thresholds)
+Primary metrics are read from the saved `results/` artifacts:
 
-- **Equivalence rate (valid programs)**: 100.0% agreement (0 divergences) for the default full run:
-  - seeds = `0..99`
-  - `N_valid >= 1000` programs per seed
-  - stratified across size buckets `{small, medium, large}`
-- **Diagnostic stability (invalid programs)**: ≥ 99.5% agreement on (error kind, line, column) for the same full run.
-- **Coverage** (measured on the executed suite):
-  - AST node-kind coverage: each AST node kind defined in `suaylang/ast.py` is observed at least once, or explicitly reported as “unreached by generator”.
-  - Opcode-kind coverage (static): each opcode kind emitted by the compiler is observed at least once across compiled programs, or explicitly reported as “unreached by generator”.
+- **Divergences**: must be 0 in the published run profile.
+  - Report: [results/diff_report.md](../results/diff_report.md) and [results/diff_report.json](../results/diff_report.json)
+- **Coverage counts**: report observed AST node kinds and opcode kinds.
+  - Report: [results/coverage.md](../results/coverage.md) and [results/coverage.json](../results/coverage.json)
+- **Diagnostics stability**: golden snapshot suite must pass.
+  - Report (generated): `results/golden_diagnostics.md` and `results/golden_diagnostics.json`
 
-## Explicit falsification conditions
-
-H1/H2 are falsified if **any** of the following occur in the reproducible full run:
-
-- Any interpreter/VM divergence on valid programs (termination/stdout/value mismatch).
-- Any mismatch in diagnostic kind or location (line/column) on invalid programs beyond the 0.5% tolerance.
-- Coverage report shows a claimed in-scope construct/opcode is never exercised.
-
-## Scope (feature subset covered by the claim)
-
-Included:
-
-- expressions, blocks, eager left-to-right evaluation (with `&&`/`||` short-circuit)
-- binding (`<-`) and mutation (`<~`)
-- lambdas and curried calls
-- dispatch (`|> { ... }`) pattern matching and variants (`Tag::payload`)
-- cycle (`~~ seed |> { ... }`) state-machine loop
-- tuples, lists, maps, text, numbers, booleans, unit
-- modules via `link` (filesystem modules)
-
-Excluded:
-
-- performance claims (handled separately in [results/benchmarks.md](../results/benchmarks.md))
-- human usability claims (handled via proxy protocol in [docs/HUMAN_STUDY.md](HUMAN_STUDY.md))
-- proposed future features not implemented in v0.1
-
-## Why this matters academically (6–10 lines)
-
-This artifact operationalizes a semantics/tooling claim as a continuous, executable contract rather than a prose guarantee.
-By fixing a reference interpreter as the specification and using large-scale, deterministic differential testing, SuayLang provides a concrete instance of compiler/VM validation under realistic tooling constraints.
-The work connects operational semantics concerns (observable behavior, error localization) with practical reproducibility (CI gating, minimized regressions, saved raw reports).
-It is designed to be reviewed like a small PL experiment: a falsifiable hypothesis, a protocol, and auditable artifacts.
+Repro command (single entry point): `make research` (see README).

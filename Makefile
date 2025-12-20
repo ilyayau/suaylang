@@ -1,4 +1,4 @@
-.PHONY: install test lint format format-check smoke build check conformance fuzz bench golden contract diff-test diff-test-ci human-study bench-report research-pdf
+.PHONY: install test lint format format-check smoke build check conformance fuzz bench golden contract diff-test diff-test-ci human-study bench-report research research-pdf
 
 PY := .venv/bin/python
 PIP := .venv/bin/pip
@@ -51,6 +51,9 @@ human-study:
 
 research-pdf:
 	$(PY) tools/build_research_plan_pdf.py
+
+research:
+	$(PY) -m tools.research_run --out-dir results --diff-profile ci --bench-profile smoke
 
 smoke:
 	$(PY) scripts/smoke.py

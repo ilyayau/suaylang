@@ -1,15 +1,15 @@
 {
-  "commit": "ae3e32ee0f9e63f41798de93a2c9de71832d12cb",
+  "commit": "e67d94e22cc3565de8cc2e928c4c08eb2eeaff36",
   "divergence_index": [],
   "divergences": 0,
   "fixed_divergences": 0,
   "invalid_category_counts": {
-    "bad_token": 179,
-    "drop_last_char": 156,
-    "missing_arrow": 180,
-    "unclosed_block": 174,
-    "undefined_name": 166,
-    "unterminated_string": 145
+    "bad_token": 168,
+    "drop_last_char": 165,
+    "missing_arrow": 188,
+    "unclosed_block": 162,
+    "undefined_name": 169,
+    "unterminated_string": 148
   },
   "metadata": {
     "platform": "Linux-6.17.9-arch1-1-x86_64-with-glibc2.42",
@@ -23,10 +23,10 @@
       "divergences": 0,
       "seed": "0",
       "termination_counts": {
-        "lex": 425,
-        "ok": 21,
-        "parse": 19,
-        "runtime": 35
+        "lex": 424,
+        "ok": 19,
+        "parse": 18,
+        "runtime": 39
       },
       "total_programs": 500
     },
@@ -34,9 +34,9 @@
       "divergences": 0,
       "seed": "1",
       "termination_counts": {
-        "lex": 428,
+        "lex": 418,
         "ok": 21,
-        "parse": 11,
+        "parse": 21,
         "runtime": 40
       },
       "total_programs": 500
@@ -45,10 +45,10 @@
       "divergences": 0,
       "seed": "2",
       "termination_counts": {
-        "lex": 433,
-        "ok": 10,
-        "parse": 12,
-        "runtime": 45
+        "lex": 426,
+        "ok": 27,
+        "parse": 15,
+        "runtime": 32
       },
       "total_programs": 500
     },
@@ -56,10 +56,10 @@
       "divergences": 0,
       "seed": "3",
       "termination_counts": {
-        "lex": 433,
-        "ok": 10,
-        "parse": 11,
-        "runtime": 46
+        "lex": 424,
+        "ok": 20,
+        "parse": 13,
+        "runtime": 43
       },
       "total_programs": 500
     },
@@ -67,10 +67,10 @@
       "divergences": 0,
       "seed": "4",
       "termination_counts": {
-        "lex": 437,
-        "ok": 15,
-        "parse": 13,
-        "runtime": 35
+        "lex": 423,
+        "ok": 16,
+        "parse": 16,
+        "runtime": 45
       },
       "total_programs": 500
     },
@@ -78,10 +78,10 @@
       "divergences": 0,
       "seed": "5",
       "termination_counts": {
-        "lex": 435,
-        "ok": 21,
-        "parse": 10,
-        "runtime": 34
+        "lex": 432,
+        "ok": 29,
+        "parse": 13,
+        "runtime": 26
       },
       "total_programs": 500
     },
@@ -89,10 +89,10 @@
       "divergences": 0,
       "seed": "6",
       "termination_counts": {
-        "lex": 420,
-        "ok": 20,
-        "parse": 15,
-        "runtime": 45
+        "lex": 431,
+        "ok": 17,
+        "parse": 12,
+        "runtime": 40
       },
       "total_programs": 500
     },
@@ -100,10 +100,10 @@
       "divergences": 0,
       "seed": "7",
       "termination_counts": {
-        "lex": 419,
-        "ok": 26,
-        "parse": 16,
-        "runtime": 39
+        "lex": 417,
+        "ok": 29,
+        "parse": 13,
+        "runtime": 41
       },
       "total_programs": 500
     },
@@ -111,10 +111,10 @@
       "divergences": 0,
       "seed": "8",
       "termination_counts": {
-        "lex": 443,
-        "ok": 15,
-        "parse": 4,
-        "runtime": 38
+        "lex": 428,
+        "ok": 22,
+        "parse": 14,
+        "runtime": 36
       },
       "total_programs": 500
     },
@@ -122,10 +122,10 @@
       "divergences": 0,
       "seed": "9",
       "termination_counts": {
-        "lex": 438,
-        "ok": 17,
-        "parse": 15,
-        "runtime": 30
+        "lex": 444,
+        "ok": 14,
+        "parse": 11,
+        "runtime": 31
       },
       "total_programs": 500
     },
@@ -139,7 +139,7 @@
     }
   },
   "profile": "ci",
-  "runtime_seconds": 5.0183195889985655,
+  "runtime_seconds": 6.668121605995111,
   "seeds": [
     0,
     1,
@@ -163,12 +163,12 @@
     "large"
   ],
   "termination_counts": {
-    "lex": 4311,
-    "ok": 177,
-    "parse": 126,
-    "runtime": 387
+    "lex": 4267,
+    "ok": 215,
+    "parse": 146,
+    "runtime": 373
   },
   "total_programs": 5001,
-  "total_vm_steps_ok": 11554,
+  "total_vm_steps_ok": 14376,
   "unique_divergences": 0
 }

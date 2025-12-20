@@ -7,6 +7,23 @@ and this project aims to follow [Semantic Versioning](https://semver.org/spec/v2
 
 ## [0.2.0] - 2025-12-19
 
+## [0.3.0] - 2025-12-20
+
+### Added
+
+- Diagnostic contract: golden diagnostics, error-code mapping.
+- Minimization and regression corpus for divergences.
+- Benchmarks: smoke suite, environment metadata.
+
+## [1.0.0] - 2025-12-20
+
+### Added
+
+- Defined observation policy (see docs/SPEC_V1_SCOPE.md).
+- Stable contract: interpreter↔VM equivalence, diagnostics, coverage.
+- Reproducible protocol: `make research` generates all results/ artifacts.
+- Reviewer path and artifact bundle.
+
 ### Added
 
 - `suay --version` for quick install verification.

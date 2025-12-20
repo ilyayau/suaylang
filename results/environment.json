@@ -1,0 +1,23 @@
+{
+  "git": {
+    "commit": "e67d94e22cc3565de8cc2e928c4c08eb2eeaff36",
+    "dirty": true
+  },
+  "hardware": {
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12450H"
+  },
+  "platform": {
+    "machine": "x86_64",
+    "platform": "Linux-6.17.9-arch1-1-x86_64-with-glibc2.42",
+    "release": "6.17.9-arch1-1",
+    "system": "Linux"
+  },
+  "python": {
+    "executable": "/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/python",
+    "implementation": "CPython",
+    "version": "3.13.11 (main, Dec 15 2025, 10:06:06) [GCC 15.2.1 20251112]"
+  },
+  "repro": {
+    "source_date_epoch": null
+  }
+}
