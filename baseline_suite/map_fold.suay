@@ -1,0 +1,6 @@
+# Baseline: map and fold
+nums <- [1 2 3 4 5]
+square <- \(x) x * x
+squares <- map . square . nums
+sum <- fold . (\(a b) a + b) . 0 . squares
+say . ("sum_squares=" ++ (text . sum))

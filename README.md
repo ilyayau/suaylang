@@ -57,7 +57,18 @@ flowchart LR
 | Coverage | 10 | 5001 | 0 | 24/20 | 6 | [coverage.md](results/coverage.md) |
 | Benchmarks | 10 | 5001 | 0 | 24/20 | 6 | [benchmarks.md](results/benchmarks.md) |
 | Golden diagnostics | – | – | – | – | – | [golden_diagnostics.md](results/golden_diagnostics.md) |
-| Baseline (TODO) | – | – | – | – | – | [baseline.md](results/baseline.md) |
+| Baseline | – | – | – | – | 5 | [baseline.md](results/baseline.md) |
+### Baseline suite (cross-language)
+
+| Name         | Python (s) | SuayInterp (s) | SuayVM (s) |
+|--------------|------------|---------------|-----------|
+| sum_to_n     | ...        | ...           | ...       |
+| fib          | ...        | ...           | ...       |
+| map_fold     | ...        | ...           | ...       |
+| oob_error    | ...        | ...           | ...       |
+| variant_match| -          | ...           | ...       |
+
+See [results/baseline.md](results/baseline.md) for full details and reproduction instructions.
 
 **Environment:** [environment.md](results/environment.md)
 

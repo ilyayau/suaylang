@@ -1,0 +1,10 @@
+# Baseline: sum of first N natural numbers
+n <- 1000
+sum <- 0
+cycle <- \(i acc)
+    (i > n) |> {
+    |> #t => << acc
+    |> #f => >> (i + 1  acc + i)
+    }
+result <- cycle . 1 . 0
+say . ("sum=" ++ (text . result))

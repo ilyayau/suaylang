@@ -1,0 +1,7 @@
+# Baseline: pattern match (variant)
+v <- Ok::42
+result <- v |> {
+    |> Ok::x  => x
+    |> Err::m => 0
+    }
+say . ("result=" ++ (text . result))

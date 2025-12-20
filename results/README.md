@@ -25,15 +25,9 @@ This directory contains all reviewer-facing, reproducible research artifacts.
 | human_study      | Proxy static metrics               | .md, .csv         |
 | baseline         | Baseline comparison (see below)    | .md               |
 
-## Baseline results table (stub)
 
-| Approach         | Correctness (%) | Diagnostic stability (%) | Coverage (node kinds) | Notes |
-|------------------|----------------:|------------------------:|----------------------:|-------|
-| Naive interpreter| TODO            | TODO                   | TODO                 |       |
-| Current interp/VM| TODO            | TODO                   | TODO                 |       |
-| Raw-string diag  | TODO            | TODO                   | TODO                 |       |
-| Structured diag  | TODO            | TODO                   | TODO                 |       |
+## Baseline results (cross-language)
 
-See [baseline.md](baseline.md) for details. This table will be updated as soon as the baseline runner is implemented.
+See [baseline.md](baseline.md) for the latest cross-language baseline table and full details.
 
 All files are generated deterministically by `make research`.

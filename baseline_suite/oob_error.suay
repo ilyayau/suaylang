@@ -1,0 +1,4 @@
+# Baseline: error reporting (out-of-bounds)
+nums <- [1 2 3]
+result <- nums . 10
+say . ("result=" ++ (text . result))

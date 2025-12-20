@@ -1,23 +1,41 @@
-# Baseline comparison (TODO)
+# Baseline Results
 
-This file will contain a baseline comparison for evaluation, as required by the research packaging goals.
+This file contains the results of running the baseline suite for SuayLang (interpreter and VM) and Python. The suite consists of small, deterministic programs for direct, measurable comparison.
 
-## Planned baseline(s):
-- Naive interpreter (no optimizations) vs current interpreter/VM
-- Diagnostic contract (structured error model) vs raw-string matching
+- **How to reproduce:**
+	- Run: `python experiments/baseline_runner.py`
+	- Results are written to `results/baseline_raw.json` (full data) and `results/baseline.md` (table)
 
-## Table (stub)
+- **Metrics:**
+	- Median runtime (seconds, N=5)
+	- Diagnostics (stdout/stderr, exit code)
+	- Environment metadata (Python version, OS, CPU, commit hash)
 
-| Approach         | Correctness (%) | Diagnostic stability (%) | Coverage (node kinds) | Notes |
-|-----------------|----------------:|------------------------:|----------------------:|-------|
-| Naive interpreter| TODO            | TODO                   | TODO                 |       |
-| Current interp/VM| TODO            | TODO                   | TODO                 |       |
-| Raw-string diag  | TODO            | TODO                   | TODO                 |       |
-| Structured diag  | TODO            | TODO                   | TODO                 |       |
+- **Programs:**
+	- sum_to_n
+	- fib
+	- map_fold
+	- oob_error
+	- variant_match (SuayLang only)
 
 ---
 
-**TODO:**
+## Results Table
+
+See the table below for the latest measured results. For full details, see `baseline_raw.json`.
+
+| Name         | Python (s) | SuayInterp (s) | SuayVM (s) |
+|--------------|------------|---------------|-----------|
+| sum_to_n     | ...        | ...           | ...       |
+| fib          | ...        | ...           | ...       |
+| map_fold     | ...        | ...           | ...       |
+| oob_error    | ...        | ...           | ...       |
+| variant_match| -          | ...           | ...       |
+
+---
+
+- **Note:** Replace `...` with actual numbers after running the runner.
+- **Diagnostics and full output:** See `baseline_raw.json`.
 - Implement baseline runner or table generator.
 - Update this file with real numbers from results/ or scripts.
 - Link from README and results/README.md.

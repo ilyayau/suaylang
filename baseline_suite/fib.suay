@@ -1,0 +1,10 @@
+# Baseline: Fibonacci (10th)
+n <- 10
+fib <- \(n)
+    n |> {
+    |> 0 => 0
+    |> 1 => 1
+    |> _ => (fib . (n - 1)) + (fib . (n - 2))
+    }
+result <- fib . n
+say . ("fib=" ++ (text . result))

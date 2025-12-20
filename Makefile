@@ -52,8 +52,10 @@ human-study:
 research-pdf:
 	$(PY) tools/build_research_plan_pdf.py
 
+
 research:
 	$(PY) -m tools.research_run --out-dir results --diff-profile ci --bench-profile smoke
+	$(PY) experiments/baseline_runner.py
 
 smoke:
 	$(PY) scripts/smoke.py
