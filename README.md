@@ -52,65 +52,12 @@ See [results/diff_report.md](results/diff_report.md#negative-examples)
 ## If you read only one thing, read this:
 [docs/REVIEWER_GUIDE.md](docs/REVIEWER_GUIDE.md)
 
-## Diagrams
-### Architecture Overview
+## Architecture Overview
 ```mermaid
 graph TD;
     Parser --> AST --> Interpreter
-
-    # SuayLang
-    **Main Research Claim:** Interpreter and VM executions for SuayLang are observationally equivalent under a fixed comparator policy, evidenced by reproducible artifacts.
-
-    **Ultra TL;DR:**
-    - 0 divergences, 5001 programs, 10 seeds, mean VM runtime 0.138s
-    - Reproduce: `make reproduce-all`
-    - Artifacts: results/ (all evidence)
-    - Limitations: v0.1 only, single-threaded, comparator ignores formatting, possible false negatives
-    - Baseline: Python 3.13.11, 5 runs per program
-
-    **If you read only one thing:** [docs/REVIEWER_GUIDE.md](docs/REVIEWER_GUIDE.md)
-
-    ```mermaid
-    graph TD;
-        Parser --> AST --> Interpreter
-        AST --> Compiler --> Bytecode --> VM
-    ```
-
-    ## Results Summary
-    ![Performance Comparison](results/img/performance.png)
-    ![Coverage Summary](results/img/coverage.png)
-
-    | Setup              | Seeds | N programs | Divergences | False positives | Runtime (s) | Python version | Artifact |
-    |--------------------|-------|------------|-------------|----------------|-------------|---------------|----------|
-    | Interpreter only   | 10    | 5001       | 0           | 0              | 11.30       | 3.13.11       | [results/diff_report.md](results/diff_report.md) |
-    | Interpreter + VM   | 10    | 5001       | 0           | 0              | 11.30       | 3.13.11       | [results/diff_report.md](results/diff_report.md) |
-
-    **Aggregates:** Mean (VM): 0.138s, Median: 0.140s, Std: 0.007s, 95% CI: [0.127, 0.145]. Min/Max (VM): 0.127 / 0.145s.
-    **Conclusion:** Interpreter and VM are observationally equivalent on all tested programs.
-
-    ## Baseline
-    | Program        | Python (s) | Interpreter (s) | VM (s) | Min | Max | Runs | Python Version |
-    |---------------|------------|-----------------|--------|-----|-----|------|---------------|
-    | fib           | 0.0222     | 0.1567          | 0.1406 | 0.0186 | 0.0261 | 5 | 3.13.11 |
-    | map_fold      | 0.0261     | 0.1433          | 0.1348 | 0.0186 | 0.0261 | 5 | 3.13.11 |
-    | oob_error     | 0.0186     | 0.1428          | 0.1268 | 0.0186 | 0.0261 | 5 | 3.13.11 |
-    | sum_to_n      | 0.0244     | 0.1544          | 0.1440 | 0.0186 | 0.0261 | 5 | 3.13.11 |
-    | variant_match | 0.0224     | 0.1510          | 0.1454 | 0.0186 | 0.0261 | 5 | 3.13.11 |
-
-    **Reproduce baseline:** `make baseline` (outputs: results/baseline_raw.json, results/baseline_summary.md, results/manifest.json)
-    **Baseline limitation:** Cannot express concurrency, JIT, or optimizer effects; only value/error/stdout compared.
-
-    ## Threats / Limitations / Out of Scope
-    - External validity: Only tested on Linux, Python 3.13.11
-    - Not caught: semantic bugs outside value/error/stdout, concurrency, JIT, optimizer
-    - False negatives: shared bug masking, generator bias, normalization hiding semantic differences, timeouts
-    - Scope: v0.1, single-threaded, no concurrency, no JIT, no optimizer
-
-    ## Docs Index
-    - [docs/REVIEWER_GUIDE.md](docs/REVIEWER_GUIDE.md) — authoritative entrypoint
-    - [docs/CORRECTNESS.md](docs/CORRECTNESS.md) — correctness details
-    - [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) — reproduction protocol
-    - [results/README.md](results/README.md) — artifact map
+    AST --> Compiler --> Bytecode --> VM
+```
 ---
 
 **Meta-evidence and reviewer resources:**
