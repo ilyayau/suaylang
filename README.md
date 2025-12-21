@@ -1,8 +1,13 @@
 
 
+
 # SuayLang: Committee-Grade Research Artifact
 
 **Main Research Claim:** Interpreter and VM executions for SuayLang are observationally equivalent under a fixed, auditable observation policy, evidenced by deterministic, reproducible experiments.
+
+## Team / Authors
+- Tolkynkhan Sultanbarys — Language & Compiler Frontend Lead (lexer, parser, AST, diagnostics, language spec, examples)
+- Syrlybai Ayaulym — Runtime/VM & Tooling Lead (interpreter/VM, runtime memory, stdlib, CLI/REPL, CI)
 
 ---
 
@@ -42,6 +47,20 @@ See [results/diff_report.md](results/diff_report.md#negative-examples)
 - **Baseline:** Reference Python or external implementation for comparison
 - **Coverage:** Fraction of constructs or opcodes exercised by tests
 - **Artifact:** Any output file or evidence produced by experiments
+
+
+## Authorship & Contributions (Ownership)
+Tolkynkhan Sultanbarys:
+- Owns language design/specification and frontend pipeline (lexing → parsing → AST).
+- Owns diagnostics design (error reporting, source locations) and frontend tests.
+- Owns language examples and documentation that demonstrate features.
+
+Syrlybai Ayaulym:
+- Owns runtime execution layer (interpreter/VM) and runtime memory model.
+- Owns tooling (CLI/REPL) and developer workflow (CI).
+- Owns runtime-facing tests/benchmarks and demo execution reliability.
+
+For more detail, see [docs/contributions.md](docs/contributions.md)
 
 ## Repo Map
 - README.md: Reviewer landing, claim, evidence, results
