@@ -1,15 +1,15 @@
 {
-  "commit": "e67d94e22cc3565de8cc2e928c4c08eb2eeaff36",
+  "commit": "4234c44ddc148f009e738402c684135de7e2e497",
   "divergence_index": [],
   "divergences": 0,
   "fixed_divergences": 0,
   "invalid_category_counts": {
-    "bad_token": 168,
+    "bad_token": 164,
     "drop_last_char": 165,
-    "missing_arrow": 188,
-    "unclosed_block": 162,
-    "undefined_name": 169,
-    "unterminated_string": 148
+    "missing_arrow": 157,
+    "unclosed_block": 168,
+    "undefined_name": 168,
+    "unterminated_string": 178
   },
   "metadata": {
     "platform": "Linux-6.17.9-arch1-1-x86_64-with-glibc2.42",
@@ -25,8 +25,8 @@
       "termination_counts": {
         "lex": 424,
         "ok": 19,
-        "parse": 18,
-        "runtime": 39
+        "parse": 13,
+        "runtime": 44
       },
       "total_programs": 500
     },
@@ -34,10 +34,10 @@
       "divergences": 0,
       "seed": "1",
       "termination_counts": {
-        "lex": 418,
-        "ok": 21,
-        "parse": 21,
-        "runtime": 40
+        "lex": 431,
+        "ok": 15,
+        "parse": 18,
+        "runtime": 36
       },
       "total_programs": 500
     },
@@ -45,10 +45,10 @@
       "divergences": 0,
       "seed": "2",
       "termination_counts": {
-        "lex": 426,
-        "ok": 27,
-        "parse": 15,
-        "runtime": 32
+        "lex": 422,
+        "ok": 25,
+        "parse": 9,
+        "runtime": 44
       },
       "total_programs": 500
     },
@@ -56,10 +56,10 @@
       "divergences": 0,
       "seed": "3",
       "termination_counts": {
-        "lex": 424,
-        "ok": 20,
-        "parse": 13,
-        "runtime": 43
+        "lex": 434,
+        "ok": 21,
+        "parse": 16,
+        "runtime": 29
       },
       "total_programs": 500
     },
@@ -68,9 +68,9 @@
       "seed": "4",
       "termination_counts": {
         "lex": 423,
-        "ok": 16,
-        "parse": 16,
-        "runtime": 45
+        "ok": 25,
+        "parse": 13,
+        "runtime": 39
       },
       "total_programs": 500
     },
@@ -78,10 +78,10 @@
       "divergences": 0,
       "seed": "5",
       "termination_counts": {
-        "lex": 432,
-        "ok": 29,
-        "parse": 13,
-        "runtime": 26
+        "lex": 428,
+        "ok": 23,
+        "parse": 17,
+        "runtime": 32
       },
       "total_programs": 500
     },
@@ -89,10 +89,10 @@
       "divergences": 0,
       "seed": "6",
       "termination_counts": {
-        "lex": 431,
-        "ok": 17,
-        "parse": 12,
-        "runtime": 40
+        "lex": 435,
+        "ok": 15,
+        "parse": 11,
+        "runtime": 39
       },
       "total_programs": 500
     },
@@ -100,10 +100,10 @@
       "divergences": 0,
       "seed": "7",
       "termination_counts": {
-        "lex": 417,
-        "ok": 29,
-        "parse": 13,
-        "runtime": 41
+        "lex": 443,
+        "ok": 17,
+        "parse": 9,
+        "runtime": 31
       },
       "total_programs": 500
     },
@@ -111,10 +111,10 @@
       "divergences": 0,
       "seed": "8",
       "termination_counts": {
-        "lex": 428,
-        "ok": 22,
-        "parse": 14,
-        "runtime": 36
+        "lex": 420,
+        "ok": 19,
+        "parse": 18,
+        "runtime": 43
       },
       "total_programs": 500
     },
@@ -122,10 +122,10 @@
       "divergences": 0,
       "seed": "9",
       "termination_counts": {
-        "lex": 444,
-        "ok": 14,
-        "parse": 11,
-        "runtime": 31
+        "lex": 430,
+        "ok": 16,
+        "parse": 15,
+        "runtime": 39
       },
       "total_programs": 500
     },
@@ -139,7 +139,7 @@
     }
   },
   "profile": "ci",
-  "runtime_seconds": 6.668121605995111,
+  "runtime_seconds": 11.303352911985712,
   "seeds": [
     0,
     1,
@@ -163,12 +163,12 @@
     "large"
   ],
   "termination_counts": {
-    "lex": 4267,
-    "ok": 215,
-    "parse": 146,
-    "runtime": 373
+    "lex": 4290,
+    "ok": 196,
+    "parse": 139,
+    "runtime": 376
   },
   "total_programs": 5001,
-  "total_vm_steps_ok": 14376,
+  "total_vm_steps_ok": 12445,
   "unique_divergences": 0
 }

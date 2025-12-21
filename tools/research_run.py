@@ -32,12 +32,8 @@ def _run_capture(argv: list[str]) -> CommandResult:
         stderr=subprocess.PIPE,
         text=True,
     )
+    return CommandResult(
         argv=argv,
-
-            for arg in golden.argv:
-                md.append(f"  - `{arg}`")
-
-            md.append("")
         returncode=proc.returncode,
         stdout=proc.stdout,
         stderr=proc.stderr,

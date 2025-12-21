@@ -1,0 +1,115 @@
+{
+  "env": {
+    "python_version": "3.13.11",
+    "os": "Linux-6.17.9-arch1-1-x86_64-with-glibc2.42",
+    "cpu": "",
+    "commit_hash": "4234c44ddc148f009e738402c684135de7e2e497"
+  },
+  "benchmarks": [
+    {
+      "name": "fib",
+      "python": {
+        "median_runtime": 0.021985272993333638,
+        "stdout": "fib=55\n",
+        "stderr": "",
+        "exit_code": 0
+      },
+      "suay_interpreter": {
+        "median_runtime": 0.15999298199312761,
+        "stdout": "",
+        "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/fib.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
+        "exit_code": 2
+      },
+      "suay_vm": {
+        "median_runtime": 0.12803838701802306,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/.local/bin/suay-vm\", line 8, in <module>\n    from suaylang.vm import main as vm_main\nImportError: cannot import name 'main' from 'suaylang.vm' (/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py)\n",
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "map_fold",
+      "python": {
+        "median_runtime": 0.021870295982807875,
+        "stdout": "sum_squares=55\n",
+        "stderr": "",
+        "exit_code": 0
+      },
+      "suay_interpreter": {
+        "median_runtime": 0.1511744690069463,
+        "stdout": "",
+        "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/map_fold.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
+        "exit_code": 2
+      },
+      "suay_vm": {
+        "median_runtime": 0.14058660398586653,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/.local/bin/suay-vm\", line 8, in <module>\n    from suaylang.vm import main as vm_main\nImportError: cannot import name 'main' from 'suaylang.vm' (/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py)\n",
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "oob_error",
+      "python": {
+        "median_runtime": 0.02621808898402378,
+        "stdout": "error: list index out of range\n",
+        "stderr": "",
+        "exit_code": 0
+      },
+      "suay_interpreter": {
+        "median_runtime": 0.15542382100829855,
+        "stdout": "",
+        "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/oob_error.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
+        "exit_code": 2
+      },
+      "suay_vm": {
+        "median_runtime": 0.14351300901034847,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/.local/bin/suay-vm\", line 8, in <module>\n    from suaylang.vm import main as vm_main\nImportError: cannot import name 'main' from 'suaylang.vm' (/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py)\n",
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "sum_to_n",
+      "python": {
+        "median_runtime": 0.029022688016993925,
+        "stdout": "sum=500500\n",
+        "stderr": "",
+        "exit_code": 0
+      },
+      "suay_interpreter": {
+        "median_runtime": 0.16827275601099245,
+        "stdout": "",
+        "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/sum_to_n.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
+        "exit_code": 2
+      },
+      "suay_vm": {
+        "median_runtime": 0.12428204799653031,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/.local/bin/suay-vm\", line 8, in <module>\n    from suaylang.vm import main as vm_main\nImportError: cannot import name 'main' from 'suaylang.vm' (/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py)\n",
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "variant_match",
+      "python": {
+        "median_runtime": 0.018008750019362196,
+        "stdout": "",
+        "stderr": "",
+        "exit_code": 0
+      },
+      "suay_interpreter": {
+        "median_runtime": 0.15333417398505844,
+        "stdout": "",
+        "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/variant_match.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
+        "exit_code": 2
+      },
+      "suay_vm": {
+        "median_runtime": 0.13867267599562183,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/.local/bin/suay-vm\", line 8, in <module>\n    from suaylang.vm import main as vm_main\nImportError: cannot import name 'main' from 'suaylang.vm' (/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py)\n",
+        "exit_code": 1
+      }
+    }
+  ]
+}

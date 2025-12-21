@@ -2,7 +2,7 @@
 
 Backed by raw JSON in `results/environment.json`.
 
-- commit: `e67d94e22cc3565de8cc2e928c4c08eb2eeaff36`
+- commit: `4234c44ddc148f009e738402c684135de7e2e497`
 - dirty: `True`
 - python: `CPython 3.13.11`
 - platform: `Linux-6.17.9-arch1-1-x86_64-with-glibc2.42`
