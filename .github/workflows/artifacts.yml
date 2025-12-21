@@ -1,3 +1,13 @@
+# File deleted for workflow cleanup
+# 
+# This file was used for artifact evaluation and has been removed
+# to streamline the CI process.
+# 
+# The contents of this file are no longer needed.
+# 
+# Please refer to ci.yml for the canonical CI workflow.
+# 
+# 
 name: artifact-validation
 
 on:

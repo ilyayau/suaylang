@@ -53,9 +53,10 @@ install:
 	$(PY) -m venv .venv
 	$(PY) -m pip install -U pip
 	$(PY) -m pip install -e ".[dev]"
+PYTHON_VERSION ?= 3.12
 # Note: You can override the Python interpreter by running 'make PY=python3.12' or similar.
-# The PY variable specifies the Python interpreter to use.
-# Default is set to python3 if not overridden.
+# The PY variable specifies the Python interpreter to use (default: python3.12).
+# All CI and artifact scripts require Python $(PYTHON_VERSION).x.
 # You can also set PIP and RUFF similarly if needed.
 # ...existing code...
 # ...existing code...

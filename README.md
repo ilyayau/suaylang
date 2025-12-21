@@ -7,11 +7,9 @@
 **Committee TL;DR (60 seconds)**
 
 - **Claim:** Interpreter and VM executions for SuayLang are observationally equivalent under a fixed, auditable observation policy, evidenced by deterministic, reproducible experiments.
-- **Evidence:**
 	- [Diff test: 0 divergences, 5001 programs, 10 seeds](results/diff_report.md)
-	- [Baseline: 5 programs, timings in results/baseline.md](results/baseline.md)
+	- [Baseline: see results/baseline.md](results/baseline.md)
 	- [Coverage: 24 AST, 20 opcodes, results/coverage.md](results/coverage.md)
-**Evidence:**
 **Reproduce (fast):** `bash ./scripts/reproduce.sh`
 **Reproduce (full):** `bash ./scripts/reproduce.sh --full`
 ---
