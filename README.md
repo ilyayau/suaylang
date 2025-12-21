@@ -6,7 +6,53 @@
 
 
 
-# SuayLang — Submission-Ready Research Artifact (v1.0)
+
+# SuayLang: A Reproducible Research Artifact for Interpreter–VM Equivalence (v1.0)
+
+**Canonical Artifact Version:** v1.0 ([commit](https://github.com/ilyayau/suaylang/commit/`git rev-parse HEAD`))
+
+## Central Research Claim
+Interpreter and VM executions for SuayLang are observationally equivalent under a fixed, explicit observation policy, with all claims evidenced by deterministic, reproducible experiments.
+
+## Research Hypotheses
+- **H1:** Interpreter and VM executions are observationally equivalent (value, error, stdout) on the full test suite.
+- **H2:** Diagnostics (error kind, code, span) are stable and contractually enforced for all golden cases.
+- **H3:** All results are reproducible with fixed seeds and environment metadata.
+
+## Results-at-a-Glance
+| Metric                | Value | Artifact/Link |
+|-----------------------|-------|--------------|
+| Seeds                 | 10    | [manifest.json](results/manifest.json) |
+| Programs              | 5001  | [diff_report.md](results/diff_report.md) |
+| Divergences           | 0     | [diff_report.md](results/diff_report.md) |
+| Coverage (AST/opcode) | 24/20 | [coverage.md](results/coverage.md) |
+| Benchmarks            | 6     | [benchmarks.md](results/benchmarks.md) |
+| Baseline/Ablation     | Yes   | [baseline.md](results/baseline.md), [ablation.md](results/ablation.md) |
+
+## 7-Minute Reviewer Path
+1. `make reproduce` — runs all tests, conformance, diff-test, baseline, ablation, builds PDFs
+2. Inspect [results/](results/README.md) — all metrics and evidence
+3. Open [paper/suaylang-tech-report.pdf](paper/suaylang-tech-report.pdf) — canonical report
+
+## Experimental Protocol
+- All experiments are deterministic (fixed seeds, commit hash, environment recorded)
+- One-command reproduction: `make reproduce`
+- Output artifacts: results/*.md, results/*.json, paper/suaylang-tech-report.pdf
+
+## Threats to Validity
+See [docs/THREATS_TO_VALIDITY.md](docs/THREATS_TO_VALIDITY.md)
+
+## Limitations
+See [docs/LIMITATIONS.md](docs/LIMITATIONS.md)
+
+## Architecture & Research Flow
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+
+## Related Work
+See [docs/RELATED_WORK.md](docs/RELATED_WORK.md)
+
+## Executive Summary
+See [docs/executive_summary.md](docs/executive_summary.md)
 
 ## Team / Authors
 - Tolkynkhan Sultanbarys — Language & Compiler Frontend Lead (lexer, parser, AST, diagnostics, language spec, examples)

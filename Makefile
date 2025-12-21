@@ -1,3 +1,18 @@
+reproduce:
+	$(PY) -m pytest -q
+	$(PY) tools/conformance/run.py
+	$(PY) tools/conformance/run.py conformance/corpus
+	$(PY) -m tools.diff_test.main --profile ci --out-dir results
+	$(PY) experiments/baseline_runner.py
+	$(PY) benchmarks/benchmark_runner.py --profile full --out-dir results
+	$(PY) experiments/ablation_runner.py
+	make research-pdf
+	make tech-report-pdf
+tech-report-pdf:
+	pandoc paper/tech_report.md -o paper/suaylang-tech-report.pdf \
+	  --defaults=paper/pandoc_tr_pdf_args.txt || \
+	  pandoc paper/tech_report.md -o paper/suaylang-tech-report.pdf \
+	    --pdf-engine=xelatex --toc --number-sections --highlight-style=tango
 .PHONY: install test lint format format-check smoke build check conformance fuzz bench golden contract diff-test diff-test-ci human-study bench-report research research-pdf
 
 PY ?= python3

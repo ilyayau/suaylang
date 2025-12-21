@@ -1,31 +1,43 @@
-# Minimal Formal Core
+# Formal Core
 
-## Subset Syntax (validated today)
-- let-binding
-- mutation
-- pattern match
-- cycle/state evolution
-- error reporting (code, span)
+## Syntax (fragment)
+- let x = e
+- x := e
+- if c then e1 else e2
+- while c do e
+- break v / continue v
+- match e with {p -> e}
+- state_machine {state, event -> next_state}
+- error(code, span)
 
-## Formal Rules (big-step)
+## Evaluation Rules (selected)
 
-### Binding vs Mutation
-1. let x = v in e ⟶ e[x ↦ v]
-2. x := v ⟶ update x to v
+1. **Let binding:**
+   (let x = v in e) ⇓ e[x ↦ v]
+2. **Mutation:**
+   (x := v; e) ⇓ e, with x updated
+3. **If-expression:**
+   if true then e1 else e2 ⇓ e1
+   if false then e1 else e2 ⇓ e2
+4. **While loop:**
+   while false do e ⇓ unit
+   while true do e ⇓ (e; while c do e)
+5. **Break/Continue:**
+   break v exits loop with value v
+   continue v skips to next iteration
+6. **Match:**
+   match v with {p -> e} ⇓ e if v matches p
+7. **State machine:**
+   state_machine {s, e -> s'} steps by event
+8. **Error:**
+   error(code, span) halts with error
 
-### Dispatch / Pattern Branching
-3. match v with {p1 → e1 | ...} ⟶ select branch by pattern
+## Observation Policy (normative)
+- Only value, error (code+span), and stdout are observable.
+- Message text and formatting are ignored.
+- Non-deterministic output is not allowed.
 
-### Cycle / State Evolution
-4. while c do e ⟶ repeat e while c true
-5. state_machine {state, event → next_state} ⟶ transition by event
-
-### Error Model
-6. error(code, span) ⟶ observable outcome
-7. error propagation: error in subexpr ⟶ error in parent
-8. error(code, span) must match contract
-
-## Observable Outcome
-- Value equivalence: same value
-- Error equivalence: same (error_code, span category)
-- Ignore: message text, formatting
+## Out of Scope
+- Side effects beyond stdout
+- Non-deterministic behaviors
+- External I/O

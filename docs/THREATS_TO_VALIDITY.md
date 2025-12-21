@@ -1,14 +1,16 @@
 # Threats to Validity
 
-- **Generator bias:** The seeded program generator may not cover all edge cases or may overfit to shared bugs.
-- **Shared-bug risk:** Interpreter and VM may share code or logic, masking divergences.
-- **Benchmark representativeness:** Microbenchmarks may not reflect real-world usage or stress cases.
-- **Normalization masking:** Output normalization may hide subtle differences.
-- **Human-proxy limitations:** Static metrics may not fully capture user experience or real diagnostics quality.
+## Internal Validity
+- **Scenario:** Shared code or test harness bug masks backend divergence.
+- **Mitigation:** Mutation/injection tests, code review, independent baseline.
+- **Remaining Risk:** Uncaught shared logic errors.
 
-## Mitigations
-- Use multiple seeds and program shapes for generator.
-- Differential testing with golden diagnostics and injected faults.
-- Explicitly report coverage by construct and mutation catch rate.
-- Document normalization policy and its limits.
-- Label all human-proxy metrics as such and do not over-claim.
+## External Validity
+- **Scenario:** Test suite does not cover all real-world program patterns.
+- **Mitigation:** Multi-seed generator, manual stress cases, coverage reporting.
+- **Remaining Risk:** Unseen edge cases in the wild.
+
+## Construct Validity
+- **Scenario:** Observation policy or equivalence definition omits relevant behaviors.
+- **Mitigation:** Formalized policy, explicit out-of-scope list, reviewer feedback.
+- **Remaining Risk:** Reviewer disagreement on what should be observed.

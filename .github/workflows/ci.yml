@@ -68,20 +68,17 @@ jobs:
       - name: Build Technical Report PDF
         run: |
           sudo apt-get update && sudo apt-get install -y pandoc texlive-xetex
-          make tr
-          test -s paper/TR-2025-01.pdf
+          make tech-report-pdf
+          test -s paper/suaylang-tech-report.pdf
 
-      - name: Upload results and paper
+      - name: Reproduce all results
+        run: |
+          make reproduce
+
+      - name: Upload all results and PDFs
         uses: actions/upload-artifact@v4
         with:
-          name: contract-reports
+          name: suaylang-artifacts
           path: |
-            artifacts/*.txt
             results/*
-            docs/RESEARCH_PLAN.pdf
-
-      - name: Upload Technical Report PDF
-        uses: actions/upload-artifact@v4
-        with:
-          name: technical-report
-          path: paper/TR-2025-01.pdf
+            paper/*.pdf

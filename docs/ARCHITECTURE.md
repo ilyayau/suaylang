@@ -47,3 +47,44 @@ The project treats “reviewable failures” as a core requirement:
 - Errors include file/line/column spans and caret context.
 - CLI commands are expected to avoid leaking Python tracebacks for user errors.
 - Tests and smoke checks enforce this constraint.
+
+# Architecture Overview
+
+## Pipeline Diagram
+
+```
+source
+  ↓
+lexer
+  ↓
+parser
+  ↓
+AST
+  ↓
+ ├─ interpreter
+ └─ compiler → bytecode → VM
+```
+
+## Research Flow Diagram
+
+```
+interpreter + VM
+      ↓
+snapshots
+      ↓
+diff
+      ↓
+minimization
+      ↓
+reports
+```
+
+## Design Decisions
+- Explicit observation policy: All equivalence claims are defined by a formal, auditable policy.
+- Deterministic execution: Fixed seeds and environment metadata for reproducibility.
+- Minimal core: Only essential language features are included for auditability.
+- Diagnostics contract: Error codes and spans are contractually enforced.
+- Baseline and ablation: All results are compared to explicit baselines.
+- Artifact-first: All claims are evidenced by saved outputs and scripts.
+- No concurrency or JIT: Simplicity and determinism prioritized.
+- Modular structure: /engine, /research, /experiments, /docs are clearly separated.
