@@ -1,14 +1,17 @@
 {
-  "artifacts": [
-    {"file": "diff_report.md", "sha256": "...", "seeds": "0-9", "commit": "..."},
-    {"file": "coverage.md", "sha256": "...", "seeds": "0-9", "commit": "..."},
-    {"file": "benchmarks.md", "sha256": "...", "seeds": "0-9", "commit": "..."},
-    {"file": "golden_diagnostics.md", "sha256": "...", "seeds": "-", "commit": "..."},
-    {"file": "environment.md", "sha256": "...", "seeds": "-", "commit": "..."},
-    {"file": "human_study.md", "sha256": "...", "seeds": "-", "commit": "..."},
-    {"file": "baseline.md", "sha256": "...", "seeds": "-", "commit": "..."},
-    {"file": "ablation.md", "sha256": "...", "seeds": "-", "commit": "..."},
-    {"file": "coverage_by_construct.md", "sha256": "...", "seeds": "-", "commit": "..."},
-    {"file": "mutation_catches.md", "sha256": "...", "seeds": "-", "commit": "..."}
-  ]
+  "commit": "6eb2298b51251a5f34c9f737004385a4392a857a",
+  "artifacts": {
+    "baseline_raw.json": "sha256-b4dd915422a9dc41fd0215895666dbf3535243fb3b517bb8a2b9d92f4ffb04c9",
+    "diff_report.md": "sha256-e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "coverage.md": "sha256-4f8f504aecaf5746ec13d4b7a6bf301981b23f737e2eb48617f77220bc82ebd9",
+    "benchmarks.md": "sha256-d30dd355d1f0bac0eaf8b6efcf151b1f24a4cef1e9bdaec2071b25f2b1419713",
+    "golden_diagnostics.md": "sha256-10413e245e0cd9a02d44510d86acbd78a6b27a7ebfd2cde4954712924610d245",
+    "ablation.md": "sha256-4c722d8427d1544beec087d6893fcc6ee3185019a26a903821faa5f2558fae40",
+    "mutation_catches.md": "sha256-13143bfe41471dd32877a7819a81b2e853f11bb76d3cf281d1d803e62761daa5",
+    "coverage_by_construct.md": "sha256-e82ccdd2ff35f1bfd7b90898d5d1b686c55b12b89685ebf136e1aa279fe26a8b",
+    "img/performance.png": "sha256-057bea6df1ddeb50b1691cc27e75ca978d12eaad349432ce7575609744f95d86",
+    "img/coverage.png": "sha256-1dbeac5a51492e3f4fb9b9c9b9d485fd97f93b46db04d8c5083b27dd81690315"
+  },
+  "python_version": "Python 3.13.11",
+  "os": "Linux cachybarys 6.18.1-arch1-2 #1 SMP PREEMPT_DYNAMIC Sat, 13 Dec 2025 18:23:21 +0000 x86_64 GNU/Linux"
 }
