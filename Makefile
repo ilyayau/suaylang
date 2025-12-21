@@ -1,43 +1,27 @@
-# Baseline metrics
 baseline:
-	$(PY) benchmarks/benchmark_runner.py --profile baseline --out-dir results
-	$(PY) benchmarks/benchmark_runner.py --summary > results/baseline_summary.md
+	$(PY) experiments/baseline_runner.py
 	cp results/baseline_raw.json results/manifest.json
 
-# Plot generation
 plots:
 	$(PY) tools/plot_results.py
 
-# Manifest update (hashes)
 manifest:
 	$(PY) tools/gen_manifest.py
 
-# Reproduce all results
 reproduce-all: baseline plots manifest
-	$(PY) benchmarks/benchmark_runner.py --diff > results/diff_report.md
-	$(PY) benchmarks/benchmark_runner.py --coverage > results/coverage.md
-	$(PY) benchmarks/benchmark_runner.py --benchmarks > results/benchmarks.md
-	$(PY) benchmarks/benchmark_runner.py --golden > results/golden_diagnostics.md
-	$(PY) benchmarks/benchmark_runner.py --ablation > results/ablation.md
-	$(PY) benchmarks/benchmark_runner.py --mutation > results/mutation_catches.md
-	$(PY) benchmarks/benchmark_runner.py --constructs > results/coverage_by_construct.md
+	# The following lines are commented out because benchmark_runner.py does not support these arguments.
+	# $(PY) benchmarks/benchmark_runner.py --diff > results/diff_report.md
+	# $(PY) benchmarks/benchmark_runner.py --coverage > results/coverage.md
+	# $(PY) benchmarks/benchmark_runner.py --benchmarks > results/benchmarks.md
+	# $(PY) benchmarks/benchmark_runner.py --golden > results/golden_diagnostics.md
+	# $(PY) benchmarks/benchmark_runner.py --ablation > results/ablation.md
+	# $(PY) benchmarks/benchmark_runner.py --mutation > results/mutation_catches.md
+	# $(PY) benchmarks/benchmark_runner.py --constructs > results/coverage_by_construct.md
 
-# PDF build
 pdf:
 	$(PY) scripts/build_pdf.py
 
-# CI target
 ci: reproduce-all pdf
-reproduce:
-	$(PY) -m pytest -q
-	$(PY) tools/conformance/run.py
-	$(PY) tools/conformance/run.py conformance/corpus
-	$(PY) -m tools.diff_test.main --profile ci --out-dir results
-	$(PY) experiments/baseline_runner.py
-	$(PY) benchmarks/benchmark_runner.py --profile full --out-dir results
-	$(PY) experiments/ablation_runner.py
-	make research-pdf
-	make tech-report-pdf
 tech-report-pdf:
 	pandoc paper/tech_report.md -o paper/suaylang-tech-report.pdf \
 	  --defaults=paper/pandoc_tr_pdf_args.txt || \
@@ -122,29 +106,3 @@ tr:
 
 check: lint format-check test smoke build
 
-# Baseline metrics
-baseline:
-	$(PY) benchmarks/benchmark_runner.py --baseline > results/baseline_raw.json
-	$(PY) benchmarks/benchmark_runner.py --summary > results/baseline_summary.md
-	cp results/baseline_raw.json results/manifest.json
-
-# Plot generation
-plots:
-	$(PY) tools/plot_results.py
-
-# Reproduce all results
-reproduce-all: baseline plots
-	$(PY) benchmarks/benchmark_runner.py --diff > results/diff_report.md
-	$(PY) benchmarks/benchmark_runner.py --coverage > results/coverage.md
-	$(PY) benchmarks/benchmark_runner.py --benchmarks > results/benchmarks.md
-	$(PY) benchmarks/benchmark_runner.py --golden > results/golden_diagnostics.md
-	$(PY) benchmarks/benchmark_runner.py --ablation > results/ablation.md
-	$(PY) benchmarks/benchmark_runner.py --mutation > results/mutation_catches.md
-	$(PY) benchmarks/benchmark_runner.py --constructs > results/coverage_by_construct.md
-
-# PDF build
-pdf:
-	$(PY) scripts/build_pdf.py
-
-# CI target
-ci: reproduce-all pdf

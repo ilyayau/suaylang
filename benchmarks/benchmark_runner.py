@@ -244,13 +244,19 @@ def _write_md(path: Path, text: str) -> None:
 
 
 def main() -> int:
+
     ap = argparse.ArgumentParser(prog="benchmark-runner", description="Run SuayLang benchmarks with parse/compile/exec timings.")
     ap.add_argument("--profile", choices=["smoke", "full"], default="full")
     ap.add_argument("--iters", type=int, default=20)
     ap.add_argument("--warmup", type=int, default=3)
     ap.add_argument("--bench-dir", type=str, default=str(_REPO_ROOT / "benchmarks" / "v1"))
     ap.add_argument("--out-dir", type=str, default=str(_REPO_ROOT / "results"))
+    ap.add_argument("--baseline", action="store_true", help="Alias for --profile smoke (for Makefile backward compatibility)")
     args = ap.parse_args()
+
+    # Backwards compatibility: --baseline sets profile to smoke
+    if getattr(args, "baseline", False):
+        args.profile = "smoke"
 
     iters = int(args.iters)
     warmup = int(args.warmup)
