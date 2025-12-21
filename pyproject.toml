@@ -7,7 +7,7 @@ name = "suaylang"
 version = "0.2.0"
 description = "SuayLang: an explicit control-flow language (interpreter + bytecode VM)"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12,<3.13"
 authors = [{ name = "SuayLang contributors" }]
 classifiers = [
   "Programming Language :: Python :: 3",

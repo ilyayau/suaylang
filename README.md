@@ -42,13 +42,18 @@
 
 ---
 
+
 ## Scope / Non-goals
 
-- Only tested on Linux, Python 3.13.11
+- Only tested on Linux, Python 3.12.x
 - v0.1, single-threaded, no concurrency, no JIT, no optimizer
 - Comparator ignores formatting, possible false negatives
-- No IDE plugin, no web demo, no user study (see ROADMAP)
+- IDE plugin exists (vscode-extension/), but is WIP and not part of evaluated claims for v0.1. No web demo, no user study (see ROADMAP)
 - Language/engineering details: [docs/overview.md](docs/overview.md)
+
+## Supported Python Versions
+
+SuayLang is tested and supported on Python 3.12.x. All CI and reproduction commands use Python 3.12. Other versions are not guaranteed to work.
 
 ---
 

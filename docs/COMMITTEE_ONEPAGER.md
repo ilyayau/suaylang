@@ -20,6 +20,6 @@
 3. Inspect: [results/README.md](../results/README.md)
 
 **Limitations:**
-- Only tested on Linux, Python 3.13.11
+- Only tested on Linux, Python 3.12.x
 - v0.1, single-threaded, no concurrency/JIT/optimizer
 - Comparator ignores formatting, possible false negatives
