@@ -1,3 +1,16 @@
+# Release artifact: dist/results_<gitsha>.tar.gz with results/ and key docs
+release-artifacts:
+	@echo "Generating release artifact..."
+	gitsha=$$(git rev-parse --short HEAD); \
+	date=$$(date -u +%Y-%m-%dT%H:%M:%SZ); \
+	pyver=$$($(PY) --version 2>&1 | awk '{print $$2}'); \
+	os=$$(uname -a); \
+	echo "Git SHA: $$gitsha" > dist/MANIFEST.txt; \
+	echo "Date: $$date" >> dist/MANIFEST.txt; \
+	echo "Python: $$pyver" >> dist/MANIFEST.txt; \
+	echo "OS: $$os" >> dist/MANIFEST.txt; \
+	tar -czf dist/results_$$gitsha.tar.gz results/ docs/COMMITTEE_ONEPAGER.md docs/TECH_REPORT.md results/baseline.md results/diff_report.md results/benchmarks.md dist/MANIFEST.txt
+	@echo "Release artifact created: dist/results_$$gitsha.tar.gz"
 baseline:
 	$(PY) experiments/baseline_runner.py
 	cp results/baseline_raw.json results/manifest.json
