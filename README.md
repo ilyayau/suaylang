@@ -1,13 +1,26 @@
 
 
-
 # SuayLang: Committee-Grade Research Artifact
 
 **Main Research Claim:** Interpreter and VM executions for SuayLang are observationally equivalent under a fixed, auditable observation policy, evidenced by deterministic, reproducible experiments.
 
-## Team / Authors
-- Tolkynkhan Sultanbarys — Language & Compiler Frontend Lead (lexer, parser, AST, diagnostics, language spec, examples)
-- Syrlybai Ayaulym — Runtime/VM & Tooling Lead (interpreter/VM, runtime memory, stdlib, CLI/REPL, CI)
+**TL;DR:**
+- 0 divergences, 5001 programs, 10 seeds, mean VM runtime 0.138s
+- Reproduce: `make reproduce-all`
+- Artifacts: [results/](results/) | [baseline_raw.json](results/baseline_raw.json)
+- Limitations: v0.1 only, single-threaded, comparator ignores formatting, possible false negatives
+
+**Reviewer Path:**
+1. `make reproduce` — runs all tests, conformance, diff-test, baseline, ablation, builds PDFs
+2. Inspect [results/](results/README.md) — all metrics and evidence
+3. Open [paper/suaylang-tech-report.pdf](paper/suaylang-tech-report.pdf) — canonical report
+
+**If you read only one thing:** [docs/REVIEWER_GUIDE.md](docs/REVIEWER_GUIDE.md)
+
+---
+
+## Architecture Overview
+![SuayLang Architecture](docs/assets/architecture.svg)
 
 ---
 
@@ -21,44 +34,11 @@
 ## Definition: Observational Equivalence
 > Two executions are observationally equivalent if, under the defined comparator policy, their value, error (code+span), and stdout are indistinguishable for all test programs. The comparator ignores message formatting, non-deterministic output, and external I/O. See [docs/BASELINE.md](docs/BASELINE.md).
 
-## Negative Example (Intentional Failure)
-**Program:**
-```python
-print(1/0)
-```
-**Expected:** Divergence (Python raises ZeroDivisionError, custom VM may raise different error or message)
-See [results/diff_report.md](results/diff_report.md#negative-examples)
-
-## TL;DR
-- 0 divergences, 5001 programs, 10 seeds, mean VM runtime 0.138s
-- Reproduce: `make reproduce-all`
-- Artifacts: [results/](results/) | [baseline_raw.json](results/baseline_raw.json)
-- Limitations: v0.1 only, single-threaded, comparator ignores formatting, possible false negatives
-
 ## Limitations / Out of Scope / Threats
 - External validity: Only tested on Linux, Python 3.13.11
 - Not caught: semantic bugs outside value/error/stdout, concurrency, JIT, optimizer
 - False negatives: shared bug masking, generator bias, normalization hiding semantic differences, timeouts
 - Scope: v0.1, single-threaded, no concurrency, no JIT, no optimizer
-
-## Glossary
-- **Observational Equivalence:** No observable difference in value, error, or output between Interpreter and VM under the defined policy
-- **Divergence:** Any difference in output, error, or state between backends
-- **Baseline:** Reference Python or external implementation for comparison
-- **Coverage:** Fraction of constructs or opcodes exercised by tests
-- **Artifact:** Any output file or evidence produced by experiments
-
-
-## Authorship & Contributions (Ownership)
-Tolkynkhan Sultanbarys:
-- Owns language design/specification and frontend pipeline (lexing → parsing → AST).
-- Owns diagnostics design (error reporting, source locations) and frontend tests.
-- Owns language examples and documentation that demonstrate features.
-
-Syrlybai Ayaulym:
-- Owns runtime execution layer (interpreter/VM) and runtime memory model.
-- Owns tooling (CLI/REPL) and developer workflow (CI).
-- Owns runtime-facing tests/benchmarks and demo execution reliability.
 
 For more detail, see [docs/contributions.md](docs/contributions.md)
 

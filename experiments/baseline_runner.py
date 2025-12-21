@@ -95,8 +95,8 @@ def main():
         print("[smoke] suay --help: ", interp_help.returncode)
         print("[smoke] suay-vm --help: ", vm_help.returncode)
     except Exception as e:
-        print(f"[smoke] CLI check failed: {e}")
-        raise
+        print(f"[ERROR] Required CLI executable missing: {e}")
+        sys.exit(1)
     results = {"env": get_env_metadata(), "benchmarks": []}
     for suay_file in sorted(BASELINE_SUITE.glob("*.suay")):
         base = suay_file.stem
