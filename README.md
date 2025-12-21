@@ -11,19 +11,34 @@
 	- [Diff test: 0 divergences, 5001 programs, 10 seeds](results/diff_report.md)
 	- [Baseline: 5 programs, timings in results/baseline.md](results/baseline.md)
 	- [Coverage: 24 AST, 20 opcodes, results/coverage.md](results/coverage.md)
-- **Reproduce (fast):** `./scripts/reproduce.sh`
-- **Reproduce (full):** `./scripts/reproduce.sh --full`
-
+**Reproduce (fast):** `bash ./scripts/reproduce.sh`
+**Reproduce (full):** `bash ./scripts/reproduce.sh --full`
 ---
-
-## 15-minute reviewer path
-
-1. Clone: `git clone https://github.com/ilyayau/suaylang && cd suaylang`
-2. Run: `./scripts/reproduce.sh` (or `--full`)
 3. Inspect: [results/README.md](results/README.md) (artifact index)
+## Shell Requirements
+
+All reproduction scripts require bash or zsh (not fish). If you use fish, run `bash ./scripts/reproduce.sh` explicitly.
+
+## Reproduction Receipt
+
+**Environment:**
+- OS: Linux (tested)
+- Python: 3.12.x (venv created automatically)
+- Shell: bash or zsh required
+
+**Commands:**
+- Fast: `bash ./scripts/reproduce.sh`
+- Full: `bash ./scripts/reproduce.sh --full`
+
+**Expected outputs:**
+- All results land in results/ (diff_report.md/json, baseline.md, coverage.md, benchmarks.md, golden_diagnostics.md, ablation.md, mutation_catches.md, manifest.json, environment.md/json)
+
+**Failure modes:**
+- Shell error: Use bash, not fish
+- Python version error: Use Python 3.12.x
+- Missing results: Check for errors in output, rerun with correct environment
+
 4. Read: [docs/COMMITTEE_ONEPAGER.md](docs/COMMITTEE_ONEPAGER.md) (1-page summary)
-5. See: [docs/ARTIFACT_EVALUATION.md](docs/ARTIFACT_EVALUATION.md) (AE guide)
-6. See: [docs/TECH_REPORT.md](docs/TECH_REPORT.md) (mini tech report; PDF: see below)
 7. See: [docs/THREATS_TO_VALIDITY.md](docs/THREATS_TO_VALIDITY.md) (threats/limitations)
 8. See: [docs/CLAIM_EVIDENCE_MATRIX.md](docs/CLAIM_EVIDENCE_MATRIX.md) (claim–evidence matrix)
 9. See: [docs/REVIEWER_PORTAL.md](docs/REVIEWER_PORTAL.md) (reviewer portal)
