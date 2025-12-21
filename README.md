@@ -57,110 +57,60 @@ See [results/diff_report.md](results/diff_report.md#negative-examples)
 ```mermaid
 graph TD;
     Parser --> AST --> Interpreter
-    AST --> Compiler --> Bytecode --> VM
-```
-### Experimental Pipeline
-```mermaid
-graph TD;
-    Programs --> Interpreter --> Snapshots1
-    Programs --> Compiler --> VM --> Snapshots2
-    Snapshots1 & Snapshots2 --> Diff
-```
 
-## Results at a Glance
-### Performance Comparison
-![Performance Comparison](results/img/performance.png)
-*Mean runtime for Python, Interpreter, and VM (see [baseline_raw.json](results/baseline_raw.json))*
+    # SuayLang
+    **Main Research Claim:** Interpreter and VM executions for SuayLang are observationally equivalent under a fixed comparator policy, evidenced by reproducible artifacts.
 
-### Coverage Summary
-![Coverage Summary](results/img/coverage.png)
-*Coverage buckets for AST and Opcode (see [baseline_raw.json](results/baseline_raw.json))*
+    **Ultra TL;DR:**
+    - 0 divergences, 5001 programs, 10 seeds, mean VM runtime 0.138s
+    - Reproduce: `make reproduce-all`
+    - Artifacts: results/ (all evidence)
+    - Limitations: v0.1 only, single-threaded, comparator ignores formatting, possible false negatives
+    - Baseline: Python 3.13.11, 5 runs per program
 
-| Setup              | Seeds | N programs | Divergences | False positives | Runtime (s) | Python version | Artifact |
-|--------------------|-------|------------|-------------|----------------|-------------|---------------|----------|
-| Interpreter only   | 10    | 5001       | 0           | 0              | 11.30       | 3.13.11       | [results/diff_report.md](results/diff_report.md) |
-| Interpreter + VM   | 10    | 5001       | 0           | 0              | 11.30       | 3.13.11       | [results/diff_report.md](results/diff_report.md) |
+    **If you read only one thing:** [docs/REVIEWER_GUIDE.md](docs/REVIEWER_GUIDE.md)
 
-**Aggregates:**
-- Mean (VM): 0.138s, Median: 0.140s, Std: 0.007s, 95% CI: [0.127, 0.145]
-- Min/Max (VM): 0.127 / 0.145s
+    ```mermaid
+    graph TD;
+        Parser --> AST --> Interpreter
+        AST --> Compiler --> Bytecode --> VM
+    ```
 
-**Overall conclusion:** Interpreter and VM are observationally equivalent on all tested programs, with no divergences and tight performance bounds.
+    ## Results Summary
+    ![Performance Comparison](results/img/performance.png)
+    ![Coverage Summary](results/img/coverage.png)
 
-**Worst-case analysis:** Max runtime observed: 0.156s (Interpreter), 0.145s (VM)
-**Memory usage:** Peak RSS (approx): 60MB (Interpreter), 62MB (VM)
+    | Setup              | Seeds | N programs | Divergences | False positives | Runtime (s) | Python version | Artifact |
+    |--------------------|-------|------------|-------------|----------------|-------------|---------------|----------|
+    | Interpreter only   | 10    | 5001       | 0           | 0              | 11.30       | 3.13.11       | [results/diff_report.md](results/diff_report.md) |
+    | Interpreter + VM   | 10    | 5001       | 0           | 0              | 11.30       | 3.13.11       | [results/diff_report.md](results/diff_report.md) |
 
-## Baseline
-| Program        | Python (s) | Interpreter (s) | VM (s) | Min | Max | Runs | Python Version |
-|---------------|------------|-----------------|--------|-----|-----|------|---------------|
-| fib           | 0.0222     | 0.1567          | 0.1406 | 0.0186 | 0.0261 | 5 | 3.13.11 |
-| map_fold      | 0.0261     | 0.1433          | 0.1348 | 0.0186 | 0.0261 | 5 | 3.13.11 |
-| oob_error     | 0.0186     | 0.1428          | 0.1268 | 0.0186 | 0.0261 | 5 | 3.13.11 |
-| sum_to_n      | 0.0244     | 0.1544          | 0.1440 | 0.0186 | 0.0261 | 5 | 3.13.11 |
-| variant_match | 0.0224     | 0.1510          | 0.1454 | 0.0186 | 0.0261 | 5 | 3.13.11 |
+    **Aggregates:** Mean (VM): 0.138s, Median: 0.140s, Std: 0.007s, 95% CI: [0.127, 0.145]. Min/Max (VM): 0.127 / 0.145s.
+    **Conclusion:** Interpreter and VM are observationally equivalent on all tested programs.
 
-**Reproduce baseline:** `make baseline` (outputs: results/baseline_raw.json, results/baseline_summary.md, results/manifest.json)
-**Baseline limitation:** Cannot express concurrency, JIT, or optimizer effects; only value/error/stdout compared.
+    ## Baseline
+    | Program        | Python (s) | Interpreter (s) | VM (s) | Min | Max | Runs | Python Version |
+    |---------------|------------|-----------------|--------|-----|-----|------|---------------|
+    | fib           | 0.0222     | 0.1567          | 0.1406 | 0.0186 | 0.0261 | 5 | 3.13.11 |
+    | map_fold      | 0.0261     | 0.1433          | 0.1348 | 0.0186 | 0.0261 | 5 | 3.13.11 |
+    | oob_error     | 0.0186     | 0.1428          | 0.1268 | 0.0186 | 0.0261 | 5 | 3.13.11 |
+    | sum_to_n      | 0.0244     | 0.1544          | 0.1440 | 0.0186 | 0.0261 | 5 | 3.13.11 |
+    | variant_match | 0.0224     | 0.1510          | 0.1454 | 0.0186 | 0.0261 | 5 | 3.13.11 |
 
+    **Reproduce baseline:** `make baseline` (outputs: results/baseline_raw.json, results/baseline_summary.md, results/manifest.json)
+    **Baseline limitation:** Cannot express concurrency, JIT, or optimizer effects; only value/error/stdout compared.
 
-## Results at a Glance
-### Performance Comparison
-![Performance Comparison](results/img/performance.png)
-*Mean runtime for Python, Interpreter, and VM (see [baseline_raw.json](results/baseline_raw.json))*
+    ## Threats / Limitations / Out of Scope
+    - External validity: Only tested on Linux, Python 3.13.11
+    - Not caught: semantic bugs outside value/error/stdout, concurrency, JIT, optimizer
+    - False negatives: shared bug masking, generator bias, normalization hiding semantic differences, timeouts
+    - Scope: v0.1, single-threaded, no concurrency, no JIT, no optimizer
 
-### Coverage Summary
-![Coverage Summary](results/img/coverage.png)
-*Coverage buckets for AST and Opcode (see [baseline_raw.json](results/baseline_raw.json))*
-
-| Setup              | Seeds | N programs | Divergences | False positives | Runtime (s) | Python version | Artifact |
-|--------------------|-------|------------|-------------|----------------|-------------|---------------|----------|
-| Interpreter only   | 10    | 5001       | 0           | 0              | 11.30       | 3.12          | [results/diff_report.md](results/diff_report.md) |
-| Interpreter + VM   | 10    | 5001       | 0           | 0              | 11.30       | 3.12          | [results/diff_report.md](results/diff_report.md) |
-
-## Hypotheses
-- **H1:** Interpreter and VM executions are observationally equivalent (value, error, stdout) on the full test suite ([make diff-test](Makefile), [results/diff_report.md](results/diff_report.md))
-- **H2:** Diagnostics (error kind, code, span) are stable and contractually enforced ([make golden](Makefile), [results/golden_diagnostics.md](results/golden_diagnostics.md))
-- **H3:** All results are reproducible with fixed seeds and environment metadata ([make reproduce-all](Makefile), [results/manifest.json](results/manifest.json))
-
-## Why This Matters
-This artifact provides a reproducible, committee-grade foundation for backend equivalence and diagnostics contract in programming languages research. All claims are evidenced and auditable.
-
-## Limitations / Non-goals
-- Valid only for v0.1 scope: single-threaded, no concurrency, no JIT, no optimizer
-- Comparator ignores: message text formatting, non-deterministic output, external I/O
-- Potential false negatives: shared bug masking, generator bias, normalization hiding semantic differences, timeouts
-
-
-## Threats to Validity
-See [docs/THREATS_TO_VALIDITY.md](docs/THREATS_TO_VALIDITY.md)
-
-### Scope Limitations
-- **Valid only for v0.1 scope:**
-    - Single-threaded
-    - No concurrency
-    - No JIT
-    - No optimizer
-- **Comparator ignores:**
-    - Message text formatting
-    - Non-deterministic output
-    - External I/O
-- **Potential false negatives:**
-    - Shared bug masking
-    - Generator bias
-    - Normalization hiding semantic differences
-    - Timeouts
-- **External validity limits:**
-    - Not tested on other OSes or Python versions
-    - Not validated for large-scale or production workloads
-
-
-## Diagrams
-See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for architecture and equivalence pipeline diagrams.
-
-## Baseline Validity Limits
-- See [docs/BASELINE.md](docs/BASELINE.md) for commands, artifact paths, and computation details.
-- Reproduce baseline: `make baseline` (outputs: results/baseline_raw.json, results/baseline_summary.md, results/manifest.json)
-
+    ## Docs Index
+    - [docs/REVIEWER_GUIDE.md](docs/REVIEWER_GUIDE.md) — authoritative entrypoint
+    - [docs/CORRECTNESS.md](docs/CORRECTNESS.md) — correctness details
+    - [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md) — reproduction protocol
+    - [results/README.md](results/README.md) — artifact map
 ---
 
 **Meta-evidence and reviewer resources:**
