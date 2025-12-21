@@ -6,4 +6,7 @@ version: 0.1.0
 license: MIT
 repository-code: "https://github.com/ilyayau/suaylang"
 authors:
-  - name: "Sultanbarys"
+  - family-names: Sultanbarys
+    given-names: Tolkynkhan
+  - family-names: Ayaulym
+    given-names: Syrlybai

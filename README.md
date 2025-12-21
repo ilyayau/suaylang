@@ -8,6 +8,10 @@
 
 # SuayLang — Submission-Ready Research Artifact (v1.0)
 
+## Team / Authors
+- Tolkynkhan Sultanbarys — Language & Compiler Frontend Lead (lexer, parser, AST, diagnostics, language spec, examples)
+- Syrlybai Ayaulym — Runtime/VM & Tooling Lead (interpreter/VM, runtime memory, stdlib, CLI/REPL, CI)
+
 **Submission-ready:** This repository is packaged for artifact evaluation and reviewer audit. All claims are evidenced, all results are reproducible, and every artifact is cross-linked. See the [Technical Report PDF](paper/TR-2025-01.pdf) for full details.
 
 **10-minute reading path:**
@@ -172,6 +176,8 @@ SuayLang is a research artifact, not a product. Tooling (CLI, formatter, VS Code
 
 ## Documentation index
 
+- [Team & Ownership](docs/contributions.md)
+
 - [Research claim](docs/RESEARCH_CLAIM.md)
 - [Scope & observation policy](docs/SPEC_V1_SCOPE.md)
 - [Metrics](docs/METRICS.md)
@@ -192,6 +198,17 @@ SuayLang is a research artifact, not a product. Tooling (CLI, formatter, VS Code
 
 <details>
 <summary>Engineering details (click to expand)</summary>
+
+## Authorship & Contributions (Ownership)
+Tolkynkhan Sultanbarys:
+- Owns language design/specification and frontend pipeline (lexing → parsing → AST).
+- Owns diagnostics design (error reporting, source locations) and frontend tests.
+- Owns language examples and documentation that demonstrate features.
+
+Syrlybai Ayaulym:
+- Owns runtime execution layer (interpreter/VM) and runtime memory model.
+- Owns tooling (CLI/REPL) and developer workflow (CI).
+- Owns runtime-facing tests/benchmarks and demo execution reliability.
 
 # SuayLang (v0.1)
 
