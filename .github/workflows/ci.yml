@@ -1,4 +1,4 @@
-# SuayLang CI: artifact reproducibility and upload
+jobs:
 name: CI
 on:
   push:

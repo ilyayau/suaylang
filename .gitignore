@@ -21,3 +21,11 @@ node_modules/
 # OS/editor
 .DS_Store
 *.swp
+
+# Results and build junk (do not ignore canonical committed artifacts)
+results/*.tmp
+results/*.log
+results/tmp/
+results/__pycache__/
+*.bak
+*.tmp
