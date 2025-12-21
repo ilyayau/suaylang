@@ -1,6 +1,30 @@
 
 
+
 # SuayLang — Research Artifact (v1.0)
+
+**Thesis claim:**
+We show that interpreter↔VM observational equivalence and a stable diagnostics contract can be achieved with explicit, expression-oriented control flow, while preserving scorable evidence under a fixed observation policy and deterministic artifact pipeline. ([THESIS_CLAIM.md](docs/THESIS_CLAIM.md))
+
+**Problem:** Most small languages claim “clear semantics” and “tooling-first design,” but backend equivalence and diagnostics stability are rarely falsifiable or reviewer-auditable.
+
+**Research Questions:**
+- RQ1: Can interpreter and VM executions be made observationally equivalent (value, error, stdout) on a large, seeded program set?
+- RQ2: Can diagnostics (error kind, code, span) be made stable and contractually enforced?
+
+**Hypotheses:**
+- H1: Interpreter and VM are observationally equivalent on all programs in the test suite.
+- H2: Diagnostics are stable and contractually enforced for all golden cases.
+
+**Contributions:**
+- Deterministic differential testing ([results/diff_report.md](results/diff_report.md))
+- Golden diagnostics contract ([results/golden_diagnostics.md](results/golden_diagnostics.md))
+- Coverage by construct ([results/coverage_by_construct.md](results/coverage_by_construct.md))
+- Baseline and ablation comparison ([results/baseline.md](results/baseline.md), [results/ablation.md](results/ablation.md))
+- Mutation/injection validation ([results/mutation_catches.md](results/mutation_catches.md))
+- Human-proxy static metrics ([docs/HUMAN_PROXY.md](docs/HUMAN_PROXY.md))
+
+**If you read only one thing:** See [docs/THESIS_CLAIM.md](docs/THESIS_CLAIM.md)
 
 [See: docs/RESEARCH_FRAMING.md](docs/RESEARCH_FRAMING.md)
 
@@ -54,6 +78,7 @@ flowchart LR
 
 ---
 
+
 ## Results at a glance
 
 | Artifact | Seeds | Programs | Divergences | Coverage (AST/opcode) | Benchmarks | Links |
@@ -62,16 +87,20 @@ flowchart LR
 | Coverage | 10 | 5001 | 0 | 24/20 | 6 | [coverage.md](results/coverage.md) |
 | Benchmarks | 10 | 5001 | 0 | 24/20 | 6 | [benchmarks.md](results/benchmarks.md) |
 | Golden diagnostics | – | – | – | – | – | [golden_diagnostics.md](results/golden_diagnostics.md) |
-| Baseline | – | – | – | – | 5 | [baseline.md](results/baseline.md) |
+| Baseline | 1 | 5 | 0 | 5/5 | 5 | [baseline.md](results/baseline.md) |
+| Ablation | 1 | 5 | 0 | 5/5 | 2 | [ablation.md](results/ablation.md) |
+| Mutation/injection | 1 | 3 | 3 | – | – | [mutation_catches.md](results/mutation_catches.md) |
+| Coverage by construct | – | – | – | 5/5 | – | [coverage_by_construct.md](results/coverage_by_construct.md) |
+
 ### Baseline suite (cross-language)
 
 | Name         | Python (s) | SuayInterp (s) | SuayVM (s) |
 |--------------|------------|---------------|-----------|
-| sum_to_n     | ...        | ...           | ...       |
-| fib          | ...        | ...           | ...       |
-| map_fold     | ...        | ...           | ...       |
-| oob_error    | ...        | ...           | ...       |
-| variant_match| -          | ...           | ...       |
+| fib          | 0.0219     | 0.1599        | 0.1280    |
+| map_fold     | 0.0218     | 0.1511        | 0.1405    |
+| oob_error    | 0.0262     | 0.1554        | 0.1435    |
+| sum_to_n     | 0.0290     | 0.1682        | 0.1242    |
+| variant_match| 0.0180     | 0.1533        | 0.1386    |
 
 See [results/baseline.md](results/baseline.md) for full details and reproduction instructions.
 
