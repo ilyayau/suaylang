@@ -1,0 +1,7 @@
+--pdf-engine=xelatex
+--metadata=title:SuayLang Technical Report TR-2025-01
+--metadata=author:Ilya Yau et al.
+--metadata=date:2025-12-21
+--toc
+--number-sections
+--highlight-style=tango

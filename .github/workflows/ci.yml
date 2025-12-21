@@ -59,6 +59,12 @@ jobs:
           make research-pdf
           test -s docs/RESEARCH_PLAN.pdf
 
+        - name: Build Technical Report PDF
+          run: |
+            sudo apt-get update && sudo apt-get install -y pandoc texlive-xetex
+            make tr
+            test -s paper/TR-2025-01.pdf
+
 
       - name: Upload results and paper
         uses: actions/upload-artifact@v4
@@ -68,3 +74,9 @@ jobs:
             artifacts/*.txt
             results/*
             docs/RESEARCH_PLAN.pdf
+
+      - name: Upload Technical Report PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: technical-report
+          path: paper/TR-2025-01.pdf

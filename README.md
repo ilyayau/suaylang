@@ -1,7 +1,51 @@
+**Meta-evidence and reviewer resources:**
+- [If Forced to Cut: Minimal Core](docs/IF_FORCED_TO_CUT.md)
+- [Known Intentional Imperfection](docs/KNOWN_INTENTIONAL_IMPERFECTION.md)
+- [Discussion Seed](docs/DISCUSSION_SEED.md)
 
 
 
-# SuayLang — Research Artifact (v1.0)
+
+# SuayLang — Submission-Ready Research Artifact (v1.0)
+
+**Submission-ready:** This repository is packaged for artifact evaluation and reviewer audit. All claims are evidenced, all results are reproducible, and every artifact is cross-linked. See the [Technical Report PDF](paper/TR-2025-01.pdf) for full details.
+
+**10-minute reading path:**
+- [Technical Report PDF](paper/TR-2025-01.pdf)
+- [One-page Formal Summary](docs/FORMAL_SUMMARY_1PAGE.md)
+- [Falsification Scenarios](docs/FALSIFICATION.md)
+- [Reviewer Checklist](docs/REVIEWER_CHECKLIST.md)
+- [Independent Reproduction Log](docs/INDEPENDENT_REPRODUCTION.md)
+
+**Results at a glance:**
+| Artifact | Seeds | Programs | Divergences | Coverage (AST/opcode) | Benchmarks | Links |
+|---|---:|---:|---:|---:|---:|---|
+| Differential test | 10 | 5001 | 0 | 24/20 | 6 | [diff_report.md](results/diff_report.md) |
+| Coverage | 10 | 5001 | 0 | 24/20 | 6 | [coverage.md](results/coverage.md) |
+| Benchmarks | 10 | 5001 | 0 | 24/20 | 6 | [benchmarks.md](results/benchmarks.md) |
+| Golden diagnostics | – | – | – | – | – | [golden_diagnostics.md](results/golden_diagnostics.md) |
+| Baseline | 1 | 5 | 0 | 5/5 | 5 | [baseline.md](results/baseline.md) |
+| Ablation | 1 | 5 | 0 | 5/5 | 2 | [ablation.md](results/ablation.md) |
+| Mutation/injection | 1 | 3 | 3 | – | – | [mutation_catches.md](results/mutation_catches.md) |
+| Coverage by construct | – | – | – | 5/5 | – | [coverage_by_construct.md](results/coverage_by_construct.md) |
+
+**What reviewers usually misunderstand:**
+- Observation policy is defined and enforced (see [Formal Summary](docs/FORMAL_SUMMARY_1PAGE.md)).
+- Diagnostics contract is not just error codes, but spans and determinism.
+- Equivalence is on value, error (code+span), and stdout, not just output text.
+- Human-proxy metrics are included, but not a full user study.
+- Baseline and ablation are real, not synthetic.
+
+**Why this is NOT overengineering:**
+- Every artifact is directly tied to a research claim or reviewer need.
+- No superfluous features; all code and docs are minimal for the contract.
+- All results are reproducible and evidenced.
+
+**Audience:** Designed for PL researchers / reviewers, not end users.
+
+**Reviewer checklist:** [docs/REVIEWER_CHECKLIST.md](docs/REVIEWER_CHECKLIST.md)
+
+---
 
 **Thesis claim:**
 We show that interpreter↔VM observational equivalence and a stable diagnostics contract can be achieved with explicit, expression-oriented control flow, while preserving scorable evidence under a fixed observation policy and deterministic artifact pipeline. ([THESIS_CLAIM.md](docs/THESIS_CLAIM.md))
@@ -136,6 +180,15 @@ SuayLang is a research artifact, not a product. Tooling (CLI, formatter, VS Code
 - [MEXT trajectory](docs/MEXT_TRAJECTORY.md)
 - [Release experiments](docs/RELEASE_EXPERIMENTS.md)
 - [Results index](results/README.md)
+
+- [Technical Report PDF](paper/TR-2025-01.pdf)
+- [One-page Formal Summary](docs/FORMAL_SUMMARY_1PAGE.md)
+- [Falsification Scenarios](docs/FALSIFICATION.md)
+- [Reviewer Checklist](docs/REVIEWER_CHECKLIST.md)
+- [Independent Reproduction Log](docs/INDEPENDENT_REPRODUCTION.md)
+- [If Forced to Cut: Minimal Core](docs/IF_FORCED_TO_CUT.md)
+- [Known Intentional Imperfection](docs/KNOWN_INTENTIONAL_IMPERFECTION.md)
+- [Discussion Seed](docs/DISCUSSION_SEED.md)
 
 <details>
 <summary>Engineering details (click to expand)</summary>

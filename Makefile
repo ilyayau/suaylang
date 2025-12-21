@@ -63,4 +63,10 @@ smoke:
 build:
 	$(PY) -m build
 
+tr:
+	pandoc paper/TR-2025-01.md -o paper/TR-2025-01.pdf \
+	  --defaults=paper/pandoc_tr_pdf_args.txt || \
+	  pandoc paper/TR-2025-01.md -o paper/TR-2025-01.pdf \
+	    --pdf-engine=xelatex --toc --number-sections --highlight-style=tango
+
 check: lint format-check test smoke build
