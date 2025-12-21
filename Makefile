@@ -1,13 +1,19 @@
 .PHONY: install test lint format format-check smoke build check conformance fuzz bench golden contract diff-test diff-test-ci human-study bench-report research research-pdf
 
-PY := .venv/bin/python
-PIP := .venv/bin/pip
-RUFF := .venv/bin/ruff
+PY ?= python3
+PIP ?= pip
+RUFF ?= ruff
 
 install:
-	python -m venv .venv
-	$(PIP) install -U pip
-	$(PIP) install -e ".[dev]"
+	$(PY) -m venv .venv
+	$(PY) -m pip install -U pip
+	$(PY) -m pip install -e ".[dev]"
+# Note: You can override the Python interpreter by running 'make PY=python3.12' or similar.
+# The PY variable specifies the Python interpreter to use.
+# Default is set to python3 if not overridden.
+# You can also set PIP and RUFF similarly if needed.
+# ...existing code...
+# ...existing code...
 
 lint:
 	$(RUFF) check .

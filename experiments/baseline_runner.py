@@ -25,17 +25,22 @@ BASELINE_SUITE = Path(__file__).parent.parent / "baseline_suite"
 RESULTS_DIR = Path(__file__).parent.parent / "results"
 N_RUNS = 5
 
-def resolve_exe(name, module_fallback=None):
+def resolve_exe(name, module_fallback=None, env_var=None):
+    # 1. If env var is set, use it
+    if env_var and os.environ.get(env_var):
+        return [os.environ[env_var]]
+    # 2. Try which
     exe = shutil.which(name)
     if exe:
         return [exe]
+    # 3. Fallback to module
     if module_fallback:
         return [sys.executable, "-m", module_fallback]
-    raise RuntimeError(f"Required executable '{name}' not found in PATH and no fallback available.\n"
-                      f"Try: pip install -e . to install CLI entry points.")
+    raise RuntimeError(f"Required executable '{name}' not found in PATH, env, or as module.\n"
+                       f"Try: pip install -e . to install CLI entry points or set {env_var}.")
 
-SUAY_INTERPRETER = resolve_exe("suay", module_fallback="suaylang.cli")
-SUAY_VM = resolve_exe("suay-vm", module_fallback="suaylang.vm_cli")
+SUAY_INTERPRETER = resolve_exe("suay", module_fallback="suaylang.cli", env_var=None)
+SUAY_VM = resolve_exe("suay-vm", module_fallback="suaylang.vm_cli", env_var="SUAY_VM_BIN")
 
 # Utility: get commit hash
 def get_commit_hash():
