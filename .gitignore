@@ -7,6 +7,9 @@ __pycache__/
 coverage.xml
 htmlcov/
 
+# IDE/dev environment noise
+.idea/
+
 # Packaging/build artifacts
 build/
 dist/
