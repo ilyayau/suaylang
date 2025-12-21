@@ -16,5 +16,5 @@ This will:
 
 ## Output Artifacts
 - results/*.md, results/*.json
-- paper/suaylang-tech-report.pdf
+- see docs/TECH_REPORT.md (PDF: run `make tech-report-pdf`)
 - results/manifest.json (contains seeds, commit hash, environment)

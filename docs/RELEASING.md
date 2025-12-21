@@ -11,7 +11,7 @@
    - This produces `dist/results_<gitsha>.tar.gz` containing:
      - results/ (all outputs)
      - docs/COMMITTEE_ONEPAGER.md
-     - docs/TECH_REPORT.md
+   - docs/TECH_REPORT.md (PDF: run `make tech-report-pdf`)
      - results/baseline.md, results/diff_report.md, results/benchmarks.md
      - dist/MANIFEST.txt (git sha, date, Python version, OS info)
 

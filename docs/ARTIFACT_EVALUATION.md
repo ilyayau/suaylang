@@ -20,7 +20,7 @@
 ## Expected outputs
 - All results in `results/` (see `results/README.md`)
 - Key metrics: `python scripts/extract_metrics.py`
-- PDFs: `paper/suaylang-tech-report.pdf` (if generated)
+- Tech report: [docs/TECH_REPORT.md](../docs/TECH_REPORT.md) (if generated: run `make tech-report-pdf`)
 
 ## Sanity checks
 - All commands exit 0

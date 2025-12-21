@@ -10,10 +10,10 @@
 4. Inspect `results/` for all output artifacts (see [results/README.md](results/README.md)).
 5. For research plan PDF: `make research-pdf` (output in `docs/`).
 
-## Expected Outputs
-- All experiment results in `results/` (JSON, Markdown tables, manifest).
-- PDFs in `paper/` and `docs/`.
-- Key files: `results/diff_report.md`, `results/coverage.md`, `results/benchmarks.md`, `results/golden_diagnostics.md`, `results/baseline_raw.json`, `results/manifest.json`.
+## Expected outputs
+- All results in `results/` (see `results/README.md`)
+- Key metrics: `python scripts/extract_metrics.py`
+- Tech report: [docs/TECH_REPORT.md](docs/TECH_REPORT.md) (PDF: run `make tech-report-pdf`)
 
 ## Time Budget
 - Full run: ~15 minutes on a modern laptop.

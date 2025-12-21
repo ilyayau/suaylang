@@ -1,3 +1,6 @@
+# Check all internal markdown links
+check-links:
+	sh scripts/check_links.sh
 # Release artifact: dist/results_<gitsha>.tar.gz with results/ and key docs
 release-artifacts:
 	@echo "Generating release artifact..."
