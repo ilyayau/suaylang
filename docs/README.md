@@ -1,3 +1,27 @@
+# Documentation Index & Glossary
+
+## Index
+- REVIEWER_GUIDE.md — Start here for artifact evaluation
+- REPRO_CHECKLIST.md — Step-by-step reproduction
+- ARCHITECTURE.md — Diagrams and flow
+- BASELINE.md — Baseline metrics, commands, artifact paths
+- EXPERIMENTS.md — Experimental protocol
+- LIMITATIONS.md — Scope and external validity
+- STYLE_GUIDE.md — Docs style/tone/terminology
+- ... (see folder for full list)
+
+## Glossary
+- **Observational Equivalence:** No observable difference in value, error, or output between Interpreter and VM under the defined policy.
+- **Divergence:** Any difference in output, error, or state between backends.
+- **Baseline:** Reference Python or external implementation for comparison.
+- **Coverage:** Fraction of constructs or opcodes exercised by tests.
+- **Artifact:** Any output file or evidence produced by experiments.
+
+## Repo Map
+- README.md: Reviewer landing, claim, evidence, results
+- results/: All experiment outputs, plots, manifest
+- docs/: Deep details, protocols, style, index
+- Makefile: Entrypoint for all reproduction
 # SuayLang Documentation Index
 
 - ARCHITECTURE.md — Diagrams and flow for language and equivalence pipeline

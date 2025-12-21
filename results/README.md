@@ -1,3 +1,28 @@
+# Results Folder Guide
+
+This folder contains all experiment outputs, metrics, and evidence artifacts for SuayLang artifact evaluation.
+
+## Structure
+- baseline_raw.json: Raw baseline timings and outputs
+- baseline_summary.md: Aggregated baseline metrics
+- diff_report.md: Differential test results (main equivalence evidence)
+- coverage.md: Coverage summary
+- benchmarks.md: Benchmark suite results
+- golden_diagnostics.md: Diagnostics contract evidence
+- ablation.md: Ablation experiment results
+- mutation_catches.md: Mutation/injection validation
+- coverage_by_construct.md: Construct-level coverage
+- img/: All plots and charts (PNG)
+- manifest.json: Artifact hashes and commit pin
+
+## How to read
+- Start with diff_report.md for equivalence evidence
+- Use baseline_summary.md for baseline metrics
+- All plots are in img/
+- All files are versioned and checksummed in manifest.json
+
+## Reproduce
+Run `make reproduce-all` from repo root. All outputs will be regenerated and checksummed.
 # Results index (SuayLang)
 
 This directory contains all reviewer-facing, reproducible research artifacts.

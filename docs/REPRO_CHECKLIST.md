@@ -1,3 +1,18 @@
+# Reproduction Checklist
+
+- [ ] Clone repo and checkout commit from results/manifest.json
+- [ ] Run `make install` (setup environment)
+- [ ] Run `make reproduce-all`
+- [ ] Confirm all results/ artifacts are regenerated
+- [ ] Check plots in results/img/
+- [ ] Compare artifact hashes in results/manifest.json
+- [ ] If divergence: see 'What to do if divergence happens' below
+
+## What to do if divergence happens
+- Check Python version and OS (see manifest.json)
+- Re-run with clean environment
+- Compare logs and diffs in results/
+- File an issue with full logs and manifest
 # External Reproducibility Checklist
 
 Instructions for external reproduction:

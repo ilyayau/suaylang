@@ -1,3 +1,30 @@
+# SuayLang CI: artifact reproducibility and upload
+name: CI
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: |
+          make install
+      - name: Reproduce all results
+        run: |
+          make reproduce-all
+      - name: Upload results artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: suaylang-results
+          path: results/
 name: artifact-validation
 
 on:

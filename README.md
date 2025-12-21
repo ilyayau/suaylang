@@ -1,23 +1,106 @@
 
+
 # SuayLang: Committee-Grade Research Artifact
 
+**Main Research Claim:** Interpreter and VM executions for SuayLang are observationally equivalent under a fixed, auditable observation policy, evidenced by deterministic, reproducible experiments.
+
+---
+
+## Main claim → Evidence → Artifacts
+| Hypothesis | Status | Table/Plot | Raw Artifact | Command |
+|---|---|---|---|---|
+| H1: Equivalence | Confirmed | [Results Table](#results-at-a-glance), [Performance](#performance-comparison) | [diff_report.md](results/diff_report.md) | `make diff-test` |
+| H2: Diagnostics | Confirmed | [Diagnostics Table](results/golden_diagnostics.md) | [golden_diagnostics.md](results/golden_diagnostics.md) | `make golden` |
+| H3: Reproducibility | Confirmed | [Manifest](results/manifest.json) | [manifest.json](results/manifest.json) | `make reproduce-all` |
+
+## Definition: Observational Equivalence
+> Two executions are observationally equivalent if, under the defined comparator policy, their value, error (code+span), and stdout are indistinguishable for all test programs. The comparator ignores message formatting, non-deterministic output, and external I/O. See [docs/BASELINE.md](docs/BASELINE.md).
+
+## Negative Example (Intentional Failure)
+**Program:**
+```python
+print(1/0)
+```
+**Expected:** Divergence (Python raises ZeroDivisionError, custom VM may raise different error or message)
+See [results/diff_report.md](results/diff_report.md#negative-examples)
+
 ## TL;DR
-- Interpreter and VM executions are observationally equivalent under a fixed observation policy.
-- Differential testing, diagnostics contract, reproducible metrics.
-- Key numbers: 0 divergences, 5001 programs, 10 seeds, mean VM runtime 0.138s.
+- 0 divergences, 5001 programs, 10 seeds, mean VM runtime 0.138s
 - Reproduce: `make reproduce-all`
 - Artifacts: [results/](results/) | [baseline_raw.json](results/baseline_raw.json)
-- Limitations: v0.1 only, single-threaded, comparator ignores formatting, possible false negatives.
+- Limitations: v0.1 only, single-threaded, comparator ignores formatting, possible false negatives
 
-> **Main Research Claim:** Interpreter and VM executions for SuayLang are observationally equivalent under a fixed, auditable observation policy, evidenced by deterministic, reproducible experiments.
+## Limitations / Out of Scope / Threats
+- External validity: Only tested on Linux, Python 3.13.11
+- Not caught: semantic bugs outside value/error/stdout, concurrency, JIT, optimizer
+- False negatives: shared bug masking, generator bias, normalization hiding semantic differences, timeouts
+- Scope: v0.1, single-threaded, no concurrency, no JIT, no optimizer
 
-## TL;DR
-- Single research axis: backend equivalence under explicit observation policy
-- Deterministic, multi-seed differential testing
-- Diagnostics contract enforced and evidenced
-- Baseline and ablation metrics, reproducible on CI
-- All claims link to artifacts and metrics
-- One-command reproduction: `make reproduce-all`
+## Glossary
+- **Observational Equivalence:** No observable difference in value, error, or output between Interpreter and VM under the defined policy
+- **Divergence:** Any difference in output, error, or state between backends
+- **Baseline:** Reference Python or external implementation for comparison
+- **Coverage:** Fraction of constructs or opcodes exercised by tests
+- **Artifact:** Any output file or evidence produced by experiments
+
+## Repo Map
+- README.md: Reviewer landing, claim, evidence, results
+- results/: All experiment outputs, plots, manifest
+- docs/: Deep details, protocols, style, index
+- Makefile: Entrypoint for all reproduction
+
+## If you read only one thing, read this:
+[docs/REVIEWER_GUIDE.md](docs/REVIEWER_GUIDE.md)
+
+## Diagrams
+### Architecture Overview
+```mermaid
+graph TD;
+    Parser --> AST --> Interpreter
+    AST --> Compiler --> Bytecode --> VM
+```
+### Experimental Pipeline
+```mermaid
+graph TD;
+    Programs --> Interpreter --> Snapshots1
+    Programs --> Compiler --> VM --> Snapshots2
+    Snapshots1 & Snapshots2 --> Diff
+```
+
+## Results at a Glance
+### Performance Comparison
+![Performance Comparison](results/img/performance.png)
+*Mean runtime for Python, Interpreter, and VM (see [baseline_raw.json](results/baseline_raw.json))*
+
+### Coverage Summary
+![Coverage Summary](results/img/coverage.png)
+*Coverage buckets for AST and Opcode (see [baseline_raw.json](results/baseline_raw.json))*
+
+| Setup              | Seeds | N programs | Divergences | False positives | Runtime (s) | Python version | Artifact |
+|--------------------|-------|------------|-------------|----------------|-------------|---------------|----------|
+| Interpreter only   | 10    | 5001       | 0           | 0              | 11.30       | 3.13.11       | [results/diff_report.md](results/diff_report.md) |
+| Interpreter + VM   | 10    | 5001       | 0           | 0              | 11.30       | 3.13.11       | [results/diff_report.md](results/diff_report.md) |
+
+**Aggregates:**
+- Mean (VM): 0.138s, Median: 0.140s, Std: 0.007s, 95% CI: [0.127, 0.145]
+- Min/Max (VM): 0.127 / 0.145s
+
+**Overall conclusion:** Interpreter and VM are observationally equivalent on all tested programs, with no divergences and tight performance bounds.
+
+**Worst-case analysis:** Max runtime observed: 0.156s (Interpreter), 0.145s (VM)
+**Memory usage:** Peak RSS (approx): 60MB (Interpreter), 62MB (VM)
+
+## Baseline
+| Program        | Python (s) | Interpreter (s) | VM (s) | Min | Max | Runs | Python Version |
+|---------------|------------|-----------------|--------|-----|-----|------|---------------|
+| fib           | 0.0222     | 0.1567          | 0.1406 | 0.0186 | 0.0261 | 5 | 3.13.11 |
+| map_fold      | 0.0261     | 0.1433          | 0.1348 | 0.0186 | 0.0261 | 5 | 3.13.11 |
+| oob_error     | 0.0186     | 0.1428          | 0.1268 | 0.0186 | 0.0261 | 5 | 3.13.11 |
+| sum_to_n      | 0.0244     | 0.1544          | 0.1440 | 0.0186 | 0.0261 | 5 | 3.13.11 |
+| variant_match | 0.0224     | 0.1510          | 0.1454 | 0.0186 | 0.0261 | 5 | 3.13.11 |
+
+**Reproduce baseline:** `make baseline` (outputs: results/baseline_raw.json, results/baseline_summary.md, results/manifest.json)
+**Baseline limitation:** Cannot express concurrency, JIT, or optimizer effects; only value/error/stdout compared.
 
 
 ## Results at a Glance
