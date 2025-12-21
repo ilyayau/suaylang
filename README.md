@@ -132,57 +132,18 @@ graph TD;
 - Output artifacts: results/*.md, results/*.json, paper/suaylang-tech-report.pdf
 
 ## Threats to Validity
-See [docs/THREATS_TO_VALIDITY.md](docs/THREATS_TO_VALIDITY.md)
+## Architecture Overview
+<img src="docs/assets/architecture.svg" alt="Architecture overview" width="600">
 
-## Limitations
-See [docs/LIMITATIONS.md](docs/LIMITATIONS.md)
-
-## Architecture & Research Flow
-
+## Architecture Overview
+<img src="docs/assets/architecture.svg" alt="Architecture overview" width="600">
 ```mermaid
-graph TD;
-    A[Source] --> B[Lexer];
-    B --> C[Parser];
-    C --> D[AST];
-    D --> E[Interpreter];
-    D --> F[Compiler];
-    F --> G[Bytecode];
-    G --> H[VM];
-```
-
-```mermaid
-graph TD;
-    P[Programs] --> I[Interpreter];
-    P --> C[Compiler];
-    C --> V[VM];
-    I --> S1[Normalized Snapshot];
-    V --> S2[Normalized Snapshot];
-    S1 & S2 --> D[Diff];
-    D --> M[Minimization];
-    M --> R[Reports];
-```
-
-## Related Work
+## Equivalence Research Flow
+<img src="docs/assets/research_flow.svg" alt="Equivalence research flow" width="600">
 See [docs/RELATED_WORK.md](docs/RELATED_WORK.md)
-
-## Executive Summary
-See [docs/executive_summary.md](docs/executive_summary.md)
-
-## Team / Authors
-- Tolkynkhan Sultanbarys — Language & Compiler Frontend Lead (lexer, parser, AST, diagnostics, language spec, examples)
-- Syrlybai Ayaulym — Runtime/VM & Tooling Lead (interpreter/VM, runtime memory, stdlib, CLI/REPL, CI)
-
-**Submission-ready:** This repository is packaged for artifact evaluation and reviewer audit. All claims are evidenced, all results are reproducible, and every artifact is cross-linked. See the [Technical Report PDF](paper/TR-2025-01.pdf) for full details.
-
-**10-minute reading path:**
-- [Technical Report PDF](paper/TR-2025-01.pdf)
-- [One-page Formal Summary](docs/FORMAL_SUMMARY_1PAGE.md)
-- [Falsification Scenarios](docs/FALSIFICATION.md)
-- [Reviewer Checklist](docs/REVIEWER_CHECKLIST.md)
-- [Independent Reproduction Log](docs/INDEPENDENT_REPRODUCTION.md)
-
-**Results at a glance:**
-| Artifact | Seeds | Programs | Divergences | Coverage (AST/opcode) | Benchmarks | Links |
+## Architecture & Research Flow
+<img src="docs/assets/architecture.svg" alt="Architecture overview" width="600">
+<img src="docs/assets/research_flow.svg" alt="Equivalence research flow" width="600">
 |---|---:|---:|---:|---:|---:|---|
 | Differential test | 10 | 5001 | 0 | 24/20 | 6 | [diff_report.md](results/diff_report.md) |
 | Coverage | 10 | 5001 | 0 | 24/20 | 6 | [coverage.md](results/coverage.md) |

@@ -10,6 +10,7 @@ baseline_runner.py: Runs the baseline suite for SuayLang and Python, collects me
 
 Usage: python experiments/baseline_runner.py
 """
+
 import os
 import shutil
 import sys
@@ -25,6 +26,7 @@ BASELINE_SUITE = Path(__file__).parent.parent / "baseline_suite"
 RESULTS_DIR = Path(__file__).parent.parent / "results"
 N_RUNS = 5
 
+
 def resolve_exe(name, module_fallback=None, env_var=None):
     # 1. If env var is set, use it
     if env_var and os.environ.get(env_var):
@@ -36,18 +38,31 @@ def resolve_exe(name, module_fallback=None, env_var=None):
     # 3. Fallback to module
     if module_fallback:
         return [sys.executable, "-m", module_fallback]
-    raise RuntimeError(f"Required executable '{name}' not found in PATH, env, or as module.\n"
-                       f"Try: pip install -e . to install CLI entry points or set {env_var}.")
+    raise RuntimeError(
+        f"Required executable '{name}' not found in PATH, env, or as module.\n"
+        f"Try: pip install -e . to install CLI entry points or set {env_var}."
+    )
+
 
 SUAY_INTERPRETER = resolve_exe("suay", module_fallback="suaylang.cli", env_var=None)
-SUAY_VM = resolve_exe("suay-vm", module_fallback="suaylang.vm_cli", env_var="SUAY_VM_BIN")
+SUAY_VM = resolve_exe(
+    "suay-vm", module_fallback="suaylang.vm_cli", env_var="SUAY_VM_BIN"
+)
+
 
 # Utility: get commit hash
 def get_commit_hash():
     try:
-        return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=Path(__file__).parent.parent).decode().strip()
+        return (
+            subprocess.check_output(
+                ["git", "rev-parse", "HEAD"], cwd=Path(__file__).parent.parent
+            )
+            .decode()
+            .strip()
+        )
     except Exception:
         return None
+
 
 def get_env_metadata():
     return {
@@ -57,11 +72,14 @@ def get_env_metadata():
         "commit_hash": get_commit_hash(),
     }
 
+
 def run_python(file):
     times = []
     for _ in range(N_RUNS):
         start = time.perf_counter()
-        proc = subprocess.run([sys.executable, str(file)], capture_output=True, text=True)
+        proc = subprocess.run(
+            [sys.executable, str(file)], capture_output=True, text=True
+        )
         end = time.perf_counter()
         times.append(end - start)
     return {
@@ -70,6 +88,7 @@ def run_python(file):
         "stderr": proc.stderr,
         "exit_code": proc.returncode,
     }
+
 
 def run_suay(file, mode):
     # mode: "interpreter" or "vm"
@@ -87,10 +106,13 @@ def run_suay(file, mode):
         "exit_code": proc.returncode,
     }
 
+
 def main():
     # CLI smoke check
     try:
-        interp_help = subprocess.run([*SUAY_INTERPRETER, "--help"], capture_output=True, text=True)
+        interp_help = subprocess.run(
+            [*SUAY_INTERPRETER, "--help"], capture_output=True, text=True
+        )
         vm_help = subprocess.run([*SUAY_VM, "--help"], capture_output=True, text=True)
         print("[smoke] suay --help: ", interp_help.returncode)
         print("[smoke] suay-vm --help: ", vm_help.returncode)
@@ -122,7 +144,10 @@ def main():
             interp = b["suay_interpreter"]["median_runtime"]
             vm = b["suay_vm"]["median_runtime"]
             f.write(f"| {b['name']} | {py} | {interp} | {vm} |\n")
-    print("Baseline results written to results/baseline_raw.json and results/baseline.md")
+    print(
+        "Baseline results written to results/baseline_raw.json and results/baseline.md"
+    )
+
 
 if __name__ == "__main__":
     main()

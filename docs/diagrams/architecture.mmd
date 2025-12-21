@@ -1,0 +1,10 @@
+graph TD;
+    Parser --> AST --> Interpreter
+    AST --> Compiler --> Bytecode --> VM
+    A[Source] --> B[Lexer];
+    B --> C[Parser];
+    C --> D[AST];
+    D --> E[Interpreter];
+    D --> F[Compiler];
+    F --> G[Bytecode];
+    G --> H[VM];

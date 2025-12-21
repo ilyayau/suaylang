@@ -1,0 +1,115 @@
+{
+  "env": {
+    "python_version": "3.13.11",
+    "os": "Linux-6.18.1-arch1-2-x86_64-with-glibc2.42",
+    "cpu": "",
+    "commit_hash": "0971030b5ecfde3a95791e4528ec73c00326a2eb"
+  },
+  "benchmarks": [
+    {
+      "name": "fib",
+      "python": {
+        "median_runtime": 0.026547169998593745,
+        "stdout": "fib=55\n",
+        "stderr": "",
+        "exit_code": 0
+      },
+      "suay_interpreter": {
+        "median_runtime": 0.16662034000000858,
+        "stdout": "",
+        "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/fib.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
+        "exit_code": 2
+      },
+      "suay_vm": {
+        "median_runtime": 0.16092831199966895,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/fib.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: Fibonacci (10th)\n^\n",
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "map_fold",
+      "python": {
+        "median_runtime": 0.030861272000038298,
+        "stdout": "sum_squares=55\n",
+        "stderr": "",
+        "exit_code": 0
+      },
+      "suay_interpreter": {
+        "median_runtime": 0.15424015499957022,
+        "stdout": "",
+        "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/map_fold.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
+        "exit_code": 2
+      },
+      "suay_vm": {
+        "median_runtime": 0.14661180999974022,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/map_fold.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: map and fold\n^\n",
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "oob_error",
+      "python": {
+        "median_runtime": 0.022748603001673473,
+        "stdout": "error: list index out of range\n",
+        "stderr": "",
+        "exit_code": 0
+      },
+      "suay_interpreter": {
+        "median_runtime": 0.16229107199978898,
+        "stdout": "",
+        "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/oob_error.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
+        "exit_code": 2
+      },
+      "suay_vm": {
+        "median_runtime": 0.15096418900066055,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/oob_error.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: error reporting (out-of-bounds)\n^\n",
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "sum_to_n",
+      "python": {
+        "median_runtime": 0.01754726900071546,
+        "stdout": "sum=500500\n",
+        "stderr": "",
+        "exit_code": 0
+      },
+      "suay_interpreter": {
+        "median_runtime": 0.15900676300043415,
+        "stdout": "",
+        "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/sum_to_n.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
+        "exit_code": 2
+      },
+      "suay_vm": {
+        "median_runtime": 0.13900870399993437,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/sum_to_n.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: sum of first N natural numbers\n^\n",
+        "exit_code": 1
+      }
+    },
+    {
+      "name": "variant_match",
+      "python": {
+        "median_runtime": 0.027047749999837833,
+        "stdout": "",
+        "stderr": "",
+        "exit_code": 0
+      },
+      "suay_interpreter": {
+        "median_runtime": 0.16130578299998888,
+        "stdout": "",
+        "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/variant_match.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
+        "exit_code": 2
+      },
+      "suay_vm": {
+        "median_runtime": 0.15021826300107932,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/variant_match.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: pattern match (variant)\n^\n",
+        "exit_code": 1
+      }
+    }
+  ]
+}
