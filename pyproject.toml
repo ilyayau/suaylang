@@ -32,6 +32,7 @@ dev = [
 
 [project.scripts]
 suay = "suaylang.cli:main"
+suay-vm = "suaylang.vm_cli:main"
 
 [tool.setuptools]
 package-dir = {"" = "."}

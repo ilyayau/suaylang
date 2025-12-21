@@ -11,6 +11,7 @@ baseline_runner.py: Runs the baseline suite for SuayLang and Python, collects me
 Usage: python experiments/baseline_runner.py
 """
 import os
+import shutil
 import sys
 import time
 import json
@@ -23,8 +24,18 @@ from pathlib import Path
 BASELINE_SUITE = Path(__file__).parent.parent / "baseline_suite"
 RESULTS_DIR = Path(__file__).parent.parent / "results"
 N_RUNS = 5
-SUAY_INTERPRETER = "suay"  # Assumed in PATH
-SUAY_VM = "suay-vm"        # Assumed in PATH
+
+def resolve_exe(name, module_fallback=None):
+    exe = shutil.which(name)
+    if exe:
+        return [exe]
+    if module_fallback:
+        return [sys.executable, "-m", module_fallback]
+    raise RuntimeError(f"Required executable '{name}' not found in PATH and no fallback available.\n"
+                      f"Try: pip install -e . to install CLI entry points.")
+
+SUAY_INTERPRETER = resolve_exe("suay", module_fallback="suaylang.cli")
+SUAY_VM = resolve_exe("suay-vm", module_fallback="suaylang.vm_cli")
 
 # Utility: get commit hash
 def get_commit_hash():
@@ -61,7 +72,7 @@ def run_suay(file, mode):
     times = []
     for _ in range(N_RUNS):
         start = time.perf_counter()
-        proc = subprocess.run([exe, str(file)], capture_output=True, text=True)
+        proc = subprocess.run([*exe, str(file)], capture_output=True, text=True)
         end = time.perf_counter()
         times.append(end - start)
     return {
@@ -72,6 +83,15 @@ def run_suay(file, mode):
     }
 
 def main():
+        # CLI smoke check
+        try:
+            interp_help = subprocess.run([*SUAY_INTERPRETER, "--help"], capture_output=True, text=True)
+            vm_help = subprocess.run([*SUAY_VM, "--help"], capture_output=True, text=True)
+            print("[smoke] suay --help: ", interp_help.returncode)
+            print("[smoke] suay-vm --help: ", vm_help.returncode)
+        except Exception as e:
+            print(f"[smoke] CLI check failed: {e}")
+            raise
     results = {"env": get_env_metadata(), "benchmarks": []}
     for suay_file in sorted(BASELINE_SUITE.glob("*.suay")):
         base = suay_file.stem

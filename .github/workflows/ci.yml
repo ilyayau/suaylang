@@ -1,3 +1,7 @@
+      - name: CLI smoke check
+        run: |
+          which suay && suay --help
+          which suay-vm && suay-vm --help
 name: ci
 
 on:
