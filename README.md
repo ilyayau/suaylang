@@ -20,21 +20,20 @@
 ---
 
 
+
 ## Architecture Overview
 <img src="docs/assets/architecture.svg" alt="Architecture overview" width="600">
 
 ## Equivalence Research Flow
 <img src="docs/assets/research_flow.svg" alt="Equivalence research flow" width="600">
 
-## Main claim → Evidence → Artifacts
-| Artifact                | Seeds | Programs | Divergences | Coverage (AST/opcode) | Link |
-|-------------------------|-------|----------|-------------|-----------------------|------|
-| Differential test       | 10    | 5001     | 0           | 24/20                 | [diff_report.md](results/diff_report.md) |
-| Coverage                | 10    | 5001     | 0           | 24/20                 | [coverage.md](results/coverage.md) |
-| Benchmarks              | 10    | 5001     | 0           | 24/20                 | [benchmarks.md](results/benchmarks.md) |
-| Golden diagnostics      | –     | –        | –           | –                     | [golden_diagnostics.md](results/golden_diagnostics.md) |
-| Baseline                | 1     | 5        | 0           | 5/5                   | [baseline.md](results/baseline.md) |
-| Ablation                | 1     | 5        | 0           | 5/5                   | [ablation.md](results/ablation.md) |
+## Results at a Glance
+- **Differential test:** 10 seeds, 5001 programs, 0 divergences ([diff_report.md](results/diff_report.md))
+- **Coverage:** 24 AST, 20 opcodes ([coverage.md](results/coverage.md))
+- **Benchmarks:** 6 programs ([benchmarks.md](results/benchmarks.md))
+- **Golden diagnostics:** contract ([golden_diagnostics.md](results/golden_diagnostics.md))
+- **Baseline:** 5 programs ([baseline.md](results/baseline.md))
+- **Ablation:** 5 programs ([ablation.md](results/ablation.md))
 
 ## Definition: Observational Equivalence
 > Two executions are observationally equivalent if, under the defined comparator policy, their value, error (code+span), and stdout are indistinguishable for all test programs. The comparator ignores message formatting, non-deterministic output, and external I/O. See [docs/BASELINE.md](docs/BASELINE.md).
@@ -79,15 +78,7 @@ For more detail, see [docs/contributions.md](docs/contributions.md)
 - Potential false negatives: shared bug masking, generator bias, normalization hiding semantic differences, timeouts.
 - See [docs/BASELINE.md](docs/BASELINE.md) for commands, artifact paths, and computation details.
 
-## Results-at-a-Glance
-| Metric                | Value | Artifact/Link |
-|-----------------------|-------|--------------|
-| Seeds                 | 10    | [manifest.json](results/manifest.json) |
-| Programs              | 5001  | [diff_report.md](results/diff_report.md) |
-| Divergences           | 0     | [diff_report.md](results/diff_report.md) |
-| Coverage (AST/opcode) | 24/20 | [coverage.md](results/coverage.md) |
-| Benchmarks            | 6     | [benchmarks.md](results/benchmarks.md) |
-| Baseline/Ablation     | Yes   | [baseline.md](results/baseline.md), [ablation.md](results/ablation.md) |
+
 
 ## 7-Minute Reviewer Path
 1. `make reproduce` — runs all tests, conformance, diff-test, baseline, ablation, builds PDFs
@@ -99,28 +90,8 @@ For more detail, see [docs/contributions.md](docs/contributions.md)
 - One-command reproduction: `make reproduce`
 - Output artifacts: results/*.md, results/*.json, paper/suaylang-tech-report.pdf
 
-## Threats to Validity
-## Architecture Overview
-<img src="docs/assets/architecture.svg" alt="Architecture overview" width="600">
 
-## Architecture Overview
-<img src="docs/assets/architecture.svg" alt="Architecture overview" width="600">
-```mermaid
-## Equivalence Research Flow
-<img src="docs/assets/research_flow.svg" alt="Equivalence research flow" width="600">
-See [Related Work](docs/RELATED_WORK.md#architecture--research-flow)
-## Architecture & Research Flow
-<img src="docs/assets/architecture.svg" alt="Architecture overview" width="600">
-<img src="docs/assets/research_flow.svg" alt="Equivalence research flow" width="600">
-|---|---:|---:|---:|---:|---:|---|
-| Differential test | 10 | 5001 | 0 | 24/20 | 6 | [diff_report.md](results/diff_report.md) |
-| Coverage | 10 | 5001 | 0 | 24/20 | 6 | [coverage.md](results/coverage.md) |
-| Benchmarks | 10 | 5001 | 0 | 24/20 | 6 | [benchmarks.md](results/benchmarks.md) |
-| Golden diagnostics | – | – | – | – | – | [golden_diagnostics.md](results/golden_diagnostics.md) |
-| Baseline | 1 | 5 | 0 | 5/5 | 5 | [baseline.md](results/baseline.md) |
-| Ablation | 1 | 5 | 0 | 5/5 | 2 | [ablation.md](results/ablation.md) |
-| Mutation/injection | 1 | 3 | 3 | – | – | [mutation_catches.md](results/mutation_catches.md) |
-| Coverage by construct | – | – | – | 5/5 | – | [coverage_by_construct.md](results/coverage_by_construct.md) |
+See: [Related Work — Architecture & Research Flow](docs/RELATED_WORK.md#architecture--research-flow)
 
 **What reviewers usually misunderstand:**
 - Observation policy is defined and enforced (see [Formal Summary](docs/FORMAL_SUMMARY_1PAGE.md)).
