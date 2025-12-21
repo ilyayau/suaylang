@@ -91,3 +91,30 @@ tr:
 	    --pdf-engine=xelatex --toc --number-sections --highlight-style=tango
 
 check: lint format-check test smoke build
+
+# Baseline metrics
+baseline:
+	$(PY) benchmarks/benchmark_runner.py --baseline > results/baseline_raw.json
+	$(PY) benchmarks/benchmark_runner.py --summary > results/baseline_summary.md
+	cp results/baseline_raw.json results/manifest.json
+
+# Plot generation
+plots:
+	$(PY) tools/plot_results.py
+
+# Reproduce all results
+reproduce-all: baseline plots
+	$(PY) benchmarks/benchmark_runner.py --diff > results/diff_report.md
+	$(PY) benchmarks/benchmark_runner.py --coverage > results/coverage.md
+	$(PY) benchmarks/benchmark_runner.py --benchmarks > results/benchmarks.md
+	$(PY) benchmarks/benchmark_runner.py --golden > results/golden_diagnostics.md
+	$(PY) benchmarks/benchmark_runner.py --ablation > results/ablation.md
+	$(PY) benchmarks/benchmark_runner.py --mutation > results/mutation_catches.md
+	$(PY) benchmarks/benchmark_runner.py --constructs > results/coverage_by_construct.md
+
+# PDF build
+pdf:
+	$(PY) scripts/build_pdf.py
+
+# CI target
+ci: reproduce-all pdf
