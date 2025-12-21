@@ -1,113 +1,113 @@
 {
   "env": {
     "python_version": "3.13.11",
-    "os": "Linux-6.17.9-arch1-1-x86_64-with-glibc2.42",
+    "os": "Linux-6.18.1-arch1-2-x86_64-with-glibc2.42",
     "cpu": "",
-    "commit_hash": "4234c44ddc148f009e738402c684135de7e2e497"
+    "commit_hash": "48a552372d2735000f45cf43d76f5c289e34928b"
   },
   "benchmarks": [
     {
       "name": "fib",
       "python": {
-        "median_runtime": 0.021985272993333638,
+        "median_runtime": 0.023236459999679937,
         "stdout": "fib=55\n",
         "stderr": "",
         "exit_code": 0
       },
       "suay_interpreter": {
-        "median_runtime": 0.15999298199312761,
+        "median_runtime": 0.17055570499996975,
         "stdout": "",
         "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/fib.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
         "exit_code": 2
       },
       "suay_vm": {
-        "median_runtime": 0.12803838701802306,
+        "median_runtime": 0.158123866999631,
         "stdout": "",
-        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/.local/bin/suay-vm\", line 8, in <module>\n    from suaylang.vm import main as vm_main\nImportError: cannot import name 'main' from 'suaylang.vm' (/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py)\n",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/fib.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: Fibonacci (10th)\n^\n",
         "exit_code": 1
       }
     },
     {
       "name": "map_fold",
       "python": {
-        "median_runtime": 0.021870295982807875,
+        "median_runtime": 0.01862946399978682,
         "stdout": "sum_squares=55\n",
         "stderr": "",
         "exit_code": 0
       },
       "suay_interpreter": {
-        "median_runtime": 0.1511744690069463,
+        "median_runtime": 0.1491412940004011,
         "stdout": "",
         "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/map_fold.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
         "exit_code": 2
       },
       "suay_vm": {
-        "median_runtime": 0.14058660398586653,
+        "median_runtime": 0.15380011100023694,
         "stdout": "",
-        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/.local/bin/suay-vm\", line 8, in <module>\n    from suaylang.vm import main as vm_main\nImportError: cannot import name 'main' from 'suaylang.vm' (/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py)\n",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/map_fold.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: map and fold\n^\n",
         "exit_code": 1
       }
     },
     {
       "name": "oob_error",
       "python": {
-        "median_runtime": 0.02621808898402378,
+        "median_runtime": 0.020205124000312935,
         "stdout": "error: list index out of range\n",
         "stderr": "",
         "exit_code": 0
       },
       "suay_interpreter": {
-        "median_runtime": 0.15542382100829855,
+        "median_runtime": 0.15981342299983226,
         "stdout": "",
         "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/oob_error.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
         "exit_code": 2
       },
       "suay_vm": {
-        "median_runtime": 0.14351300901034847,
+        "median_runtime": 0.1485830639994674,
         "stdout": "",
-        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/.local/bin/suay-vm\", line 8, in <module>\n    from suaylang.vm import main as vm_main\nImportError: cannot import name 'main' from 'suaylang.vm' (/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py)\n",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/oob_error.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: error reporting (out-of-bounds)\n^\n",
         "exit_code": 1
       }
     },
     {
       "name": "sum_to_n",
       "python": {
-        "median_runtime": 0.029022688016993925,
+        "median_runtime": 0.02233834599974216,
         "stdout": "sum=500500\n",
         "stderr": "",
         "exit_code": 0
       },
       "suay_interpreter": {
-        "median_runtime": 0.16827275601099245,
+        "median_runtime": 0.14664419400014594,
         "stdout": "",
         "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/sum_to_n.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
         "exit_code": 2
       },
       "suay_vm": {
-        "median_runtime": 0.12428204799653031,
+        "median_runtime": 0.14395737499944516,
         "stdout": "",
-        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/.local/bin/suay-vm\", line 8, in <module>\n    from suaylang.vm import main as vm_main\nImportError: cannot import name 'main' from 'suaylang.vm' (/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py)\n",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/sum_to_n.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: sum of first N natural numbers\n^\n",
         "exit_code": 1
       }
     },
     {
       "name": "variant_match",
       "python": {
-        "median_runtime": 0.018008750019362196,
+        "median_runtime": 0.021190907999880437,
         "stdout": "",
         "stderr": "",
         "exit_code": 0
       },
       "suay_interpreter": {
-        "median_runtime": 0.15333417398505844,
+        "median_runtime": 0.15962968799976807,
         "stdout": "",
         "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/variant_match.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
         "exit_code": 2
       },
       "suay_vm": {
-        "median_runtime": 0.13867267599562183,
+        "median_runtime": 0.1430634709995502,
         "stdout": "",
-        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/.local/bin/suay-vm\", line 8, in <module>\n    from suaylang.vm import main as vm_main\nImportError: cannot import name 'main' from 'suaylang.vm' (/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py)\n",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/variant_match.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: pattern match (variant)\n^\n",
         "exit_code": 1
       }
     }
