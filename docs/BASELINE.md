@@ -1,10 +1,16 @@
 # Baseline Comparison
 
-| System | Programs | Divergences | Coverage (AST/opcode) | Benchmarks | Command |
-|--------|----------|-------------|----------------------|------------|---------|
-| Interpreter only | 5001 | 0 | 24/20 | 6 | make research |
-| Interpreter+VM   | 5001 | 0 | 24/20 | 6 | make research |
+| Setup              | Seeds | N programs | Divergences caught | False positives | Runtime (s) | Artifact |
+|--------------------|-------|------------|-------------------|----------------|-------------|----------|
+| Interpreter only   | 10    | 5001       | 0                 | 0              | 11.30       | [results/diff_report.md](../results/diff_report.md) |
+| Interpreter + VM   | 10    | 5001       | 0                 | 0              | 11.30       | [results/diff_report.md](../results/diff_report.md) |
 
-- Baseline: Interpreter only (no VM, no diagnostics contract)
-- Full system: Interpreter+VM, diagnostics contract enforced
-- Metrics: # programs, divergences, coverage, benchmarks
+## How numbers were computed
+- Command: `make research`
+- Output artifact: results/diff_report.md
+- Numbers are extracted from the differential test report (see [results/diff_report.md](../results/diff_report.md)).
+
+## Validity/Limitations
+- Valid only for v0.1 scope: single-threaded, no concurrency, no JIT, no optimizer.
+- Comparator ignores: message text formatting, non-deterministic output, external I/O.
+- Potential false negatives: shared bug masking, generator bias, normalization hiding semantic differences, timeouts.
