@@ -2,14 +2,14 @@
         run: |
           which suay && suay --help
           which suay-vm && suay-vm --help
-name: ci
+name: artifact-validation
 
 on:
   push:
   pull_request:
 
 jobs:
-  contract:
+  artifact-validation-checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
