@@ -19,17 +19,22 @@
 
 ---
 
-## Architecture Overview
-![SuayLang Architecture](docs/assets/architecture.svg)
 
----
+## Architecture Overview
+<img src="docs/assets/architecture.svg" alt="Architecture overview" width="600">
+
+## Equivalence Research Flow
+<img src="docs/assets/research_flow.svg" alt="Equivalence research flow" width="600">
 
 ## Main claim → Evidence → Artifacts
-| Hypothesis | Status | Table/Plot | Raw Artifact | Command |
-|---|---|---|---|---|
-| H1: Equivalence | Confirmed | [Results Table](#results-at-a-glance), [Performance](#performance-comparison) | [diff_report.md](results/diff_report.md) | `make diff-test` |
-| H2: Diagnostics | Confirmed | [Diagnostics Table](results/golden_diagnostics.md) | [golden_diagnostics.md](results/golden_diagnostics.md) | `make golden` |
-| H3: Reproducibility | Confirmed | [Manifest](results/manifest.json) | [manifest.json](results/manifest.json) | `make reproduce-all` |
+| Artifact                | Seeds | Programs | Divergences | Coverage (AST/opcode) | Link |
+|-------------------------|-------|----------|-------------|-----------------------|------|
+| Differential test       | 10    | 5001     | 0           | 24/20                 | [diff_report.md](results/diff_report.md) |
+| Coverage                | 10    | 5001     | 0           | 24/20                 | [coverage.md](results/coverage.md) |
+| Benchmarks              | 10    | 5001     | 0           | 24/20                 | [benchmarks.md](results/benchmarks.md) |
+| Golden diagnostics      | –     | –        | –           | –                     | [golden_diagnostics.md](results/golden_diagnostics.md) |
+| Baseline                | 1     | 5        | 0           | 5/5                   | [baseline.md](results/baseline.md) |
+| Ablation                | 1     | 5        | 0           | 5/5                   | [ablation.md](results/ablation.md) |
 
 ## Definition: Observational Equivalence
 > Two executions are observationally equivalent if, under the defined comparator policy, their value, error (code+span), and stdout are indistinguishable for all test programs. The comparator ignores message formatting, non-deterministic output, and external I/O. See [docs/BASELINE.md](docs/BASELINE.md).
@@ -51,48 +56,11 @@ For more detail, see [docs/contributions.md](docs/contributions.md)
 ## If you read only one thing, read this:
 [docs/REVIEWER_GUIDE.md](docs/REVIEWER_GUIDE.md)
 
-## Architecture Overview
-```mermaid
-graph TD;
-    Parser --> AST --> Interpreter
-    AST --> Compiler --> Bytecode --> VM
-```
----
 
 **Meta-evidence and reviewer resources:**
 - [If Forced to Cut: Minimal Core](docs/IF_FORCED_TO_CUT.md)
 - [Known Intentional Imperfection](docs/KNOWN_INTENTIONAL_IMPERFECTION.md)
 - [Discussion Seed](docs/DISCUSSION_SEED.md)
-
-
----
-
-## Architecture Overview
-
-```mermaid
-graph TD;
-    A[Source] --> B[Lexer];
-    B --> C[Parser];
-    C --> D[AST];
-    D --> E[Interpreter];
-    D --> F[Compiler];
-    F --> G[Bytecode];
-    G --> H[VM];
-```
-
-## Equivalence Research Flow
-
-```mermaid
-graph TD;
-    P[Programs] --> I[Interpreter];
-    P --> C[Compiler];
-    C --> V[VM];
-    I --> S1[Normalized Snapshot];
-    V --> S2[Normalized Snapshot];
-    S1 & S2 --> D[Diff];
-    D --> M[Minimization];
-    M --> R[Reports];
-```
 
 ## Baseline Comparison
 
@@ -140,7 +108,7 @@ graph TD;
 ```mermaid
 ## Equivalence Research Flow
 <img src="docs/assets/research_flow.svg" alt="Equivalence research flow" width="600">
-See [docs/RELATED_WORK.md](docs/RELATED_WORK.md)
+See [Related Work](docs/RELATED_WORK.md#architecture--research-flow)
 ## Architecture & Research Flow
 <img src="docs/assets/architecture.svg" alt="Architecture overview" width="600">
 <img src="docs/assets/research_flow.svg" alt="Equivalence research flow" width="600">
