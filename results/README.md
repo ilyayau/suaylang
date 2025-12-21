@@ -39,6 +39,8 @@ This directory contains all reviewer-facing, reproducible research artifacts.
 - Ablation results: [ablation.md](ablation.md)
 - Coverage by construct: [coverage_by_construct.md](coverage_by_construct.md)
 - Mutation catch results: [mutation_catches.md](mutation_catches.md)
+- Claim–Evidence matrix: [../docs/CLAIM_EVIDENCE_MATRIX.md](../docs/CLAIM_EVIDENCE_MATRIX.md)
+- Reviewer portal: [../docs/REVIEWER_PORTAL.md](../docs/REVIEWER_PORTAL.md)
 
 ## Results Directory
 

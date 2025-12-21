@@ -16,6 +16,8 @@
 2. Run: `./scripts/reproduce.sh` (or `--full`)
 3. Inspect: [results/README.md](../results/README.md), [results/diff_report.md](../results/diff_report.md), [results/baseline.md](../results/baseline.md), [results/benchmarks.md](../results/benchmarks.md)
 4. For Windows: use `scripts/reproduce.ps1`
+5. See: [CLAIM_EVIDENCE_MATRIX.md](CLAIM_EVIDENCE_MATRIX.md) for claim–evidence mapping
+6. See: [REVIEWER_PORTAL.md](REVIEWER_PORTAL.md) for reviewer entry point
 
 ## Expected outputs
 - All results in `results/` (see `results/README.md`)

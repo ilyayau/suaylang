@@ -9,6 +9,8 @@
 - LIMITATIONS.md — Scope and external validity
 - STYLE_GUIDE.md — Docs style/tone/terminology
 - ... (see folder for full list)
+- CLAIM_EVIDENCE_MATRIX.md — Claim–Evidence matrix
+- REVIEWER_PORTAL.md — Reviewer portal (single entry point)
 
 ## Glossary
 - **Observational Equivalence:** No observable difference in value, error, or output between Interpreter and VM under the defined policy.

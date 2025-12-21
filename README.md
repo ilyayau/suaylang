@@ -25,6 +25,8 @@
 5. See: [docs/ARTIFACT_EVALUATION.md](docs/ARTIFACT_EVALUATION.md) (AE guide)
 6. See: [docs/TECH_REPORT.md](docs/TECH_REPORT.md) (mini tech report; PDF: see below)
 7. See: [docs/THREATS_TO_VALIDITY.md](docs/THREATS_TO_VALIDITY.md) (threats/limitations)
+8. See: [docs/CLAIM_EVIDENCE_MATRIX.md](docs/CLAIM_EVIDENCE_MATRIX.md) (claim–evidence matrix)
+9. See: [docs/REVIEWER_PORTAL.md](docs/REVIEWER_PORTAL.md) (reviewer portal)
 
 ---
 
