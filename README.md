@@ -18,8 +18,8 @@
 | Coverage         | results/coverage.md      | AST/opcode coverage        |
 | ...              | ...                      | ...                        |
 
-<img src="docs/diagrams/architecture.svg" width="700"/>
-<img src="docs/diagrams/research_flow.svg" width="700"/>
+![Architecture overview](docs/assets/architecture.svg)
+![Equivalence research flow](docs/assets/equiv_flow.svg)
 ## Shell Requirements
 
 All reproduction scripts require bash or zsh (not fish). If you use fish, run `bash ./scripts/reproduce.sh` explicitly.

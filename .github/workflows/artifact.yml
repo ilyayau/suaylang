@@ -8,45 +8,4 @@
 # Please refer to ci.yml for the canonical CI workflow.
 # 
 # 
-name: Artifact Evaluation
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Install dependencies
-        run: |
-          python -m pip install -U pip
-          python -m pip install -e .
-      - name: Run tests
-        run: |
-          python -m pytest -q
-      - name: Run research pipeline
-        run: |
-          make research
-      - name: Upload results artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: suaylang-results
-          path: results/
-      - name: Upload key markdown reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: suaylang-reports
-          path: |
-            results/*.md
-            results/*.json
-            docs/TECH_REPORT.md
-            docs/THREATS_TO_VALIDITY.md
-            ARTIFACT_EVALUATION.md
+ # File deleted for workflow cleanup
