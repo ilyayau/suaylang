@@ -33,6 +33,8 @@ dev = [
   "twine>=5.0",
   "markdown-it-py",
   "pypdf",
+  "matplotlib",
+  "rich"
 ]
 
 [project.scripts]
