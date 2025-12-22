@@ -2,23 +2,24 @@
 
 
 
+
 # SuayLang: Committee-Grade Research Artifact
 
-**Committee TL;DR (60 seconds)**
+**TL;DR:**
+- Deterministic diff-testing, coverage, baseline, artifact index
+- All results in results/, all docs in docs/
+- Reproduce: `make reproduce-all` or see below
+- [Committee one-pager](docs/COMMITTEE_ONEPAGER.md)
 
-- **Claim:** Interpreter and VM executions for SuayLang are observationally equivalent under a fixed, auditable observation policy, evidenced by deterministic, reproducible experiments.
-	- [Diff test: 0 divergences, 5001 programs, 10 seeds](results/diff_report.md)
-	- [Baseline: see results/baseline.md](results/baseline.md)
-	- [Coverage: 24 AST, 20 opcodes, results/coverage.md](results/coverage.md)
-**Reproduce (fast):** `bash ./scripts/reproduce.sh`
-**Reproduce (full):** `bash ./scripts/reproduce.sh --full`
----
+| Artifact         | File(s)                  | Description                |
+|------------------|--------------------------|----------------------------|
+| Diff test        | results/diff_report.md   | Main equivalence evidence  |
+| Baseline         | results/baseline.md      | Baseline timings           |
+| Coverage         | results/coverage.md      | AST/opcode coverage        |
+| ...              | ...                      | ...                        |
 
-**Observation Policy:** See [docs/OBSERVATION_POLICY.md](docs/OBSERVATION_POLICY.md) for the formal definition of what is compared, what is ignored, and how the claim can be falsified. This policy is the contract for all equivalence evidence.
-
-**So what?**
-SuayLang demonstrates that a research language can achieve bit-for-bit equivalence between interpreter and VM backends, under a transparent, reviewer-auditable observation policy. This artifact sets a new bar for reproducibility, evidence integrity, and reviewer experience in PL artifact evaluation.
-3. Inspect: [results/README.md](results/README.md) (artifact index)
+<img src="docs/diagrams/architecture.svg" width="700"/>
+<img src="docs/diagrams/research_flow.svg" width="700"/>
 ## Shell Requirements
 
 All reproduction scripts require bash or zsh (not fish). If you use fish, run `bash ./scripts/reproduce.sh` explicitly.

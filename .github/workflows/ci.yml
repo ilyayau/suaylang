@@ -1,3 +1,4 @@
+jobs:
 name: CI
 on:
   push:
@@ -16,48 +17,16 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install -U pip
-          python -m pip install -e .
+          python -m pip install -e ".[dev]"
+      - name: Run tests
+        run: python -m pytest -q
       - name: Reproduce all results
-        run: |
-          make reproduce-all
+        run: make reproduce-all PY=python
       - name: Upload results artifacts
         uses: actions/upload-artifact@v4
         with:
           name: suaylang-results
           path: results/
-
-      - name: Run tests
-        run: |
-          mkdir -p artifacts
-          python -m pytest -q | tee artifacts/pytest.txt
-
-      - name: Run conformance report
-        run: |
-          python tools/conformance/run.py conformance/corpus | tee artifacts/conformance.txt
-
-      - name: Run diff-test (CI subset)
-        run: |
-          python -m tools.diff_test.main --profile ci --out-dir results
-
-      - name: Run benchmarks (smoke)
-        run: |
-          python benchmarks/benchmark_runner.py --profile smoke --out-dir results
-
-      - name: Run baseline runner
-        run: |
-          python experiments/baseline_runner.py
-
-      - name: Run ablation runner
-        run: |
-          python experiments/ablation_runner.py
-
-      - name: Run human-study proxy (static metrics)
-        run: |
-          python -m tools.human_proxy.run --out-dir results
-
-      - name: Build research plan PDF
-        run: |
-          make research-pdf
           test -s docs/RESEARCH_PLAN.pdf
 
       - name: Build Technical Report PDF

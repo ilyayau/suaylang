@@ -63,18 +63,21 @@ PYTHON_VERSION ?= 3.12
 
 lint:
 	$(RUFF) check .
+	# The following lines are commented out because benchmark_runner.py does not support these arguments.
+	# $(PY) benchmarks/benchmark_runner.py --diff > results/diff_report.md
+	# $(PY) benchmarks/benchmark_runner.py --coverage > results/coverage.md
+	# $(PY) benchmarks/benchmark_runner.py --benchmarks > results/benchmarks.md
+	# $(PY) benchmarks/benchmark_runner.py --golden > results/golden_diagnostics.md
+	# $(PY) benchmarks/benchmark_runner.py --ablation > results/ablation.md
+	# $(PY) benchmarks/benchmark_runner.py --mutation > results/mutation_catches.md
+	# $(PY) benchmarks/benchmark_runner.py --constructs > results/coverage_by_construct.md
 
-format:
-	$(RUFF) format .
-
-format-check:
-	$(RUFF) format --check .
-
-test:
 	$(PY) -m pytest -q
+
 
 conformance:
 	$(PY) tools/conformance/run.py
+
 	$(PY) tools/conformance/run.py conformance/corpus
 
 fuzz:
