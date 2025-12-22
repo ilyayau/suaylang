@@ -46,31 +46,19 @@ tech-report-pdf:
 .PHONY: install test lint format format-check smoke build check conformance fuzz bench golden contract diff-test diff-test-ci human-study bench-report research research-pdf
 
 PY ?= python3
-PIP ?= pip
-RUFF ?= ruff
-
-install:
-	$(PY) -m venv .venv
-	$(PY) -m pip install -U pip
-	$(PY) -m pip install -e ".[dev]"
-PYTHON_VERSION ?= 3.12
-# Note: You can override the Python interpreter by running 'make PY=python3.12' or similar.
-# The PY variable specifies the Python interpreter to use (default: python3.12).
-# All CI and artifact scripts require Python $(PYTHON_VERSION).x.
-# You can also set PIP and RUFF similarly if needed.
-# ...existing code...
-# ...existing code...
 
 lint:
-	$(RUFF) check .
-	# The following lines are commented out because benchmark_runner.py does not support these arguments.
-	# $(PY) benchmarks/benchmark_runner.py --diff > results/diff_report.md
-	# $(PY) benchmarks/benchmark_runner.py --coverage > results/coverage.md
-	# $(PY) benchmarks/benchmark_runner.py --benchmarks > results/benchmarks.md
-	# $(PY) benchmarks/benchmark_runner.py --golden > results/golden_diagnostics.md
+PY ?= python3
+
+reproduce-all: baseline plots manifest
+
 	# $(PY) benchmarks/benchmark_runner.py --ablation > results/ablation.md
 	# $(PY) benchmarks/benchmark_runner.py --mutation > results/mutation_catches.md
+
+plots:
 	# $(PY) benchmarks/benchmark_runner.py --constructs > results/coverage_by_construct.md
+
+manifest:
 
 	$(PY) -m pytest -q
 
