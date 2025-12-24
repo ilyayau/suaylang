@@ -1,0 +1,17 @@
+Reproduction pipeline (ASCII)
+
+make reproduce-all
+  |
+  +--> experiments/baseline_runner.py
+  |      -> results/baseline_raw.json
+  |      -> results/baseline.md
+  |
+  +--> tools/plot_microbench.py + tools/plot_results.py
+  |      -> docs/plots/*.png
+  |      -> results/img/*.png
+  |
+  +--> tools/gen_manifest.py
+  |      -> results/manifest.json
+  |
+  +--> tools/gen_hashes.py
+         -> results/hashes.txt

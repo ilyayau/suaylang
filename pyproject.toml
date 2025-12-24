@@ -31,6 +31,10 @@ dev = [
   "rich"
 ]
 
+fuzz = [
+  "hypothesis>=6.0",
+]
+
 plots = [
   "matplotlib",
   "numpy",
@@ -80,7 +84,7 @@ exclude_lines = [
 ]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.12"
 files = [
   "suaylang/errors.py",
   "suaylang/tokens.py",

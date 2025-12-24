@@ -1,7 +1,9 @@
+import argparse
 import json
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 
 
 def _ensure_dirs():
@@ -46,8 +48,17 @@ def plot_coverage():
     plt.close()
 
 def main():
+    ap = argparse.ArgumentParser(prog="plot-results")
+    ap.add_argument(
+        "--fast",
+        action="store_true",
+        help="Generate only the minimal plot set for CI reproduce-fast.",
+    )
+    args = ap.parse_args()
+
     plot_performance()
-    plot_coverage()
+    if not args.fast:
+        plot_coverage()
 
 if __name__ == '__main__':
     main()

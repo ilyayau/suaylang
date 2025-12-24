@@ -1,10 +1,2 @@
-graph TD;
-    Parser --> AST --> Interpreter
-    AST --> Compiler --> Bytecode --> VM
-    A[Source] --> B[Lexer];
-    B --> C[Parser];
-    C --> D[AST];
-    D --> E[Interpreter];
-    D --> F[Compiler];
-    F --> G[Bytecode];
-    G --> H[VM];
+%% Deprecated: Mermaid sources live in docs/diagrams/src/*.mmd
+%% Use: docs/diagrams/src/architecture_overview.mmd

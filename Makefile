@@ -1,9 +1,13 @@
 
 PY ?= python
 
-.PHONY: reproduce-all baseline plots plot-microbench manifest hashes check-links \
+DOCKER ?= docker
+IMAGE ?= suaylang-offline
+
+.PHONY: reproduce-fast reproduce-all verify-results reproduce-offline \
+	baseline plots plots-fast plot-microbench manifest hashes check-links \
 	pytest conformance fuzz diff-test diff-test-ci golden contract bench research \
-	smoke build tech-report-pdf release-artifacts
+	smoke demo clean-room-test build tech-report-pdf release-artifacts
 
 # Link checker (reviewer UX)
 check-links:
@@ -19,13 +23,23 @@ plot-microbench:
 plots: plot-microbench
 	$(PY) tools/plot_results.py
 
+plots-fast: plot-microbench
+	$(PY) tools/plot_results.py --fast
+
 manifest:
 	$(PY) tools/gen_manifest.py
 
 hashes:
 	$(PY) tools/gen_hashes.py
 
-reproduce-all: baseline plots manifest hashes
+verify-results:
+	$(PY) tools/verify_results.py
+
+reproduce-fast: baseline plots-fast manifest hashes verify-results
+	@echo "[ok] reproduce-fast completed"
+
+
+reproduce-all: baseline diff-test-ci conformance golden plots manifest hashes verify-results
 	@echo "[ok] reproduce-all completed"
 
 # Tests and research utilities
@@ -61,6 +75,12 @@ research:
 smoke:
 	$(PY) scripts/smoke.py
 
+demo:
+	$(PY) scripts/demo.py
+
+clean-room-test:
+	bash scripts/clean_room_test.sh
+
 build:
 	$(PY) -m build
 
@@ -85,4 +105,8 @@ release-artifacts:
 	echo "OS: $$os" >> dist/MANIFEST.txt; \
 	tar -czf dist/results_$$gitsha.tar.gz results/ docs/COMMITTEE_ONEPAGER.md docs/TECH_REPORT.md dist/MANIFEST.txt
 	@echo "Release artifact created: dist/results_$$gitsha.tar.gz"
+
+reproduce-offline:
+	$(DOCKER) build -t $(IMAGE) .
+	$(DOCKER) run --rm --network=none $(IMAGE) --full
 

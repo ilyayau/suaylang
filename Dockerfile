@@ -12,15 +12,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Set workdir
 WORKDIR /workspace
 
-# Copy requirements and install
-COPY requirements.txt requirements.txt
-COPY requirements-dev.txt requirements-dev.txt
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt && \
-    pip install -r requirements-dev.txt
-
 # Copy rest of the code
 COPY . .
+
+# Install (editable) with required extras
+RUN pip install --upgrade pip && \
+    pip install -e ".[dev,plots]"
 
 # Default shell is bash for scripts
 SHELL ["/bin/bash", "-c"]

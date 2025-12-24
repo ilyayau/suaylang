@@ -1,38 +1,10 @@
-name: Artifact Evaluation
+name: Legacy Artifact Evaluation (Disabled)
+
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  build:
+  noop:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12.8'
-
-      - name: Install dependencies (dev + plots)
-        run: |
-          python -m pip install -U pip
-          python -m pip install -e ".[dev,plots]"
-
-      - name: Run tests
-        run: python -m pytest -q
-
-      - name: Run artifact pipeline
-        run: make reproduce-all PY=python
-
-      - name: Upload artifact bundle
-        uses: actions/upload-artifact@v4
-        with:
-          name: artifact-evaluation
-          path: |
-            results/
-            docs/assets/
-            docs/diagrams/
-            README.md
+      - run: echo "Disabled: use CI workflow (ci.yml)."

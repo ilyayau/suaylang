@@ -8,12 +8,11 @@ else
   exit 1
 fi
 python -m pip install -U pip
-python -m pip install -e .
-python -m pip install pytest
-python -m pytest -q
+python -m pip install -e ".[dev,plots]"
+python -m pytest --cov=suaylang --cov-report=term-missing
 if [ "$1" = "--full" ]; then
   make reproduce-all
 else
-  make research
+  make reproduce-fast
 fi
 echo REPRODUCED OK

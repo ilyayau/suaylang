@@ -1,0 +1,13 @@
+SuayLang architecture (ASCII)
+
+Suay source
+  |
+  v
+lexer -> parser -> AST
+  |              |
+  |              +--> interpreter (reference)
+  |
+  +--> compiler -> bytecode -> VM
+
+Both runtimes feed the observation policy:
+  normalize(outputs, diagnostics) -> compare -> evidence artifacts (results/*)

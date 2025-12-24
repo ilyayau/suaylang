@@ -1,0 +1,20 @@
+Equivalence evidence flow (ASCII)
+
+Claim: interpreter and VM are observationally equivalent
+  |
+  v
+Protocol: make reproduce-all
+  |
+  v
+Artifacts:
+  - results/* (tables, raw JSON, manifest)
+  - docs/plots/* (pre-rendered PNG)
+  |
+  v
+Integrity:
+  - results/manifest.json (sha256 per artifact)
+  - results/hashes.txt (sha256 list)
+  |
+  v
+Reviewer path:
+  portal -> onepager -> evidence map -> artifact index
