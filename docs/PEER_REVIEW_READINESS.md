@@ -9,3 +9,4 @@
 - Repro checklist: docs/ACM_REPRODUCIBILITY_CHECKLIST.md.
 - Citation policy: docs/CITATION_POLICY.md and CITATION.cff.
 - Threats/limitations: docs/THREATS_TO_VALIDITY.md, docs/LIMITATIONS.md.
+- Executable plan (Top-20 + milestones): docs/EXECUTION_PLAN.md.

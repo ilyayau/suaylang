@@ -3,6 +3,8 @@
 This roadmap focuses on research-grade evidence, reproducibility, and reviewer experience.
 It does not propose new language features.
 
+For an executable Top-20 + milestone breakdown, see docs/EXECUTION_PLAN.md.
+
 ## Next release (0.1.x)
 
 - Expand interpreter↔VM conformance corpus and tighten equivalence reporting.
