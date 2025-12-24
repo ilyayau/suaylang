@@ -3,6 +3,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+
+def _ensure_dirs():
+    os.makedirs('results/img', exist_ok=True)
+    os.makedirs('docs/plots', exist_ok=True)
+
 def plot_performance():
     with open('results/baseline_raw.json') as f:
         data = json.load(f)
@@ -16,8 +21,9 @@ def plot_performance():
     plt.ylabel('Mean Runtime (s)')
     plt.title('Performance Comparison')
     plt.tight_layout()
-    os.makedirs('results/img', exist_ok=True)
+    _ensure_dirs()
     plt.savefig('results/img/performance.png', dpi=150)
+    plt.savefig('docs/plots/performance.png', dpi=200)
     plt.close()
 
 def plot_coverage():
@@ -31,8 +37,9 @@ def plot_coverage():
     plt.ylabel('Coverage')
     plt.title('Coverage Summary')
     plt.tight_layout()
-    os.makedirs('results/img', exist_ok=True)
+    _ensure_dirs()
     plt.savefig('results/img/coverage.png', dpi=150)
+    plt.savefig('docs/plots/coverage.png', dpi=200)
     plt.close()
 
 def main():

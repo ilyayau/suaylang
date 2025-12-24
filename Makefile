@@ -1,71 +1,39 @@
-# Check all internal markdown links
+
+PY ?= python
+
+.PHONY: reproduce-all baseline plots plot-microbench manifest hashes check-links \
+	pytest conformance fuzz diff-test diff-test-ci golden contract bench research \
+	smoke build tech-report-pdf release-artifacts
+
+# Link checker (reviewer UX)
 check-links:
 	sh scripts/check_links.sh
-# Release artifact: dist/results_<gitsha>.tar.gz with results/ and key docs
-release-artifacts:
-	@echo "Generating release artifact..."
-	gitsha=$$(git rev-parse --short HEAD); \
-	date=$$(date -u +%Y-%m-%dT%H:%M:%SZ); \
-	pyver=$$($(PY) --version 2>&1 | awk '{print $$2}'); \
-	os=$$(uname -a); \
-	echo "Git SHA: $$gitsha" > dist/MANIFEST.txt; \
-	echo "Date: $$date" >> dist/MANIFEST.txt; \
-	echo "Python: $$pyver" >> dist/MANIFEST.txt; \
-	echo "OS: $$os" >> dist/MANIFEST.txt; \
-	tar -czf dist/results_$$gitsha.tar.gz results/ docs/COMMITTEE_ONEPAGER.md docs/TECH_REPORT.md results/baseline.md results/diff_report.md results/benchmarks.md dist/MANIFEST.txt
-	@echo "Release artifact created: dist/results_$$gitsha.tar.gz"
+
+# Canonical artifact pipeline
 baseline:
 	$(PY) experiments/baseline_runner.py
-	cp results/baseline_raw.json results/manifest.json
 
-plots:
+plot-microbench:
+	$(PY) tools/plot_microbench.py --in-md benchmarks/results.md --out docs/plots/microbench_relative.png
+
+plots: plot-microbench
 	$(PY) tools/plot_results.py
 
 manifest:
 	$(PY) tools/gen_manifest.py
 
-reproduce-all: baseline plots manifest
-	# The following lines are commented out because benchmark_runner.py does not support these arguments.
-	# $(PY) benchmarks/benchmark_runner.py --diff > results/diff_report.md
-	# $(PY) benchmarks/benchmark_runner.py --coverage > results/coverage.md
-	# $(PY) benchmarks/benchmark_runner.py --benchmarks > results/benchmarks.md
-	# $(PY) benchmarks/benchmark_runner.py --golden > results/golden_diagnostics.md
-	# $(PY) benchmarks/benchmark_runner.py --ablation > results/ablation.md
-	# $(PY) benchmarks/benchmark_runner.py --mutation > results/mutation_catches.md
-	# $(PY) benchmarks/benchmark_runner.py --constructs > results/coverage_by_construct.md
+hashes:
+	$(PY) tools/gen_hashes.py
 
-pdf:
-	$(PY) scripts/build_pdf.py
+reproduce-all: baseline plots manifest hashes
+	@echo "[ok] reproduce-all completed"
 
-ci: reproduce-all pdf
-tech-report-pdf:
-	pandoc paper/tech_report.md -o paper/suaylang-tech-report.pdf \
-	  --defaults=paper/pandoc_tr_pdf_args.txt || \
-	  pandoc paper/tech_report.md -o paper/suaylang-tech-report.pdf \
-	    --pdf-engine=xelatex --toc --number-sections --highlight-style=tango
-.PHONY: install test lint format format-check smoke build check conformance fuzz bench golden contract diff-test diff-test-ci human-study bench-report research research-pdf
-
-PY ?= python3
-
-lint:
-PY ?= python3
-
-reproduce-all: baseline plots manifest
-
-	# $(PY) benchmarks/benchmark_runner.py --ablation > results/ablation.md
-	# $(PY) benchmarks/benchmark_runner.py --mutation > results/mutation_catches.md
-
-plots:
-	# $(PY) benchmarks/benchmark_runner.py --constructs > results/coverage_by_construct.md
-
-manifest:
-
+# Tests and research utilities
+pytest:
 	$(PY) -m pytest -q
-
 
 conformance:
 	$(PY) tools/conformance/run.py
-
 	$(PY) tools/conformance/run.py conformance/corpus
 
 fuzz:
@@ -86,16 +54,6 @@ contract:
 bench:
 	$(PY) benchmarks/benchmark_runner.py --profile full --out-dir results
 
-bench-report:
-	$(PY) benchmarks/benchmark_runner.py --profile full --out-dir results
-
-human-study:
-	$(PY) -m tools.human_proxy.run --out-dir results
-
-research-pdf:
-	$(PY) tools/build_research_plan_pdf.py
-
-
 research:
 	$(PY) -m tools.research_run --out-dir results --diff-profile ci --bench-profile smoke
 	$(PY) experiments/baseline_runner.py
@@ -106,11 +64,25 @@ smoke:
 build:
 	$(PY) -m build
 
-tr:
-	pandoc paper/TR-2025-01.md -o paper/TR-2025-01.pdf \
+# Optional: PDF generation (requires pandoc + LaTeX)
+tech-report-pdf:
+	pandoc paper/tech_report.md -o paper/suaylang-tech-report.pdf \
 	  --defaults=paper/pandoc_tr_pdf_args.txt || \
-	  pandoc paper/TR-2025-01.md -o paper/TR-2025-01.pdf \
+	  pandoc paper/tech_report.md -o paper/suaylang-tech-report.pdf \
 	    --pdf-engine=xelatex --toc --number-sections --highlight-style=tango
 
-check: lint format-check test smoke build
+# Optional: release artifact bundle
+release-artifacts:
+	@mkdir -p dist
+	@echo "Generating release artifact..."
+	gitsha=$$(git rev-parse --short HEAD); \
+	date=$$(date -u +%Y-%m-%dT%H:%M:%SZ); \
+	pyver=$$($(PY) --version 2>&1 | awk '{print $$2}'); \
+	os=$$(uname -a); \
+	echo "Git SHA: $$gitsha" > dist/MANIFEST.txt; \
+	echo "Date: $$date" >> dist/MANIFEST.txt; \
+	echo "Python: $$pyver" >> dist/MANIFEST.txt; \
+	echo "OS: $$os" >> dist/MANIFEST.txt; \
+	tar -czf dist/results_$$gitsha.tar.gz results/ docs/COMMITTEE_ONEPAGER.md docs/TECH_REPORT.md dist/MANIFEST.txt
+	@echo "Release artifact created: dist/results_$$gitsha.tar.gz"
 

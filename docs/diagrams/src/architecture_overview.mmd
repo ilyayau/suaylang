@@ -1,0 +1,8 @@
+flowchart LR
+  P[Suay program\n(baseline_suite/, benchmarks/)] --> FE[Front-end\nlexer → parser → AST]
+  FE --> I[Reference interpreter\nexec(AST)]
+  FE --> C[Compiler\ncompile(AST) → bytecode]
+  C --> V[Bytecode VM\nexec(code)]
+  I --> OP[Observation policy\nnormalize + compare]
+  V --> OP
+  OP --> E[Evidence artifacts\nresults/* + hashes]

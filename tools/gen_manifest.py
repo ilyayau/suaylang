@@ -1,10 +1,11 @@
 import hashlib
 import json
 import os
+import sys
 
 ARTIFACTS = [
     'baseline_raw.json',
-    'baseline_summary.md',
+    'baseline.md',
     'diff_report.md',
     'coverage.md',
     'benchmarks.md',
@@ -21,7 +22,7 @@ RESULTS_DIR = 'results'
 manifest = {
     'commit': os.popen('git rev-parse HEAD').read().strip(),
     'artifacts': {},
-    'python_version': os.popen('python3 --version').read().strip(),
+    'python_version': sys.version.replace("\n", " ").strip(),
     'os': os.popen('uname -a').read().strip(),
 }
 

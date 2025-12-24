@@ -8,7 +8,7 @@ Welcome, committee reviewers! This portal provides a single, stable entry point 
 - [results/README.md](../results/README.md) — Artifact index, evidence map
 - [docs/ARTIFACT_EVALUATION.md](ARTIFACT_EVALUATION.md) — Artifact evaluation guide
 - [docs/COMMITTEE_ONEPAGER.md](COMMITTEE_ONEPAGER.md) — 1-page summary
-- [docs/TECH_REPORT.md](TECH_REPORT.md) — Technical report
+- [docs/TECHREPORT.md](TECHREPORT.md) — Technical report
 - [docs/THREATS_TO_VALIDITY.md](THREATS_TO_VALIDITY.md) — Threats/limitations
 
 ## Reproduction Instructions

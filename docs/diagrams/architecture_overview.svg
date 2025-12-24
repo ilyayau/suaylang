@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="340" viewBox="0 0 980 340">
+  <rect x="0" y="0" width="980" height="340" fill="white"/>
+  <style>
+    .box { fill: #ffffff; stroke: #111827; stroke-width: 2; }
+    .hdr { font: 700 18px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #111827; }
+    .txt { font: 14px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial; fill: #111827; }
+    .muted { fill: #374151; }
+    .arrow { stroke: #111827; stroke-width: 2; fill: none; marker-end: url(#arrow); }
+  </style>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#111827"/>
+    </marker>
+  </defs>
+
+  <text x="24" y="38" class="hdr">Architecture overview (two executions + evidence pipeline)</text>
+  <text x="24" y="62" class="txt muted">Interpreter and VM are separate execution strategies for the same language front-end.</text>
+
+  <!-- Source -->
+  <rect x="24" y="96" width="200" height="80" class="box" rx="10"/>
+  <text x="44" y="128" class="txt">Suay source program</text>
+  <text x="44" y="152" class="txt muted">(baseline_suite/, benchmarks/)</text>
+
+  <!-- Front-end -->
+  <rect x="270" y="96" width="220" height="80" class="box" rx="10"/>
+  <text x="290" y="124" class="txt">Front-end</text>
+  <text x="290" y="148" class="txt muted">lexer → parser → AST</text>
+
+  <path d="M224 136 L270 136" class="arrow"/>
+
+  <!-- Interpreter -->
+  <rect x="540" y="74" width="200" height="90" class="box" rx="10"/>
+  <text x="560" y="110" class="txt">Reference interpreter</text>
+  <text x="560" y="134" class="txt muted">exec(AST) → value/error/stdout</text>
+
+  <!-- Compiler+VM -->
+  <rect x="540" y="186" width="200" height="90" class="box" rx="10"/>
+  <text x="560" y="222" class="txt">Compiler + bytecode VM</text>
+  <text x="560" y="246" class="txt muted">compile(AST) → code → exec(code)</text>
+
+  <path d="M490 136 L540 118" class="arrow"/>
+  <path d="M490 136 L540 232" class="arrow"/>
+
+  <!-- Comparator / observation policy -->
+  <rect x="780" y="120" width="176" height="120" class="box" rx="10"/>
+  <text x="800" y="152" class="txt">Observation policy</text>
+  <text x="800" y="176" class="txt muted">normalize outputs</text>
+  <text x="800" y="198" class="txt muted">compare traces</text>
+  <text x="800" y="220" class="txt muted">emit evidence</text>
+
+  <path d="M740 118 L780 156" class="arrow"/>
+  <path d="M740 232 L780 196" class="arrow"/>
+
+  <!-- Evidence -->
+  <rect x="24" y="210" width="466" height="104" class="box" rx="10"/>
+  <text x="44" y="242" class="txt">Evidence artifacts</text>
+  <text x="44" y="266" class="txt muted">results/* (tables, JSON) + results/manifest.json + results/hashes.txt</text>
+  <text x="44" y="290" class="txt muted">docs/plots/* and docs/diagrams/* (pre-rendered figures)</text>
+
+  <path d="M780 240 L490 262" class="arrow"/>
+</svg>

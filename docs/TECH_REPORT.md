@@ -1,7 +1,7 @@
 # SuayLang Technical Report
 
 ## Abstract
-SuayLang is a research language designed to test the limits of observational equivalence between interpreter and VM backends under a fixed, auditable comparator policy. We present a deterministic, reproducible artifact with a full test harness, coverage metrics, and a robust diagnostics contract. Our evaluation demonstrates that, for a well-defined subset, interpreter and VM executions are indistinguishable on all measured programs, with all results and artifacts versioned and reproducible.
+SuayLang is a research language designed to study observational equivalence between two independent executions: a reference interpreter and a bytecode VM, under a fixed and auditable observation policy. The artifact is structured so that each claim maps to versioned evidence files and a reproduction command, rather than relying on narrative-only assertions.
 
 ## Research Question & Hypothesis
 - **RQ:** Can interpreter and VM executions for a non-trivial language be made observationally equivalent (value, error, stdout) under a fixed comparator policy, across a large, seeded program set?
@@ -16,21 +16,19 @@ SuayLang is a research language designed to test the limits of observational equ
 ## Semantics & Observational Equivalence
 - **Reference Interpreter:** Implements the full language spec, with deterministic error and value reporting.
 - **VM:** Bytecode-based backend, sharing the same test suite and comparator policy.
-- **Observational Equivalence:** Defined as indistinguishability in value, error (code+span), and stdout, ignoring formatting and non-deterministic output. See [docs/BASELINE.md](BASELINE.md).
+- **Observational Equivalence:** Defined as indistinguishability in value, error (code+span), and stdout, subject to explicit exclusions. See [docs/OBSERVATION_POLICY.md](OBSERVATION_POLICY.md).
 
 ## Methodology
 - **Test Harness:** All .suay and .py programs in baseline_suite/ are run through both backends.
-- **Seeds:** 10 fixed seeds, 5001 programs per seed.
-- **Determinism:** All experiments record commit hash, environment, and are fully reproducible.
-- **Comparator Policy:** Ignores formatting, non-deterministic output, and external I/O. See [docs/BASELINE.md](BASELINE.md).
+- **Seeds:** Seeds and corpus sizes are recorded in the generated evidence artifacts (do not hard-code them here).
+- **Determinism:** Experiments record commit hash and environment metadata in results/manifest.json.
+- **Comparator / Observation Policy:** See docs/OBSERVATION_POLICY.md.
 
 ## Evaluation
 - **Metrics:** Divergences, coverage (AST/opcode), runtime, diagnostics stability.
 - **Tables/Figures:**
-    - 0 divergences on 5001 programs, 10 seeds.
-    - Coverage: 24 AST constructs, 20 opcodes.
-    - Benchmarks: 6 programs, median VM runtime 0.138s.
-- **Artifacts:** All results in results/, with summary tables in README and [results/README.md](../results/README.md).
+    - All concrete values are read from artifacts under results/ and docs/plots/.
+- **Artifacts:** See results/README.md for the artifact index and docs/CLAIM_EVIDENCE_MATRIX.md for claim↔evidence mapping.
 
 ## Limitations & Threats to Validity
 - See [docs/THREATS_TO_VALIDITY.md](THREATS_TO_VALIDITY.md) for detailed discussion.
@@ -38,14 +36,8 @@ SuayLang is a research language designed to test the limits of observational equ
 
 ## Related Work
 - See [docs/RELATED_WORK.md](RELATED_WORK.md) for full citations and comparison table.
-- Comparison table:
 
-| System         | Observational Equivalence | Diagnostics Contract | Determinism | Artifacted |
-|----------------|--------------------------|---------------------|-------------|------------|
-| SuayLang       | Yes                      | Yes                 | Yes         | Yes        |
-| Python         | No                       | Partial             | No          | Yes        |
-| OCaml          | No                       | Partial             | Yes         | Yes        |
-| Lua            | No                       | No                  | No          | Yes        |
+Comparative claims are intentionally not asserted in this report; committee reviewers should treat this as an artifact report, not a survey.
 
 ## Reproducibility Checklist
 - Hardware: x86_64 Linux, Python 3.12+

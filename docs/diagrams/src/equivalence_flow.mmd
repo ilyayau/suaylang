@@ -1,0 +1,5 @@
+flowchart LR
+  C[Claim: observational equivalence] --> P[Protocol: make reproduce-all]
+  P --> A[Artifacts: results/* + docs/plots/*]
+  A --> H[Integrity: manifest.json + hashes.txt]
+  H --> R[Reviewer path: portal → onepager → artifact index]

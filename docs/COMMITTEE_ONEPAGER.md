@@ -1,34 +1,47 @@
+# COMMITTEE ONE-PAGER (SuayLang)
 
-# SuayLang: Committee One-Pager
+## Claim
 
-## Research Impact
-SuayLang sets a new standard for artifact evaluation in programming languages research by delivering bit-for-bit equivalence between interpreter and VM backends, under a transparent, reviewer-auditable observation policy. All claims are directly evidenced, reproducible, and falsifiable by construction.
+**Primary claim:** SuayLang provides **two independent executions** (a reference interpreter and a bytecode VM) and a **reproducible protocol** to test observational equivalence under an explicit observation policy.
 
-## Main Claim
-Interpreter and VM executions for SuayLang are observationally equivalent under a fixed, formal observation policy ([see policy](OBSERVATION_POLICY.md)), evidenced by deterministic, reproducible experiments.
+This one-pager is intentionally “paper-like”: every claim must map to a concrete evidence file and a reproduction command.
 
-## Evidence & Results
-- **Diff test:** 0 divergences, 5001 programs, 10 seeds ([diff_report.md](../results/diff_report.md))
-- **Baseline:** 5 programs, timings ([baseline.md](../results/baseline.md))
-- **Coverage:** 24 AST, 20 opcodes ([coverage.md](../results/coverage.md))
-- **Diagnostics contract:** ([golden_diagnostics.md](../results/golden_diagnostics.md))
-- **Ablation/mutation:** ([ablation.md](../results/ablation.md), [mutation_catches.md](../results/mutation_catches.md))
-- **Manifest/environment:** ([manifest.json](../results/manifest.json), [environment.json](../results/environment.json))
+## Protocol
 
-## Observation Policy
-See [docs/OBSERVATION_POLICY.md](OBSERVATION_POLICY.md) for the formal definition of what is compared, what is ignored, and how the claim can be falsified. This policy is the contract for all equivalence evidence.
+Canonical command (single entrypoint):
 
-## Reviewer Experience
-- **Reproduce (fast):** `bash ./scripts/reproduce.sh`
-- **Reproduce (full):** `bash ./scripts/reproduce.sh --full`
-- **Artifact index:** [results/README.md](../results/README.md)
-- **Reviewer attack questions:** [REVIEWER_ATTACKS.md](REVIEWER_ATTACKS.md)
+```sh
+make reproduce-all
+```
 
-## Limitations & Threats
-- Only tested on Linux, Python 3.12.x
-- v0.1, single-threaded, no concurrency/JIT/optimizer
-- Comparator ignores formatting, possible false negatives ([see policy](OBSERVATION_POLICY.md))
-- IDE plugin (vscode-extension/) is WIP and not part of evaluated claims for v0.1
+Alternative scripted entrypoint (reviewer-friendly):
 
-## How to Falsify
-See [OBSERVATION_POLICY.md](OBSERVATION_POLICY.md#how-to-falsify-this-claim) for explicit falsifiability criteria. Any divergence in value, error, or stdout between interpreter and VM falsifies the main claim and will be caught by the test harness.
+```sh
+bash ./scripts/reproduce.sh
+```
+
+Environment expectation:
+- Linux + Python 3.12.x are the primary supported settings for the artifact pipeline.
+
+## Evidence map (claim → artifact → reproduce)
+
+| Claim surface | Evidence artifact(s) | Where to read | Reproduce |
+|---|---|---|---|
+| Observation policy (what is compared / ignored) | docs/OBSERVATION_POLICY.md | policy + falsification criteria | n/a |
+| Equivalence (interpreter vs VM) | results/diff_report.md (and/or JSON when present) | divergence summary and counterexamples | `make reproduce-all` |
+| Baseline suite timings | results/baseline.md + results/baseline_raw.json | per-program median runtimes | `make baseline` |
+| Microbench (interp vs VM, relative) | benchmarks/results.md + docs/plots/microbench_relative.png | “example run” table + derived plot | `make plot-microbench` |
+| Artifact integrity (hashes) | results/manifest.json + results/hashes.txt | per-artifact SHA-256 | `make hashes` |
+
+## Where artifacts are
+
+- Reviewer portal: docs/REVIEWER_PORTAL.md
+- Claim↔evidence matrix: docs/CLAIM_EVIDENCE_MATRIX.md
+- Artifact index: results/README.md
+- Reproducibility contract (including “if results diverge”): docs/REPRODUCIBILITY.md
+- Threats and limitations: docs/THREATS_TO_VALIDITY.md, docs/LIMITATIONS.md
+
+## Notes for reviewers
+
+- Numeric values are not asserted here; they are read from generated artifacts under results/.
+- Any divergence or missing artifact is a falsification signal per docs/OBSERVATION_POLICY.md.
