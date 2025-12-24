@@ -10,7 +10,11 @@ It matches the behavior of:
 
 - **Whitespace**: spaces, tabs, and `\r` are ignored.
 - **Newlines** (`NEWLINE`) are significant.
-- **Comments**: `⍝ ...` to end-of-line. (The newline itself is still tokenized.)
+- **Comments**: line comments are supported:
+    - Unicode: `⍝ ...` to end-of-line
+    - ASCII: `// ...` to end-of-line
+    - Compatibility: `# ...` to end-of-line (accepted by the lexer for baseline compatibility; `#t/#f/#u` are literals, not comments)
+    (The newline itself is still tokenized.)
 - **Strings**: `"..."` with escapes `\n`, `\t`, `\"`, `\\`. Strings cannot contain raw newlines.
 - **Identifiers** (`IDENT`): Unicode letters plus `_` as start; continue with letters/digits/`_`.
 - ASCII operator fallbacks exist: `*`/`/`/`-` are accepted for `×`/`÷`/`−`.

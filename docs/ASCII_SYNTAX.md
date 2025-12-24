@@ -56,6 +56,12 @@ ASCII-only comment syntax:
 |---|---|---|
 | `// ...` | `⍝ ...` | line comment |
 
+Compatibility note:
+
+- The lexer also accepts `# ...` as a line comment for baseline-suite compatibility.
+- `# ...` is not the canonical spelling for new SuayLang code.
+- `#t`, `#f`, and `#u` are literals, not comments.
+
 ## Side-by-side example
 
 ASCII (canonical):

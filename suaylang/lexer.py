@@ -205,6 +205,9 @@ class Lexer:
             # Comment: ⍝ ... end of line (but keep newline token).
             # ASCII alias: // ... end of line.
             # NEW: Accept lines starting with '#' as comments (for baseline_suite compatibility)
+            if ch == "#" and self._peek_n(2) in ("#t", "#f", "#u"):
+                break
+
             if ch == "⍝" or (ch == "/" and not self._at_end() and self._peek_n(2) == "//") or ch == "#":
                 if ch == "/":
                     # consume both slashes

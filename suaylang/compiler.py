@@ -113,7 +113,8 @@ class Compiler:
                 for k, v in entries:
                     self._compile_expr(b, k)
                     self._compile_expr(b, v)
-                b.emit("MAKE_MAP", len(entries), span=e.span)
+                span = entries[0][0].span if entries else e.span
+                b.emit("MAKE_MAP", len(entries), span=span)
 
             case ast.VariantExpr(tag=tag, payload=payload):
                 self._compile_expr(b, payload)
