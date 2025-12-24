@@ -16,10 +16,10 @@
 | Diff test        | results/diff_report.md   | Main equivalence evidence  |
 | Baseline         | results/baseline.md      | Baseline timings           |
 | Coverage         | results/coverage.md      | AST/opcode coverage        |
-| ...              | ...                      | ...                        |
+
 
 ![Architecture overview](docs/assets/architecture.svg)
-![Equivalence research flow](docs/assets/equiv_flow.svg)
+![Equivalence research flow](docs/assets/research_flow.svg)
 ## Shell Requirements
 
 All reproduction scripts require bash or zsh (not fish). If you use fish, run `bash ./scripts/reproduce.sh` explicitly.

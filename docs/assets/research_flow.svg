@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="260" viewBox="0 0 900 260">
+  <style>
+    .box{fill:#fff;stroke:#111;stroke-width:2;}
+    .t{font:14px sans-serif;fill:#111;}
+    .a{stroke:#111;stroke-width:2;fill:none;marker-end:url(#m);} 
+  </style>
+  <defs>
+    <marker id="m" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L9,3 L0,6 Z" fill="#111" />
+    </marker>
+  </defs>
+
+  <text class="t" x="20" y="30">Equivalence research flow (simplified)</text>
+
+  <rect class="box" x="20" y="90" width="170" height="60" rx="8"/>
+  <text class="t" x="105" y="125" text-anchor="middle">Programs</text>
+
+  <rect class="box" x="230" y="40" width="170" height="60" rx="8"/>
+  <text class="t" x="315" y="75" text-anchor="middle">Interpreter</text>
+
+  <rect class="box" x="230" y="140" width="170" height="60" rx="8"/>
+  <text class="t" x="315" y="175" text-anchor="middle">Compiler → VM</text>
+
+  <rect class="box" x="450" y="40" width="190" height="60" rx="8"/>
+  <text class="t" x="545" y="75" text-anchor="middle">Normalized snapshot</text>
+
+  <rect class="box" x="450" y="140" width="190" height="60" rx="8"/>
+  <text class="t" x="545" y="175" text-anchor="middle">Normalized snapshot</text>
+
+  <rect class="box" x="680" y="90" width="190" height="60" rx="8"/>
+  <text class="t" x="775" y="125" text-anchor="middle">Diff → Report</text>
+
+  <path class="a" d="M190,120 L230,70"/>
+  <path class="a" d="M190,120 L230,170"/>
+  <path class="a" d="M400,70 L450,70"/>
+  <path class="a" d="M400,170 L450,170"/>
+  <path class="a" d="M640,70 L680,120"/>
+  <path class="a" d="M640,170 L680,120"/>
+</svg>

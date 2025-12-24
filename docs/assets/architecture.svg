@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="220" viewBox="0 0 900 220">
+  <style>
+    .box{fill:#fff;stroke:#111;stroke-width:2;}
+    .t{font:14px sans-serif;fill:#111;}
+    .a{stroke:#111;stroke-width:2;fill:none;marker-end:url(#m);} 
+  </style>
+  <defs>
+    <marker id="m" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L9,3 L0,6 Z" fill="#111" />
+    </marker>
+  </defs>
+
+  <rect class="box" x="20" y="60" width="140" height="60" rx="8"/>
+  <text class="t" x="90" y="95" text-anchor="middle">Source</text>
+
+  <rect class="box" x="190" y="60" width="140" height="60" rx="8"/>
+  <text class="t" x="260" y="95" text-anchor="middle">Lexer</text>
+
+  <rect class="box" x="360" y="60" width="140" height="60" rx="8"/>
+  <text class="t" x="430" y="95" text-anchor="middle">Parser</text>
+
+  <rect class="box" x="530" y="60" width="140" height="60" rx="8"/>
+  <text class="t" x="600" y="95" text-anchor="middle">AST</text>
+
+  <rect class="box" x="700" y="20" width="170" height="60" rx="8"/>
+  <text class="t" x="785" y="55" text-anchor="middle">Interpreter</text>
+
+  <rect class="box" x="700" y="120" width="170" height="60" rx="8"/>
+  <text class="t" x="785" y="155" text-anchor="middle">Compiler → VM</text>
+
+  <path class="a" d="M160,90 L190,90"/>
+  <path class="a" d="M330,90 L360,90"/>
+  <path class="a" d="M500,90 L530,90"/>
+  <path class="a" d="M670,90 L700,50"/>
+  <path class="a" d="M670,90 L700,150"/>
+
+  <text class="t" x="20" y="30">SuayLang architecture (simplified)</text>
+</svg>
