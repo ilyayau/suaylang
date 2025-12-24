@@ -7,7 +7,7 @@ name = "suaylang"
 version = "0.2.0"
 description = "SuayLang: an explicit control-flow language (interpreter + bytecode VM)"
 readme = "README.md"
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.12,<3.14"
 authors = [{ name = "SuayLang contributors" }]
 classifiers = [
   "Programming Language :: Python :: 3",
@@ -28,8 +28,18 @@ dev = [
   "twine>=5.0",
   "markdown-it-py",
   "pypdf",
-  "matplotlib",
   "rich"
+]
+
+plots = [
+  "matplotlib",
+  "numpy",
+]
+
+docs = [
+  "mkdocs>=1.6",
+  "mkdocs-material>=9.5",
+  "pymdown-extensions>=10.0",
 ]
 
 [project.scripts]

@@ -1,114 +1,114 @@
 {
   "env": {
     "python_version": "3.13.11",
-    "os": "Linux-6.18.1-arch1-2-x86_64-with-glibc2.42",
+    "os": "Linux-6.12.62-2-cachyos-lts-x86_64-with-glibc2.42",
     "cpu": "",
-    "commit_hash": "6eb2298b51251a5f34c9f737004385a4392a857a"
+    "commit_hash": "6501e25f7eea47ed6d163c2880d53da630ad70b6"
   },
   "benchmarks": [
     {
       "name": "fib",
       "python": {
-        "median_runtime": 0.02676877100020647,
+        "median_runtime": 0.017888090999804263,
         "stdout": "fib=55\n",
         "stderr": "",
         "exit_code": 0
       },
       "suay_interpreter": {
-        "median_runtime": 0.17675651899844524,
+        "median_runtime": 0.14897492399995826,
         "stdout": "",
         "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/fib.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
         "exit_code": 2
       },
       "suay_vm": {
-        "median_runtime": 0.16540009200070926,
-        "stdout": "",
-        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/fib.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: Fibonacci (10th)\n^\n",
-        "exit_code": 1
+        "median_runtime": 0.14284452799984138,
+        "stdout": "fib=55\nUnit()\n",
+        "stderr": "",
+        "exit_code": 0
       }
     },
     {
       "name": "map_fold",
       "python": {
-        "median_runtime": 0.02012929900047311,
+        "median_runtime": 0.018146045999856142,
         "stdout": "sum_squares=55\n",
         "stderr": "",
         "exit_code": 0
       },
       "suay_interpreter": {
-        "median_runtime": 0.17893403000016406,
+        "median_runtime": 0.14876009599993267,
         "stdout": "",
         "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/map_fold.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
         "exit_code": 2
       },
       "suay_vm": {
-        "median_runtime": 0.1692128609993233,
-        "stdout": "",
-        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/map_fold.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: map and fold\n^\n",
-        "exit_code": 1
+        "median_runtime": 0.14015713600019808,
+        "stdout": "sum_squares=55\nUnit()\n",
+        "stderr": "",
+        "exit_code": 0
       }
     },
     {
       "name": "oob_error",
       "python": {
-        "median_runtime": 0.020293113999287016,
+        "median_runtime": 0.017811577999964356,
         "stdout": "error: list index out of range\n",
         "stderr": "",
         "exit_code": 0
       },
       "suay_interpreter": {
-        "median_runtime": 0.1604578099995706,
+        "median_runtime": 0.14911809199929849,
         "stdout": "",
         "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/oob_error.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
         "exit_code": 2
       },
       "suay_vm": {
-        "median_runtime": 0.15742453300117631,
+        "median_runtime": 0.14381986199987296,
         "stdout": "",
-        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/oob_error.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: error reporting (out-of-bounds)\n^\n",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/.local/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 18, in main\n    result, _ = vm.run_with_stats(code)\n                ~~~~~~~~~~~~~~~~~^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py\", line 102, in run_with_stats\n    return self.run_in_env_with_stats(code, env)\n           ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py\", line 216, in run_in_env_with_stats\n    stack.append(self._apply(fn, arg, call_span=ins.span))\n                 ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm.py\", line 675, in _apply\n    raise SuayRuntimeError(\n    ...<4 lines>...\n    )\nsuaylang.runtime.SuayRuntimeError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/oob_error.suay:3:11: runtime error: Value is not callable: list\nresult <- nums . 10\n          ^\n",
         "exit_code": 1
       }
     },
     {
       "name": "sum_to_n",
       "python": {
-        "median_runtime": 0.02107602800060704,
+        "median_runtime": 0.017657598999903712,
         "stdout": "sum=500500\n",
         "stderr": "",
         "exit_code": 0
       },
       "suay_interpreter": {
-        "median_runtime": 0.17435709700112056,
+        "median_runtime": 0.15301105600065057,
         "stdout": "",
         "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/sum_to_n.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
         "exit_code": 2
       },
       "suay_vm": {
-        "median_runtime": 0.14175849999992352,
+        "median_runtime": 0.15194394800073496,
         "stdout": "",
-        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/sum_to_n.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: sum of first N natural numbers\n^\n",
+        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/.local/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 15, in main\n    program = Parser(tokens, src, filename=args.file).parse_program()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 33, in parse_program\n    expr = self._parse_expr()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 79, in _parse_expr\n    return self._parse_dispatch()\n           ~~~~~~~~~~~~~~~~~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 82, in _parse_dispatch\n    expr = self._parse_or()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 115, in _parse_or\n    expr = self._parse_and()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 128, in _parse_and\n    expr = self._parse_compare()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 141, in _parse_compare\n    expr = self._parse_add()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 161, in _parse_add\n    expr = self._parse_mul()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 174, in _parse_mul\n    expr = self._parse_prefix()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 193, in _parse_prefix\n    return self._parse_call()\n           ~~~~~~~~~~~~~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 196, in _parse_call\n    expr = self._parse_variant()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 226, in _parse_variant\n    return self._parse_primary()\n           ~~~~~~~~~~~~~~~~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 399, in _parse_primary\n    val = self._parse_expr()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 79, in _parse_expr\n    return self._parse_dispatch()\n           ~~~~~~~~~~~~~~~~~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 82, in _parse_dispatch\n    expr = self._parse_or()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 115, in _parse_or\n    expr = self._parse_and()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 128, in _parse_and\n    expr = self._parse_compare()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 141, in _parse_compare\n    expr = self._parse_add()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 161, in _parse_add\n    expr = self._parse_mul()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 174, in _parse_mul\n    expr = self._parse_prefix()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 193, in _parse_prefix\n    return self._parse_call()\n           ~~~~~~~~~~~~~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 196, in _parse_call\n    expr = self._parse_variant()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 226, in _parse_variant\n    return self._parse_primary()\n           ~~~~~~~~~~~~~~~~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 300, in _parse_primary\n    body = self._parse_expr()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 79, in _parse_expr\n    return self._parse_dispatch()\n           ~~~~~~~~~~~~~~~~~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 97, in _parse_dispatch\n    arm_expr = self._parse_expr()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 79, in _parse_expr\n    return self._parse_dispatch()\n           ~~~~~~~~~~~~~~~~~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 82, in _parse_dispatch\n    expr = self._parse_or()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 115, in _parse_or\n    expr = self._parse_and()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 128, in _parse_and\n    expr = self._parse_compare()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 141, in _parse_compare\n    expr = self._parse_add()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 161, in _parse_add\n    expr = self._parse_mul()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 174, in _parse_mul\n    expr = self._parse_prefix()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 193, in _parse_prefix\n    return self._parse_call()\n           ~~~~~~~~~~~~~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 196, in _parse_call\n    expr = self._parse_variant()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 226, in _parse_variant\n    return self._parse_primary()\n           ~~~~~~~~~~~~~~~~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 422, in _parse_primary\n    self._error_here(\"Expected an expression\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/parser.py\", line 573, in _error_here\n    raise ParseError(\n    ...<7 lines>...\n    )\nsuaylang.parser.ParseError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/sum_to_n.suay:6:14: syntax error: Expected an expression (got \u21af)\n    |> #t => << acc\n             ^\n",
         "exit_code": 1
       }
     },
     {
       "name": "variant_match",
       "python": {
-        "median_runtime": 0.02218598900071811,
+        "median_runtime": 0.019850522000524506,
         "stdout": "",
         "stderr": "",
         "exit_code": 0
       },
       "suay_interpreter": {
-        "median_runtime": 0.15607838699907006,
+        "median_runtime": 0.15869551499963563,
         "stdout": "",
         "stderr": "usage: suay [-h] [--version] [--error-codes]\n            {run,check,ast,doctor,new,repl,fmt,test,ref,explain} ...\nsuay: error: argument cmd: invalid choice: '/home/ayaubarys/Desktop/projects/suayLang/baseline_suite/variant_match.suay' (choose from run, check, ast, doctor, new, repl, fmt, test, ref, explain)\n",
         "exit_code": 2
       },
       "suay_vm": {
-        "median_runtime": 0.15335014299853356,
-        "stdout": "",
-        "stderr": "Traceback (most recent call last):\n  File \"/home/ayaubarys/Desktop/projects/suayLang/.venv/bin/suay-vm\", line 7, in <module>\n    sys.exit(main())\n             ~~~~^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/vm_cli.py\", line 14, in main\n    tokens = Lexer(src, filename=args.file).tokenize()\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 191, in tokenize\n    self._error(f\"Unexpected character {ch!r}\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/ayaubarys/Desktop/projects/suayLang/suaylang/lexer.py\", line 368, in _error\n    raise LexError(\n    ...<7 lines>...\n    )\nsuaylang.lexer.LexError: /home/ayaubarys/Desktop/projects/suayLang/baseline_suite/variant_match.suay:1:1: lexical error: Unexpected character '#'\n# Baseline: pattern match (variant)\n^\n",
-        "exit_code": 1
+        "median_runtime": 0.13993967099941074,
+        "stdout": "result=42\nUnit()\n",
+        "stderr": "",
+        "exit_code": 0
       }
     }
   ]

@@ -1,0 +1,10 @@
+flowchart LR
+  A[Source corpus + examples] --> B[make reproduce-all]
+  B --> C[baseline_runner.py]\nresults/baseline_raw.json + results/baseline.md
+  B --> D[plot_microbench.py + plot_results.py]\ndocs/plots/*.png
+  B --> E[gen_manifest.py]\nresults/manifest.json
+  B --> F[gen_hashes.py]\nresults/hashes.txt
+  C --> G[Committee artifacts]\nresults/README.md
+  D --> G
+  E --> G
+  F --> G

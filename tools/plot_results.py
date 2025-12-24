@@ -24,6 +24,9 @@ def plot_performance():
     _ensure_dirs()
     plt.savefig('results/img/performance.png', dpi=150)
     plt.savefig('docs/plots/performance.png', dpi=200)
+    # Committee-facing alias name (requested by reviewer UX docs)
+    plt.savefig('results/img/interp_vs_vm.png', dpi=150)
+    plt.savefig('docs/plots/interp_vs_vm.png', dpi=200)
     plt.close()
 
 def plot_coverage():
