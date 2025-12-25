@@ -1,0 +1,46 @@
+{
+  "claims": [
+    {
+      "id": "C1_equivalence",
+      "claim": "Interpreter and VM are observationally equivalent for the shipped corpora under the declared observation policy.",
+      "metric": "Pass/fail equivalence; counterexample program + normalized observations when failing",
+      "where_computed": [
+        "tools/diff_test/main.py (protocol entry)",
+        "tools/conformance/run.py (corpus runner)"
+      ],
+      "result_artifacts": [
+        "results/diff_report.md",
+        "results/diff_report.json"
+      ],
+      "reproduce": "make reproduce-all"
+    },
+    {
+      "id": "C2_baseline",
+      "claim": "Baseline timings are computed reproducibly (per machine) for paired .py/.suay programs.",
+      "metric": "Median runtime across N runs per benchmark per backend",
+      "where_computed": [
+        "experiments/baseline_runner.py"
+      ],
+      "result_artifacts": [
+        "results/baseline.md",
+        "results/baseline_raw.json"
+      ],
+      "reproduce": "make baseline"
+    },
+    {
+      "id": "C3_integrity",
+      "claim": "Evidence artifacts are integrity-checkable by SHA-256.",
+      "metric": "SHA-256 per artifact and environment metadata",
+      "where_computed": [
+        "tools/gen_manifest.py",
+        "tools/gen_hashes.py",
+        "tools/verify_results.py"
+      ],
+      "result_artifacts": [
+        "results/manifest.json",
+        "results/hashes.txt"
+      ],
+      "reproduce": "make reproduce-all"
+    }
+  ]
+}

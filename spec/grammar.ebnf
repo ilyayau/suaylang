@@ -1,0 +1,99 @@
+(* SuayLang Specification Grammar (EBNF)
+
+Spec version: spec/VERSION
+
+Notes:
+- This grammar is machine-readable and is intended to match the shipped lexer/parser.
+- Terminals are quoted. NEWLINE/EOF are lexer tokens.
+*)
+
+Program       ::= { NEWLINE } [ Expr { NEWLINE+ Expr } ] { NEWLINE } EOF ;
+
+Expr          ::= Dispatch ;
+
+Dispatch      ::= OrExpr { "▷" "⟪" { DispatchArm } "⟫" } ;
+DispatchArm   ::= "▷" Pattern "⇒" { NEWLINE } Expr { NEWLINE } ;
+
+OrExpr        ::= AndExpr { "∨" AndExpr } ;
+AndExpr       ::= CmpExpr { "∧" CmpExpr } ;
+CmpExpr       ::= AddExpr { ("=" | "≠" | "<" | "≤" | ">" | "≥") AddExpr } ;
+AddExpr       ::= MulExpr { ("+" | "−" | "⊞") MulExpr } ;
+MulExpr       ::= Prefix { ("×" | "÷" | "%") Prefix } ;
+
+Prefix        ::= ("¬" | "−" | "-") Call | Call ;
+
+Call          ::= Variant { "·" Variant } ;
+
+CallArg       ::= Variant | ("¬" | "−" | "-") Variant ;
+
+Variant       ::= IDENT "•" Primary | Primary ;
+
+Primary       ::= Literal
+              | Binding
+              | Mutation
+              | Name
+              | TupleOrGroup
+              | List
+              | Map
+              | Block
+              | Lambda
+              | Cycle ;
+
+Binding       ::= IDENT "←" { NEWLINE } Expr ;
+Mutation      ::= IDENT "⇐" { NEWLINE } Expr ;
+Name          ::= IDENT ;
+
+TupleOrGroup  ::= "(" { NEWLINE }
+                  [ Expr { TupleItemSep Expr } [ "," ] ]
+                  { NEWLINE } ")" ;
+
+TupleItemSep  ::= "," { NEWLINE } | NEWLINE+ ;
+
+List          ::= "[" { NEWLINE }
+                  [ Expr { ListItemSep Expr } ]
+                  { NEWLINE } "]" ;
+
+ListItemSep   ::= "," { NEWLINE } | NEWLINE+ ;
+
+Map           ::= "⟦" { NEWLINE }
+                  [ MapEntry { MapSep MapEntry } ]
+                  { NEWLINE } "⟧" ;
+
+MapEntry      ::= Expr "↦" Expr ;
+MapSep        ::= "," { NEWLINE } | NEWLINE+ ;
+
+Block         ::= "⟪" { NEWLINE } BlockItem { NEWLINE+ BlockItem } { NEWLINE } "⟫" ;
+BlockItem     ::= Expr ;
+
+Lambda        ::= "⌁" "(" { NEWLINE }
+                  [ Pattern { ParamSep Pattern } ]
+                  { NEWLINE } ")" { NEWLINE } Expr ;
+
+ParamSep      ::= "," { NEWLINE } | NEWLINE+ ;
+
+Cycle         ::= "⟲" { NEWLINE } CycleSeed "▷" "⟪" { NEWLINE } { CycleArm } "⟫" ;
+CycleSeed     ::= OrExpr ;
+CycleArm      ::= "▷" Pattern "⇒" ("↩" | "↯") { NEWLINE } Expr { NEWLINE } ;
+
+Literal       ::= INT | DEC | STRING | "ø" | "⊤" | "⊥" ;
+
+Pattern       ::= VariantPattern | PatternAtom ;
+VariantPattern::= IDENT "•" PatternAtom ;
+
+PatternAtom   ::= "_"
+              | Literal
+              | IDENT
+              | PatternTupleOrGroup
+              | ListPattern ;
+
+PatternTupleOrGroup
+              ::= "(" { NEWLINE }
+                  [ Pattern { PatItemSep Pattern } [ "," ] ]
+                  { NEWLINE } ")" ;
+
+PatItemSep    ::= "," { NEWLINE } | NEWLINE+ ;
+
+ListPattern   ::= "[" { NEWLINE }
+                  [ Pattern { ListItemSep Pattern } ]
+                  [ "⋯" (IDENT | "_") ]
+                  { NEWLINE } "]" ;

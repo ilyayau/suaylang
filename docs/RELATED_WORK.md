@@ -5,20 +5,29 @@ Bibliography: docs/refs.bib.
 
 ## Differential testing / compiler validation
 
-- Csmith established large-scale randomized compiler testing via differential behavior across compilers and options. It motivates “two independent executions” as a practical validation strategy. (yang2011csmith)
+- Example class: randomized compiler testing / differential execution (e.g., Csmith). (yang2011csmith)
+- Why it matters here: motivates “two independent executions” as a practical validation strategy.
+- Limitation of the class: differential testing can miss shared-oracle bugs and can under-sample semantically hard cases.
 
 ## Property-based testing
 
-- QuickCheck popularized generative testing with shrinking counterexamples. The SuayLang fuzz/diff-test tooling follows the same spirit: deterministic seeds + minimized regressions. (claessen2000quickcheck)
+- Example class: property-based testing with generation + shrinking (e.g., QuickCheck). (claessen2000quickcheck)
+- Why it matters here: deterministic seeds and minimized counterexamples make failures reproducible.
+- Limitation of the class: generator bias can produce false confidence; properties can be under-specified.
 
 ## Mutation testing
 
-- Mutation testing literature frames systematic fault injection as a way to evaluate test adequacy; we cite it as a future strengthening direction for this artifact’s adequacy story. (jia2011mutation)
+- Example class: mutation testing to assess adequacy. (jia2011mutation)
+- Why it matters here: helps bound the “shared-oracle” threat by testing whether suites actually detect injected bugs.
+- Limitation of the class: mutation score can be expensive and can overfit to mutation operators.
 
 ## Artifact evaluation and reproducibility norms
 
 - SIGPLAN AE guidance motivates committee-first packaging.
 - Reproducible builds culture motivates integrity metadata and explicit environment disclosure. (sigplan-ae, reproducible-builds)
+
+Limitation of the class:
+- Passing reproducibility checks does not imply correctness; it only implies the protocol is executable and stable.
 
 ## Novelty / positioning (explicit)
 
@@ -37,4 +46,8 @@ The novelty is an **academic packaging pattern** for backend-equivalence claims:
 | Property-based testing (e.g., QuickCheck) | Validate properties via generated inputs | Test suites + shrunk counterexamples | A language-level observation policy + interpreter/VM equivalence comparator as an explicit protocol |
 | Mutation testing (surveyed) | Measure test adequacy | Mutation score | (Planned) adequacy strengthening; not claimed as complete in v0.1 |
 | Artifact-evaluation norms | Standardize reproducibility | Checklists + badges | Concretely integrated into Make targets + results/ artifact index |
+
+## Where ours differs (one sentence)
+
+SuayLang differs by treating equivalence as a falsifiable, artifact-indexed claim (policy → protocol → generated counterexamples) rather than an informal statement about two implementations.
 

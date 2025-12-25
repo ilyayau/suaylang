@@ -1,5 +1,3 @@
-# SuayLang
-
 SuayLang is a research artifact that evaluates observational equivalence between a reference interpreter and a bytecode VM for a small control‑flow language via a deterministic, file-based evidence pipeline.
 
 | claim | evidence | artifact |
@@ -7,6 +5,8 @@ SuayLang is a research artifact that evaluates observational equivalence between
 | Interpreter and VM are observationally equivalent for the shipped corpora under an explicit observation policy | Read: [docs/OBSERVATION_POLICY.md](docs/OBSERVATION_POLICY.md); Reproduce: `make reproduce-all` | [results/diff_report.md](results/diff_report.md) (+ [results/diff_report.json](results/diff_report.json)) |
 | Baseline timings are computed reproducibly (per machine) for paired .py/.suay programs | Read: [experiments/baseline_runner.py](experiments/baseline_runner.py); Reproduce: `make baseline` | [results/baseline.md](results/baseline.md) (+ [results/baseline_raw.json](results/baseline_raw.json)) |
 | Committee-facing plots are generated from artifacts and pre-rendered (no Mermaid required) | Read: [tools/plot_results.py](tools/plot_results.py); Reproduce: `make plots-fast` (or `make plots`) | [docs/plots/interp_vs_vm.png](docs/plots/interp_vs_vm.png) (+ [docs/diagrams/pipeline.svg](docs/diagrams/pipeline.svg), [docs/diagrams/ascii/pipeline.txt](docs/diagrams/ascii/pipeline.txt)) |
+
+# SuayLang
 
 Ultra TL;DR (30 seconds):
 - Two independent executions: interpreter + bytecode VM.

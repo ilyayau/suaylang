@@ -4,21 +4,27 @@ Welcome, committee reviewers! This portal provides a single, stable entry point 
 
 ## Quick Links
 - [README.md](../README.md) — Project overview, committee narrative
-- [docs/CLAIM_EVIDENCE_MATRIX.md](CLAIM_EVIDENCE_MATRIX.md) — Claim–Evidence matrix
-- [results/README.md](../results/README.md) — Artifact index, evidence map
+- [docs/EVIDENCE_MAP.md](EVIDENCE_MAP.md) — Claim → metric → artifact map
+- [docs/evidence_map.json](evidence_map.json) — Machine-readable evidence map
+- [results/README.md](../results/README.md) — Artifact index
 - [docs/ARTIFACT_EVALUATION.md](ARTIFACT_EVALUATION.md) — Artifact evaluation guide
 - [docs/COMMITTEE_ONEPAGER.md](COMMITTEE_ONEPAGER.md) — 1-page summary
 - [docs/TECHREPORT.md](TECHREPORT.md) — Technical report
 - [docs/THREATS_TO_VALIDITY.md](THREATS_TO_VALIDITY.md) — Threats/limitations
+- [docs/NEGATIVE_RESULTS.md](NEGATIVE_RESULTS.md) — What failed / dead ends
+- [docs/NONTRIVIALITY.md](NONTRIVIALITY.md) — Why this is not trivial
+- [docs/OUT_OF_SCOPE.md](OUT_OF_SCOPE.md) — What is not solved
+- [spec/](../spec/) — Versioned specification
 
 ## Reproduction Instructions
 1. Clone: `git clone https://github.com/ilyayau/suaylang && cd suaylang`
-2. Run: `./scripts/reproduce.sh` (fast) or `./scripts/reproduce.sh --full` (full)
+2. Run: `make reproduce-fast` (fast) or `make reproduce-all` (full)
 3. Inspect: [results/README.md](../results/README.md) for all evidence
 
 ## Evidence Map
-- All claims, evidence, and results are mapped in [docs/CLAIM_EVIDENCE_MATRIX.md](CLAIM_EVIDENCE_MATRIX.md)
-- All artifact outputs are indexed in [results/README.md](../results/README.md)
+- Evidence map (human-readable): docs/EVIDENCE_MAP.md
+- Evidence map (machine-readable): docs/evidence_map.json
+- Artifact index: results/README.md
 
 ## Reviewer UX
 - All links are stable and checked (see Makefile: `make check-links`)

@@ -1,0 +1,30 @@
+{
+  "spec_version": "0.1.0",
+  "format": "suay-ebnf-strings-v1",
+  "nonterminals": {
+    "Program": ["{ NEWLINE } [ Expr { NEWLINE+ Expr } ] { NEWLINE } EOF"],
+    "Expr": ["Dispatch"],
+    "Dispatch": ["OrExpr { '▷' '⟪' { DispatchArm } '⟫' }"],
+    "DispatchArm": ["'▷' Pattern '⇒' { NEWLINE } Expr { NEWLINE }"],
+    "OrExpr": ["AndExpr { '∨' AndExpr }"],
+    "AndExpr": ["CmpExpr { '∧' CmpExpr }"],
+    "CmpExpr": ["AddExpr { ('=' | '≠' | '<' | '≤' | '>' | '≥') AddExpr }"],
+    "AddExpr": ["MulExpr { ('+' | '−' | '⊞') MulExpr }"],
+    "MulExpr": ["Prefix { ('×' | '÷' | '%') Prefix }"],
+    "Prefix": ["('¬' | '−' | '-') Call", "Call"],
+    "Call": ["Variant { '·' Variant }"],
+    "Variant": ["IDENT '•' Primary", "Primary"],
+    "Primary": [
+      "Literal",
+      "Binding",
+      "Mutation",
+      "Name",
+      "TupleOrGroup",
+      "List",
+      "Map",
+      "Block",
+      "Lambda",
+      "Cycle"
+    ]
+  }
+}

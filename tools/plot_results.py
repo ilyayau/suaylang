@@ -32,15 +32,19 @@ def plot_performance():
     plt.close()
 
 def plot_coverage():
-    with open('results/baseline_raw.json') as f:
-        data = json.load(f)
-    # Estimate coverage from number of benchmarks (AST/opcode buckets)
-    ast_cov = len(data['benchmarks'])
-    opcode_cov = sum(1 for b in data['benchmarks'] if 'suay_vm' in b)
-    plt.figure(figsize=(4,3))
-    plt.bar(['AST', 'Opcode'], [ast_cov, opcode_cov], color=['#59a14f','#e15759'])
-    plt.ylabel('Coverage')
-    plt.title('Coverage Summary')
+    # Coverage here refers to language-feature/opcode coverage over the shipped corpora,
+    # as computed by the coverage pipeline (not test coverage).
+    with open('results/coverage.json') as f:
+        cov = json.load(f)
+
+    termination = cov.get('termination_counts', {})
+    labels = list(termination.keys())
+    values = [termination[k] for k in labels]
+
+    plt.figure(figsize=(5, 3))
+    plt.bar(labels, values)
+    plt.ylabel('Count')
+    plt.title('Corpus termination outcomes')
     plt.tight_layout()
     _ensure_dirs()
     plt.savefig('results/img/coverage.png', dpi=150)
